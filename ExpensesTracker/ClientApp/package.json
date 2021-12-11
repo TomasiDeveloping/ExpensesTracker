@@ -1,6 +1,6 @@
 {
   "name": "expensestracker",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "prestart": "node aspnetcore-https",
@@ -23,7 +23,9 @@
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/platform-server": "~13.1.0",
     "@angular/router": "~13.1.0",
+    "@popperjs/core": "^2.11.0",
     "bootstrap": "^5.1.3",
+    "bootswatch": "^5.1.3",
     "jquery": "^3.5.1",
     "oidc-client": "^1.11.5",
     "popper.js": "^1.16.0",
