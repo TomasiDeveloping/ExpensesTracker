@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\v1\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DataBase\DataBase.csproj" />
   </ItemGroup>
 

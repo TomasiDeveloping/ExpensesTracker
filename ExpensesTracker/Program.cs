@@ -1,5 +1,7 @@
+using Core.Interfaces;
 using DataBase;
-using ExpensesTracker.Profiles;
+using DataBase.Profiles;
+using DataBase.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +25,8 @@ builder.Services.AddDbContext<ExpensesTrackerContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddCors();
 
