@@ -24,7 +24,8 @@ import { ExpensesComponent } from './home/expenses/expenses.component';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
