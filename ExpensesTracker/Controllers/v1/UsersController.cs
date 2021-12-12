@@ -51,7 +51,7 @@ namespace ExpensesTracker.Controllers.v1
         {
             try
             {
-                if (userId != userDto.Id) return BadRequest("Error with userID");
+                if (userId != userDto.Id) return BadRequest("Error with userId");
                 var userToUpdate = await _service.UpdateUserAsync(userId, userDto);
                 return Ok(userToUpdate);
             }

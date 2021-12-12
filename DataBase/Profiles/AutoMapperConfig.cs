@@ -13,6 +13,10 @@ namespace DataBase.Profiles
             CreateMap<UserDto, User>()
                 .ForMember(src => src.Password, o => o.Ignore())
                 .ForMember(src => src.Salt, o => o.Ignore());
+
+            CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>()
+                .ForMember(src => src.User, o => o.Ignore());
         }
     }
 }

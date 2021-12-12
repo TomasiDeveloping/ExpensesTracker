@@ -27,6 +27,7 @@ builder.Services.AddDbContext<ExpensesTrackerContext>(options =>
 });
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddCors();
 
