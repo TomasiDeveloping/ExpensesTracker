@@ -1,6 +1,5 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpensesTracker.Controllers.v1
@@ -47,7 +46,7 @@ namespace ExpensesTracker.Controllers.v1
             try
             {
                 var newCategory = await _service.InsertCategoryAsync(categoryDto);
-                return Ok(categoryDto);
+                return Ok(newCategory);
             }
             catch (Exception e)
             {

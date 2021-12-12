@@ -17,6 +17,7 @@ namespace DataBase.Services
             _mapper = mapper;
             _context = context;
         }
+
         public async Task<List<UserDto>> GetUsersAsync()
         {
             var users = await _context.Users.ToListAsync();
@@ -53,7 +54,7 @@ namespace DataBase.Services
         {
             var userToUpdate = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (userToUpdate == null) return null;
-            _mapper.Map<UserDto, User>(userDto, userToUpdate);
+            _mapper.Map(userDto, userToUpdate);
             await _context.SaveChangesAsync();
             return _mapper.Map<UserDto>(userToUpdate);
         }

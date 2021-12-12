@@ -16,6 +16,7 @@ namespace DataBase.Services
             _mapper = mapper;
             _context = context;
         }
+
         public async Task<List<CategoryDto>> GetCategoriesAsync()
         {
             var categories = await _context.Categories.ToListAsync();
