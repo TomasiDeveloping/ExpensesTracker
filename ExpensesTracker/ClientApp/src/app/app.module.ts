@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import {AppRoutingModule} from "./app-routing.module";
 import { CategoriesComponent } from './categories/categories.component';
 import { ExpendituresComponent } from './expenditures/expenditures.component';
+import { ExpensesComponent } from './home/expenses/expenses.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ExpendituresComponent } from './expenditures/expenditures.component';
     NavComponent,
     HomeComponent,
     CategoriesComponent,
-    ExpendituresComponent
+    ExpendituresComponent,
+    ExpensesComponent
   ],
   imports: [
     BrowserModule,
