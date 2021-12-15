@@ -1,1 +1,22 @@
-<p>categories works!</p>
+<div class="container">
+  <h1>Kategorien</h1>
+  <hr>
+  <div class="table-responsive">
+  <table class="table table-secondary table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Bearbeiten</th>
+      <th scope="col">Löschen</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let category of userCategories">
+      <th scope="row">{{category.name}}</th>
+      <td><span class="material-icons" id="edit">edit</span></td>
+      <td><span class="material-icons" id="delete">delete</span></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
