@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>{{isUpdate ? currentCategory.name + ' bearbeiten' : 'Kategorie hinzufügen'}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="categoryForm">
+    <div class="form-group mb-4">
+      <label class="col-form-label mt-4" for="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid': categoryForm.controls.name.invalid &&
+          (categoryForm.controls.name.dirty || categoryForm.controls.name.touched),
+          'is-valid': categoryForm.controls.name.valid
+          }"
+        formControlName="name">
+      <div class="invalid-feedback"
+           *ngIf="categoryForm.controls.name.errors &&
+                 (categoryForm.controls.name.dirty || categoryForm.controls.name.touched)">
+        <p *ngIf="categoryForm.controls.name.errors.required">Name ist ein Pflichtfeld</p>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions class="button-container">
+  <button type="button" class="btn bg-warning" (click)="onClose()">Abbrechen</button>
+  <button class="btn btn-success" type="submit" [disabled]="categoryForm.invalid" (click)="onSubmit()">Speichern</button>
+</div>

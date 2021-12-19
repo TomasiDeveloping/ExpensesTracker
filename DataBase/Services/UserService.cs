@@ -30,6 +30,11 @@ namespace DataBase.Services
             return user == null ? null : _mapper.Map<UserDto>(user);
         }
 
+        public async Task<User?> GetUserByEmailForLoginAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<UserDto> InsertUserAsync(UserDto userDto)
         {
             var passwordHashAndSalt = PasswordService.CreateNewPassword(userDto.Password);

@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.Models;
 
 namespace Core.Interfaces
 {
@@ -7,6 +8,7 @@ namespace Core.Interfaces
         public Task<List<UserDto>> GetUsersAsync();
 
         public Task<UserDto?> GetUserByIdAsync(int userId);
+        public Task<User?> GetUserByEmailForLoginAsync(string email);
 
         public Task<UserDto> InsertUserAsync(UserDto userDto);
 

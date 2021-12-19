@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
+import * as jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-expenditures',
@@ -30,17 +31,23 @@ export class ExpendituresComponent implements OnInit {
   years: number[] = [];
   groupedExpenses: { categoryName: string, groupAmount: number, expense: ExpenseModel[] }[] = [];
   expenses: ExpenseModel[] = [];
+  currentUserId: number = 0;
 
   constructor(private expenseService: ExpensesService) {
   }
 
   ngOnInit(): void {
+    const token = localStorage.getItem('expenseToken');
+    if (token) {
+      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
+      this.currentUserId = +decodeToken.nameid;
+    }
     this.getUserExpenses();
     this.createYears();
   }
 
   getUserExpenses() {
-    this.expenseService.getUserExpenses(4).subscribe((response) => {
+    this.expenseService.getUserExpenses(this.currentUserId).subscribe((response) => {
       this.expenses = response;
       response.forEach((expense) => {
         const categoryExists = this.groupedExpenses.some(el => el.categoryName === expense.categoryName);

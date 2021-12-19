@@ -1,3 +1,4 @@
+using Core.Helper;
 using Core.Interfaces;
 using DataBase;
 using DataBase.Profiles;
@@ -26,6 +27,7 @@ builder.Services.AddDbContext<ExpensesTrackerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();

@@ -1,0 +1,92 @@
+<h1 mat-dialog-title>Ausgabe{{isUpdate ? ' bearbeiten' : ' hinzufügen'}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="expenseForm">
+    <div class="mb-3">
+      <label class="form-label" for="amount">Betrag</label>
+      <input
+        [ngClass]="{
+          'is-invalid': expenseForm.controls.amount.invalid &&
+          (expenseForm.controls.amount.dirty || expenseForm.controls.amount.touched),
+          'is-valid': expenseForm.controls.amount.valid
+          }"
+        class="form-control"
+        formControlName="amount"
+        id="amount"
+        type="number">
+      <div *ngIf="expenseForm.controls.amount.errors &&
+                 (expenseForm.controls.amount.dirty || expenseForm.controls.amount.touched)"
+           class="invalid-feedback">
+        <p *ngIf="expenseForm.controls.amount.errors.required">Betrag ist ein Pflichtfeld</p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="categoryId">Kategorie</label>
+      <select (change)="onCategoryChange($event)" [ngClass]="{
+          'is-invalid': expenseForm.controls.categoryId.invalid &&
+          (expenseForm.controls.categoryId.dirty || expenseForm.controls.categoryId.touched),
+          'is-valid': expenseForm.controls.categoryId.valid
+          }" class="form-select" formControlName="categoryId" id="categoryId">
+        <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
+        <option value="newCategory">Neue Kategorie</option>
+      </select>
+      <div *ngIf="expenseForm.controls.categoryId.errors &&
+                 (expenseForm.controls.categoryId.dirty || expenseForm.controls.categoryId.touched)"
+           class="invalid-feedback">
+        <p *ngIf="expenseForm.controls.categoryId.errors.required">Kategorie ist ein Pflichtfeld</p>
+      </div>
+    </div>
+    <div class="mb-3" *ngIf="isNewCategory">
+      <label class="form-label" for="categoryName">Neue Kategorie</label>
+      <input
+        [ngClass]="{
+          'is-invalid': expenseForm.controls.categoryName.invalid &&
+          (expenseForm.controls.categoryName.dirty || expenseForm.controls.categoryName.touched),
+          'is-valid': expenseForm.controls.categoryName.valid
+          }"
+        class="form-control"
+        formControlName="categoryName"
+        id="categoryName"
+        type="text">
+      <div *ngIf="expenseForm.controls.categoryName.errors &&
+                 (expenseForm.controls.categoryName.dirty || expenseForm.controls.categoryName.touched)"
+           class="invalid-feedback">
+        <p *ngIf="expenseForm.controls.categoryName.errors.required">Neue Kategorie ist ein Pflichtfeld</p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="description">Beschreibung</label>
+      <textarea [ngClass]="{
+          'is-invalid': expenseForm.controls.description.invalid &&
+          (expenseForm.controls.description.dirty || expenseForm.controls.description.touched),
+          'is-valid': expenseForm.controls.description.valid
+          }" class="form-control" formControlName="description" id="description" rows="2"></textarea>
+      <div *ngIf="expenseForm.controls.description.errors &&
+                 (expenseForm.controls.description.dirty || expenseForm.controls.description.touched)"
+           class="invalid-feedback">
+        <p *ngIf="expenseForm.controls.description.errors.maxlength">Maximum 255 Zeichen erlaubt</p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="createDate">Datum</label>
+      <input
+        [ngClass]="{
+          'is-invalid': expenseForm.controls.createDate.invalid &&
+          (expenseForm.controls.createDate.dirty || expenseForm.controls.createDate.touched),
+          'is-valid': expenseForm.controls.createDate.valid
+          }"
+        class="form-control"
+        formControlName="createDate"
+        id="createDate"
+        type="date">
+      <div *ngIf="expenseForm.controls.createDate.errors &&
+                 (expenseForm.controls.createDate.dirty || expenseForm.controls.createDate.touched)"
+           class="invalid-feedback">
+        <p *ngIf="expenseForm.controls.createDate.errors.required">Datum ist ein Pflichtfeld</p>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="button-container" mat-dialog-actions>
+  <button (click)="onClose()" class="btn bg-warning" type="button">Abbrechen</button>
+  <button (click)="onSubmit()" [disabled]="expenseForm.invalid" class="btn btn-success" type="submit">Speichern</button>
+</div>

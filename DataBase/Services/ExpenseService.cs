@@ -38,6 +38,8 @@ namespace DataBase.Services
             var userExpenses = await _context.Expenses
                 .Include(e => e.Category)
                 .Where(e => e.UserId == userId)
+                .OrderBy(e => e.CategoryId)
+                .ThenByDescending(e => e.CreateDate)
                 .ToListAsync();
             return _mapper.Map<List<ExpenseDto>>(userExpenses);
         }

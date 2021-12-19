@@ -1,0 +1,23 @@
+.form-signing {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.container {
+  margin-top: 2em;
+}
+
+
+.forgotPassword {
+  color: gold;
+}
+
+.forgotPassword:hover {
+  cursor: pointer;
+}
+
+button {
+  width: 100%;
+}

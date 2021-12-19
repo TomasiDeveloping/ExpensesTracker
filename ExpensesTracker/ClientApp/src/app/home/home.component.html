@@ -4,10 +4,10 @@
     <span>{{currentMonth?.name}} {{currentMonth?.year}}</span>
   </div>
   <div class="d-grid" id="add-button">
-    <button class="btn btn-primary" type="button">Ausgabe erfassen</button>
+    <button class="btn btn-primary" type="button" (click)="onAddExpense()">Ausgabe erfassen</button>
   </div>
-  <p>Ausgegebener Prozentsatz des geplanten Budgets</p>
-  <div class="progress" style="height: 30px;">
+  <p>{{userBudget > 0 ? 'Ausgegebener Prozentsatz des geplanten Budgets' : 'Du hast kein Budget gesetzt.'}}</p>
+  <div class="progress" style="height: 30px;" *ngIf="userBudget > 0">
     <div [attr.aria-valuenow]="monthlyConsumptionPercent"
          [ngStyle]="{'width': monthlyConsumptionPercent + '%'}"
          aria-valuemax="100" aria-valuemin="0"

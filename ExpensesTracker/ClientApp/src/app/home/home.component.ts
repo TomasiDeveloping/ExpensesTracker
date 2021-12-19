@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
+import * as jwt_decode from "jwt-decode";
+import {UserModel} from "../models/user.model";
+import {UsersService} from "../services/users.service";
+import {MatDialog} from "@angular/material/dialog";
+import {EditExpensesComponent} from "./edit-expenses/edit-expenses.component";
 
 @Component({
   selector: 'app-home',
@@ -12,20 +17,38 @@ export class HomeComponent implements OnInit {
   userExpenses: ExpenseModel[] = [];
   totalAmount = 0;
   monthlyConsumptionPercent = 0;
-  userBudget = 2250.00;
+  userBudget = 0;
   // @ts-ignore
   currentMonth = { value: 0, name: '', year: 0 };
   categoryGroups: {category: number, name: string, amount: number} [] = [];
+  currentUserId: number = 0;
+  // @ts-ignore
+  currentUser: UserModel;
 
-  constructor(private expenseService: ExpensesService) { }
+  constructor(private expenseService: ExpensesService,
+              private userService: UsersService,
+              private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.getUserExpenses();
-    this.getCurrentMonth();
+    const token = localStorage.getItem('expenseToken');
+    if (token) {
+      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
+      this.currentUserId = +decodeToken.nameid;
+    }
+    this.getCurrentUser();
+  }
+
+  getCurrentUser() {
+    this.userService.getUserById(this.currentUserId).subscribe((response) => {
+      this.currentUser = response;
+      this.userBudget = response.monthlyBudget;
+      this.getUserExpenses();
+      this.getCurrentMonth();
+    } )
   }
 
   getUserExpenses() {
-    this.expenseService.getUserExpenses(4).subscribe((response) => {
+    this.expenseService.getUserExpenses(this.currentUserId).subscribe((response) => {
       this.userExpenses = response;
       response.forEach(expense => {
         this.totalAmount += expense.amount;
@@ -44,8 +67,10 @@ export class HomeComponent implements OnInit {
   }
 
   private CalculateExpensesInPercent(totalAmount: number) {
-    this.monthlyConsumptionPercent = (100 / this.userBudget) * totalAmount;
-    this.monthlyConsumptionPercent = Math.round(this.monthlyConsumptionPercent * 100) / 100;
+    if (this.userBudget > 0) {
+      this.monthlyConsumptionPercent = (100 / this.userBudget) * totalAmount;
+      this.monthlyConsumptionPercent = Math.round(this.monthlyConsumptionPercent * 100) / 100;
+    }
   }
 
   private getCurrentMonth() {
@@ -71,5 +96,23 @@ export class HomeComponent implements OnInit {
       case 12: return 'Dezember';
       default: return '';
     }
+  }
+
+  onAddExpense() {
+    const expense: ExpenseModel = new class implements ExpenseModel {
+      amount = 0;
+      categoryId = 0;
+      categoryName =  '';
+      createDate =  new Date();
+      description = '';
+      id = 0;
+      userId = 0;
+    }
+    expense.userId = this.currentUserId;
+    this.dialog.open(EditExpensesComponent, {
+      width: '80%',
+      height: 'auto',
+      data: {isUpdate: false, expense: expense}
+    })
   }
 }

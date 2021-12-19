@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -10,6 +10,15 @@ import {AppRoutingModule} from "./app-routing.module";
 import { CategoriesComponent } from './categories/categories.component';
 import { ExpendituresComponent } from './expenditures/expenditures.component';
 import { ExpensesComponent } from './home/expenses/expenses.component';
+import {ToastrModule} from "ngx-toastr";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CategoryEditDialogComponent } from './categories/category-edit-dialog/category-edit-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {NgxSpinnerModule} from "ngx-spinner";
+import {SpinnerInterceptor} from "./interceptors/spinner.interceptor";
+import { SettingsComponent } from './settings/settings.component';
+import { AuthComponent } from './auth/auth.component';
+import { EditExpensesComponent } from './home/edit-expenses/edit-expenses.component';
 
 @NgModule({
   declarations: [
@@ -18,16 +27,29 @@ import { ExpensesComponent } from './home/expenses/expenses.component';
     HomeComponent,
     CategoriesComponent,
     ExpendituresComponent,
-    ExpensesComponent
+    ExpensesComponent,
+    CategoryEditDialogComponent,
+    SettingsComponent,
+    AuthComponent,
+    EditExpensesComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right'
+    }),
+    BrowserAnimationsModule,
+    MatDialogModule,
+    NgxSpinnerModule,
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

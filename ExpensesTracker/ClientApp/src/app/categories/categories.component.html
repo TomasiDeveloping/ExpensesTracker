@@ -1,6 +1,9 @@
 <div class="container">
-  <h1>Kategorien</h1>
+  <h2>Kategorien</h2>
   <hr>
+  <div class="add-button">
+    <button class="btn bg-info" (click)="onAddCategory()">Kategorie hinzufügen</button>
+  </div>
   <div class="table-responsive">
   <table class="table table-secondary table-striped">
     <thead>
@@ -13,8 +16,8 @@
     <tbody>
     <tr *ngFor="let category of userCategories">
       <th scope="row">{{category.name}}</th>
-      <td><span class="material-icons" id="edit">edit</span></td>
-      <td><span class="material-icons" id="delete">delete</span></td>
+      <td><span class="material-icons" id="edit" (click)="onEdit(category)">edit</span></td>
+      <td><span class="material-icons" id="delete" (click)="onDelete(category)">delete</span></td>
     </tr>
     </tbody>
   </table>

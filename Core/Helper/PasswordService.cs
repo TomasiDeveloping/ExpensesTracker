@@ -12,5 +12,12 @@ namespace Core.Helper
             password.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(clearTextPassword));
             return password;
         }
+
+        public static bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return !computedHash.Where((t, i) => t != passwordHash[i]).Any();
+        }
     }
 }
