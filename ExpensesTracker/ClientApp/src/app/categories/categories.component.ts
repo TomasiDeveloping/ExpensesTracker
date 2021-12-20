@@ -78,7 +78,7 @@ export class CategoriesComponent implements OnInit {
   onDelete(category: CategoryModel) {
     Swal.fire({
       title: 'Bist Du sicher ?',
-      text: 'Kategorie ' + category.name + ' wirklich löschen ?',
+      html: '<p>Kategorie <b>' + category.name + '</b> wirklich löschen ?</p><p>Alle Ausgaben für die Kategorie werden ebenfalls gelöscht!</p>',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

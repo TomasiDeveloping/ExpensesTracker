@@ -1,5 +1,6 @@
-<div class="container">
-  <h1 class="text-center mt-2">Expense</h1>
+<div class="login-container">
+  <div class="bg"></div>
+  <h1 id="title">Kostenmanager</h1>
   <form (ngSubmit)="onLogin()" *ngIf="loginForm" [formGroup]="loginForm" class="form-signing">
     <div class="text-center mb-4">
       <h1 class="h3 mb-3 font-weight-normal">Login</h1>
@@ -60,9 +61,10 @@
     <div class="text-center mt-2">
       <div (click)="onForgotPassword()" class="forgotPassword">Passwort vergessen ?</div>
     </div>
-    <button [disabled]="loginForm.invalid || !loginForm.dirty" class="btn btn-lg btn-success mt-4"
+    <button class="btn btn-lg btn-success mt-4" [disabled]="loginForm.invalid"
             type="submit"><i class="fa fa-sign-in"></i> Login
     </button>
+    <button id="register" class="btn btn-outline-info">Konto erstellen</button>
   </form>
 </div>
 

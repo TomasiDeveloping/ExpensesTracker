@@ -1,4 +1,76 @@
 <div class="container">
   <h2>Einstellungen</h2>
   <hr>
+  <h4>Account</h4>
+  <form *ngIf="currentUser" [formGroup]="userForm">
+    <div class="row">
+      <div class="col-6">
+        <label for="lastName">Vorname</label>
+        <input class="form-control" type="text" formControlName="lastName" id="lastName">
+      </div>
+      <div class="col-6">
+        <label for="firstName">Nachname</label>
+        <input class="form-control" type="text" formControlName="firstName" id="firstName">
+      </div>
+    </div>
+    <div>
+      <label for="email">E-Mail</label>
+      <input class="form-control" type="email" formControlName="email" id="email">
+    </div>
+    <div class="edit-user-btn">
+    <button *ngIf="!isUserUpdate" class="btn btn-secondary" type="button" (click)="onEditUser()">Bearbeiten</button>
+    <button *ngIf="isUserUpdate" class="btn btn-success" (click)="onSubmit()">Speichern</button>
+    </div>
+  </form>
+  <hr>
+  <h4>Budget</h4>
+  <div class="col-8">
+    <label for="budget" class="form-label">Budget</label>
+    <input [(ngModel)]="userBudget" min="0" class="form-control" type="number" name="budget" id="budget">
+    <button id="changeBudgetBtn" class="btn btn-success" (click)="onBudgetChange()">Monatsbudget ändern</button>
+  </div>
+  <hr>
+  <h4>Passwort ändern</h4>
+  <form>
+  <div class="row">
+    <div class="col-6">
+      <label for="password">Neues Passwort</label>
+      <div class="input-group">
+      <input class="form-control" [type]="passwordFieldTextType ? 'text' : 'password'" id="password">
+      <span class="input-group-text" (click)="togglePasswordFieldTextType()">
+              <i
+                [ngClass]="{
+                      'fa-eye-slash': !passwordFieldTextType,
+                      'fa-eye': passwordFieldTextType
+                    }"
+                class="fa"
+              ></i>
+        </span>
+      </div>
+    </div>
+    <div class="col-6">
+      <label for="confirmPassword">Passwort bestätigen</label>
+      <div class="input-group">
+        <input class="form-control" [type]="confirmFieldTextType ? 'text' : 'password'" id="confirmPassword">
+        <span class="input-group-text" (click)="toggleConfirmFieldTextType()">
+              <i
+                [ngClass]="{
+                      'fa-eye-slash': !confirmFieldTextType,
+                      'fa-eye': confirmFieldTextType
+                    }"
+                class="fa"
+              ></i>
+        </span>
+      </div>
+    </div>
+  </div>
+    <div class="change-pw-btn">
+      <button class="btn btn-success">Passwort ändern</button>
+    </div>
+  </form>
+  <hr>
+  <h4>Account löschen</h4>
+  <div class="delete-container">
+    <button class="btn btn-danger btn-sm" (click)="onDeleteAccount()">Account Löschen</button>
+  </div>
 </div>

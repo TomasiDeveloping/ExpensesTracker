@@ -56,6 +56,11 @@ namespace DataBase.Services
         {
             var categoryToDelete = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
             if (categoryToDelete == null) return false;
+            var expenses = await _context.Expenses.Where(e => e.CategoryId == categoryToDelete.Id).ToListAsync();
+            if (expenses.Any())
+            {
+                _context.Expenses.RemoveRange(expenses);
+            }
             _context.Categories.Remove(categoryToDelete);
             await _context.SaveChangesAsync();
             return true;

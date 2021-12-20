@@ -22,6 +22,10 @@
           <div class="ms-2 me-auto">
             <div class="fw-bold">{{expense.description}}</div>
             {{expense.createDate | date: 'dd.MM.yyyy'}}
+            <div>
+              <span class="material-icons edit" (click)="onEditExpense(expense)">edit</span>
+              <span class="material-icons delete" (click)="onDeleteExpense(expense)">delete</span>
+            </div>
           </div>
           <span class="badge bg-warning">{{expense.amount | currency: 'CHF '}}</span>
         </li>

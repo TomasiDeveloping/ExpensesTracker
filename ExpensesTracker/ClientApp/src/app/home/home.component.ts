@@ -62,7 +62,6 @@ export class HomeComponent implements OnInit {
         }
       })
       this.CalculateExpensesInPercent(this.totalAmount);
-      console.log(this.categoryGroups);
     });
   }
 
@@ -109,10 +108,15 @@ export class HomeComponent implements OnInit {
       userId = 0;
     }
     expense.userId = this.currentUserId;
-    this.dialog.open(EditExpensesComponent, {
+    const dialogRef = this.dialog.open(EditExpensesComponent, {
       width: '80%',
       height: 'auto',
       data: {isUpdate: false, expense: expense}
-    })
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'update') {
+        this.getCurrentUser();
+      }
+    });
   }
 }

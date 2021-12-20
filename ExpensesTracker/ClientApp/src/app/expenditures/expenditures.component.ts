@@ -2,6 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
 import * as jwt_decode from "jwt-decode";
+import {MatDialog} from "@angular/material/dialog";
+import {EditExpensesComponent} from "../home/edit-expenses/edit-expenses.component";
+import Swal from "sweetalert2";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-expenditures',
@@ -33,7 +37,9 @@ export class ExpendituresComponent implements OnInit {
   expenses: ExpenseModel[] = [];
   currentUserId: number = 0;
 
-  constructor(private expenseService: ExpensesService) {
+  constructor(private expenseService: ExpensesService,
+              private dialog: MatDialog,
+              private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -67,7 +73,6 @@ export class ExpendituresComponent implements OnInit {
           this.groupedExpenses.push(groupExpense);
         }
       })
-      console.log(this.groupedExpenses);
     });
   }
 
@@ -76,7 +81,6 @@ export class ExpendituresComponent implements OnInit {
     for (let i = 0; i < 4; i++) {
       this.years.push(year - i);
     }
-    console.log(this.years);
   }
 
   onYearChange(event: any) {
@@ -85,5 +89,48 @@ export class ExpendituresComponent implements OnInit {
 
   onMonthChange(event: any) {
     console.log(event.target.value);
+  }
+
+  onEditExpense(expense: ExpenseModel) {
+    const dialogRef = this.dialog.open(EditExpensesComponent, {
+      width: '80%',
+      height: 'auto',
+      data: {expense: expense, isUpdate: true}
+    });
+    dialogRef.afterClosed().subscribe(response => {
+      if (response === 'update') {
+        this.groupedExpenses = [];
+        this.getUserExpenses();
+      }
+    });
+  }
+
+  onDeleteExpense(expense: ExpenseModel) {
+    Swal.fire({
+      title: 'Bist Du sicher ?',
+      html: '<p>Ausgabe wirklich löschen ?</p>',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ja, bitte löschen',
+      cancelButtonText: 'Abbrechen'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteExpense(expense);
+      }
+    })
+  }
+
+  private deleteExpense(expense: ExpenseModel) {
+    this.expenseService.deleteExpense(expense.id).subscribe((response) => {
+      if (response) {
+        this.groupedExpenses = [];
+        this.getUserExpenses();
+        this.toastr.success('Ausgabe wurde gelöscht', 'Löschen');
+      }
+    }, error => {
+      Swal.fire('Löschen', error.error, 'error').then();
+    });
   }
 }

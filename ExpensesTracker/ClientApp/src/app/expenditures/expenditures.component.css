@@ -6,6 +6,9 @@ h2 {
   width: 85%;
   margin: auto;
 }
+.expenses-container:last-of-type {
+  padding-bottom: 50px;
+}
 .expenses-container h3{
   color: #a56210;
 }
@@ -19,4 +22,14 @@ h2 {
 
 #total-amount {
   font-weight: bold;
+}
+.material-icons {
+  cursor: pointer;
+}
+.edit {
+  color: #6262f3;
+  margin-right: 20px;
+}
+.delete {
+  color: #ee5d5d;
 }
