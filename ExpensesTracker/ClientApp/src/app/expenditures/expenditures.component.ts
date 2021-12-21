@@ -55,24 +55,26 @@ export class ExpendituresComponent implements OnInit {
   getUserExpenses() {
     this.expenseService.getUserExpenses(this.currentUserId).subscribe((response) => {
       this.expenses = response;
-      response.forEach((expense) => {
-        const categoryExists = this.groupedExpenses.some(el => el.categoryName === expense.categoryName);
-        if (categoryExists) {
-          let category = this.groupedExpenses.find(s => s.categoryName === expense.categoryName);
-          // @ts-ignore
-          category.groupAmount = category.groupAmount + expense.amount;
-          // @ts-ignore
-          category.expense.push(expense);
-        } else {
-          const groupExpense: { categoryName: string, groupAmount: number, expense: ExpenseModel[] } = {
-            categoryName: expense.categoryName,
-            groupAmount: expense.amount,
-            expense: []
+      if (response) {
+        response.forEach((expense) => {
+          const categoryExists = this.groupedExpenses.some(el => el.categoryName === expense.categoryName);
+          if (categoryExists) {
+            let category = this.groupedExpenses.find(s => s.categoryName === expense.categoryName);
+            // @ts-ignore
+            category.groupAmount = category.groupAmount + expense.amount;
+            // @ts-ignore
+            category.expense.push(expense);
+          } else {
+            const groupExpense: { categoryName: string, groupAmount: number, expense: ExpenseModel[] } = {
+              categoryName: expense.categoryName,
+              groupAmount: expense.amount,
+              expense: []
+            }
+            groupExpense.expense.push(expense);
+            this.groupedExpenses.push(groupExpense);
           }
-          groupExpense.expense.push(expense);
-          this.groupedExpenses.push(groupExpense);
-        }
-      })
+        })
+      }
     });
   }
 

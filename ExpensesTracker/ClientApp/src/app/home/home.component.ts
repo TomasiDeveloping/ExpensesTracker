@@ -39,6 +39,9 @@ export class HomeComponent implements OnInit {
   }
 
   getCurrentUser() {
+    this.totalAmount = 0;
+    this.userExpenses = [];
+    this.categoryGroups = [];
     this.userService.getUserById(this.currentUserId).subscribe((response) => {
       this.currentUser = response;
       this.userBudget = response.monthlyBudget;
@@ -50,18 +53,20 @@ export class HomeComponent implements OnInit {
   getUserExpenses() {
     this.expenseService.getUserExpenses(this.currentUserId).subscribe((response) => {
       this.userExpenses = response;
-      response.forEach(expense => {
-        this.totalAmount += expense.amount;
-        const categoryExists = this.categoryGroups.some(el => el.category === expense.categoryId);
-        if (categoryExists) {
-          let category = this.categoryGroups.find(s => s.category === expense.categoryId)
-          // @ts-ignore
-          category.amount += expense.amount;
-        } else {
-          this.categoryGroups.push({name: expense.categoryName, category: expense.categoryId, amount: expense.amount})
-        }
-      })
-      this.CalculateExpensesInPercent(this.totalAmount);
+      if (response) {
+        response.forEach(expense => {
+          this.totalAmount += expense.amount;
+          const categoryExists = this.categoryGroups.some(el => el.category === expense.categoryId);
+          if (categoryExists) {
+            let category = this.categoryGroups.find(s => s.category === expense.categoryId)
+            // @ts-ignore
+            category.amount += expense.amount;
+          } else {
+            this.categoryGroups.push({name: expense.categoryName, category: expense.categoryId, amount: expense.amount})
+          }
+        })
+        this.CalculateExpensesInPercent(this.totalAmount);
+      }
     });
   }
 

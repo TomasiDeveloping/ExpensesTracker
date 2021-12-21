@@ -19,6 +19,7 @@ import {SpinnerInterceptor} from "./interceptors/spinner.interceptor";
 import { SettingsComponent } from './settings/settings.component';
 import { AuthComponent } from './auth/auth.component';
 import { EditExpensesComponent } from './home/edit-expenses/edit-expenses.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { EditExpensesComponent } from './home/edit-expenses/edit-expenses.compon
     CategoryEditDialogComponent,
     SettingsComponent,
     AuthComponent,
-    EditExpensesComponent
+    EditExpensesComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

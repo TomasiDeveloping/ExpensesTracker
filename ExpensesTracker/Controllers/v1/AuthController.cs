@@ -35,7 +35,29 @@ namespace ExpensesTracker.Controllers.v1
             {
                 FirstName = user.FirstName,
                 UserId = user.Id,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user.Id.ToString(), user.Email)
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Register(Register register)
+        {
+            var newUser = await _userService.InsertUserAsync(new UserDto()
+            {
+                CreatedAt = DateTime.Now,
+                Email = register.Email,
+                FirstName = register.FirstName,
+                LastName = register.LastName,
+                MonthlyBudget = 0,
+                IsActive = true,
+                Password = register.Password
+            });
+            return Ok(new AppUserDto()
+            {
+                FirstName = newUser.FirstName,
+                UserId = newUser.Id,
+                Token = _tokenService.CreateToken(newUser.Id.ToString(), newUser.Email)
             });
         }
     }

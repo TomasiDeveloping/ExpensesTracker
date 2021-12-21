@@ -1,0 +1,114 @@
+<form [formGroup]="registerForm" class="form-signing" *ngIf="registerForm">
+  <div class="text-center mb-4">
+    <h1 class="h3 mb-3 font-weight-normal">Registrieren</h1>
+  </div>
+  <div class="form-label-group">
+    <label for="registerEmail">Email</label>
+    <div class="input-group">
+      <input
+        [ngClass]="{
+                        'is-invalid': registerForm.controls.email.invalid && (registerForm.controls.email.dirty || registerForm.controls.email.touched),
+                        'is-valid': registerForm.controls.email.valid
+                      }"
+        class="form-control"
+        formControlName="email"
+        id="registerEmail"
+        type="email">
+      <div *ngIf="registerForm.controls.email.errors &&
+                 (registerForm.controls.email.dirty || registerForm.controls.email.touched)"
+           class="invalid-feedback">
+        <p *ngIf="registerForm.controls.email.errors.required">Email ist ein Pflichtfeld</p>
+        <p *ngIf="registerForm.controls.email.errors.email">Ungültige E-Mail</p>
+        <p *ngIf="registerForm.controls.email.errors.maxlength">Max 100 Zeichen erlaubt</p>
+        <p *ngIf="registerForm.controls.email.errors.emailExists">E-Mail bereits registriert</p>
+      </div>
+    </div>
+  </div>
+  <div class="form-label-group">
+    <label for="registerFirstName">Vorname</label>
+    <div class="input-group">
+      <input
+        [ngClass]="{
+                        'is-invalid': registerForm.controls.firstName.invalid && (registerForm.controls.firstName.dirty || registerForm.controls.firstName.touched),
+                        'is-valid': registerForm.controls.firstName.valid
+                      }"
+        class="form-control"
+        formControlName="firstName"
+        id="registerFirstName"
+        type="text">
+      <div *ngIf="registerForm.controls.firstName.errors &&
+                 (registerForm.controls.firstName.dirty || registerForm.controls.firstName.touched)"
+           class="invalid-feedback">
+        <p *ngIf="registerForm.controls.firstName.errors.required">Vorname ist ein Pflichtfeld</p>
+        <p *ngIf="registerForm.controls.firstName.errors.maxlength">Max 100 Zeichen erlaubt</p>
+      </div>
+    </div>
+  </div>
+  <div class="form-label-group">
+    <label for="registerLastName">Nachname</label>
+    <div class="input-group">
+      <input
+        [ngClass]="{
+                        'is-invalid': registerForm.controls.lastName.invalid && (registerForm.controls.lastName.dirty || registerForm.controls.lastName.touched),
+                        'is-valid': registerForm.controls.lastName.valid
+                      }"
+        class="form-control"
+        formControlName="lastName"
+        id="registerLastName"
+        type="text">
+      <div *ngIf="registerForm.controls.lastName.errors &&
+                 (registerForm.controls.lastName.dirty || registerForm.controls.lastName.touched)"
+           class="invalid-feedback">
+        <p *ngIf="registerForm.controls.lastName.errors.required">Nachname ist ein Pflichtfeld</p>
+        <p *ngIf="registerForm.controls.lastName.errors.maxlength">Max 100 Zeichen erlaubt</p>
+      </div>
+    </div>
+  </div>
+  <div class="form-label-group">
+    <label for="registerPassword">Passwort</label>
+    <div class="input-group">
+      <input
+        [ngClass]="{
+                        'is-invalid': registerForm.controls.password.invalid && (registerForm.controls.password.dirty || registerForm.controls.password.touched),
+                        'is-valid': registerForm.controls.password.valid
+                      }"
+        autocomplete="on"
+        class="form-control"
+        formControlName="password"
+        id="registerPassword"
+        type="password">
+      <div *ngIf="registerForm.controls.password.errors &&
+                 (registerForm.controls.password.dirty || registerForm.controls.password.touched)"
+           class="invalid-feedback">
+        <p *ngIf="registerForm.controls.password.errors.required">Passwort ist ein Pflichtfeld</p>
+      </div>
+    </div>
+  </div>
+  <div class="form-label-group">
+    <label for="registerConfirmPassword">Passwort bestätigen</label>
+    <div class="input-group">
+      <input
+        [ngClass]="{
+                        'is-invalid': registerForm.controls.confirmPassword.invalid && (registerForm.controls.confirmPassword.dirty || registerForm.controls.confirmPassword.touched),
+                        'is-valid': registerForm.controls.confirmPassword.valid
+                      }"
+        autocomplete="on"
+        class="form-control"
+        formControlName="confirmPassword"
+        id="registerConfirmPassword"
+        type="password">
+      <div *ngIf="registerForm.controls.confirmPassword.errors &&
+                 (registerForm.controls.confirmPassword.dirty || registerForm.controls.confirmPassword.touched)"
+           class="invalid-feedback">
+        <p *ngIf="registerForm.controls.confirmPassword.errors.required">Passwort bestätigen ist ein Pflichtfeld</p>
+        <p *ngIf="registerForm.controls.confirmPassword.errors.isMatching">Passwort nicht identisch</p>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="button-container">
+  <button type="button" class="btn bg-warning" (click)="onClose()">Abbrechen</button>
+  <button [disabled]="registerForm.invalid || !registerForm.dirty" class="btn btn-lg btn-success"
+          type="submit" (click)="onRegister()"><i class="fa fa-sign-in"></i> Registrieren
+  </button>
+</div>

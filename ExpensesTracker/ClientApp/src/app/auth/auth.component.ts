@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {ToastrService} from "ngx-toastr";
+import {MatDialog} from "@angular/material/dialog";
+import {RegisterComponent} from "./register/register.component";
 
 @Component({
   selector: 'app-auth',
@@ -15,7 +17,8 @@ export class AuthComponent implements OnInit {
   fieldTextType: Boolean = false;
 
   constructor(private authService: AuthService,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService,
+              private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.createLoginForm();
@@ -43,5 +46,13 @@ export class AuthComponent implements OnInit {
 
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
+  }
+
+  onRegister() {
+    this.dialog.open(RegisterComponent, {
+      width: '100%',
+      height: 'auto',
+      autoFocus: false
+    });
   }
 }

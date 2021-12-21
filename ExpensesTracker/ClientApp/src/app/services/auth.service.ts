@@ -7,6 +7,7 @@ import {ToastrService} from "ngx-toastr";
 import {UsersService} from "./users.service";
 import Swal from "sweetalert2";
 import * as jwt_decode from "jwt-decode";
+import {RegisterModel} from "../models/register.model";
 
 @Injectable({
   providedIn: 'root'
@@ -42,14 +43,14 @@ export class AuthService {
     });
   }
 
-  // register(register: Register) {
-  //   this.http.post<AppUser>(this.apiUrl + 'Register', register).subscribe(response => {
-  //     this.currentUserSource.next(response);
-  //     AuthService.setUserData(response);
-  //   }, error => {
-  //     this.toastr.error(error.error, 'Registrieren')
-  //   })
-  // }
+  register(register: RegisterModel) {
+    this.http.post<AppUser>(this.serviceUrl + 'Register', register).subscribe(response => {
+      this.currentUserSource.next(response);
+      AuthService.setUserData(response);
+    }, error => {
+      this.toastr.error(error.error, 'Registrieren')
+    })
+  }
 
   autoLogin() {
     const token = localStorage.getItem('expenseToken');

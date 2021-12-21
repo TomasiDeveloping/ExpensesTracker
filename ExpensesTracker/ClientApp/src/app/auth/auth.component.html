@@ -17,7 +17,6 @@
           class="form-control"
           formControlName="email"
           id="inputEmail"
-          placeholder="E-Mail"
           type="email">
         <div *ngIf="loginForm.controls.email.errors &&
                  (loginForm.controls.email.dirty || loginForm.controls.email.touched)"
@@ -40,8 +39,7 @@
           autocomplete="on"
           class="form-control"
           formControlName="password"
-          id="inputPassword"
-          placeholder="Passwort">
+          id="inputPassword">
         <span class="input-group-text" (click)="toggleFieldTextType()">
               <i
                 [ngClass]="{
@@ -64,7 +62,7 @@
     <button class="btn btn-lg btn-success mt-4" [disabled]="loginForm.invalid"
             type="submit"><i class="fa fa-sign-in"></i> Login
     </button>
-    <button id="register" class="btn btn-outline-info">Konto erstellen</button>
+    <button id="register" type="button" class="btn btn-outline-info" (click)="onRegister()">Konto erstellen</button>
   </form>
 </div>
 

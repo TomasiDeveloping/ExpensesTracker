@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text;
 using Core.Models;
 using System.IdentityModel.Tokens.Jwt;
+using Core.DTOs;
 using Core.Interfaces;
 
 namespace Core.Helper
@@ -19,12 +20,12 @@ namespace Core.Helper
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
         }
 
-        public string CreateToken(User user)
+        public string CreateToken(string userId, string userEmail)
         {
             var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-                new(JwtRegisteredClaimNames.Email, user.Email)
+                new(JwtRegisteredClaimNames.NameId, userId),
+                new(JwtRegisteredClaimNames.Email, userEmail)
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
