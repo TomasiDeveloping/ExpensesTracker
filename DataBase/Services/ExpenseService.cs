@@ -44,6 +44,19 @@ namespace DataBase.Services
             return _mapper.Map<List<ExpenseDto>>(userExpenses);
         }
 
+        public async Task<List<ExpenseDto>> GetUserExpensesByParamsAsync(int userId, int year, int month)
+        {
+            var dateFrom = new DateTime(year, month, 1);
+            var dateTo = dateFrom.AddMonths(1).AddDays(-1);
+            var userExpenses = await _context.Expenses
+                .Include(e => e.Category)
+                .Where(e => e.UserId == userId && e.CreateDate >= dateFrom && e.CreateDate <= dateTo)
+                .OrderBy(e => e.CategoryId)
+                .ThenByDescending(e => e.CreateDate)
+                .ToListAsync();
+            return _mapper.Map<List<ExpenseDto>>(userExpenses);
+        }
+
         public async Task<List<ExpenseDto>> GetExpensesByUserIdAndCategoryId(int userId, int categoryId)
         {
             var userExpensesByCategory = await _context.Expenses

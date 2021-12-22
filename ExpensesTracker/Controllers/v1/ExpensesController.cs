@@ -25,9 +25,15 @@ namespace ExpensesTracker.Controllers.v1
         }
 
         [HttpGet("user/{userId:int}")]
-        public async Task<IActionResult> GetExpensesByUserId(int userId)
+        public async Task<IActionResult> GetExpensesByUserId(int userId, [FromQuery] int? year = null, [FromQuery] int? month = null)
         {
-            var userExpenses = await _service.GetExpensesByUserId(userId);
+            _ = new List<ExpenseDto>();
+            List<ExpenseDto>? userExpenses;
+            if (year != null && month != null)
+                userExpenses = await _service.GetUserExpensesByParamsAsync(userId, year.Value, month.Value);
+            else
+                userExpenses = await _service.GetExpensesByUserId(userId);
+
             if (!userExpenses.Any()) return NoContent();
             return Ok(userExpenses);
         }

@@ -9,6 +9,7 @@ namespace Core.Interfaces
         Task<ExpenseDto?> GetExpenseByIdAsync(int expenseId);
 
         Task<List<ExpenseDto>> GetExpensesByUserId(int userId);
+        Task<List<ExpenseDto>> GetUserExpensesByParamsAsync(int userId, int year, int month);
 
         Task<List<ExpenseDto>> GetExpensesByUserIdAndCategoryId(int userId, int categoryId);
 
