@@ -13,6 +13,7 @@ namespace Core.Interfaces
         public Task<UserDto> InsertUserAsync(UserDto userDto);
 
         public Task<UserDto?> UpdateUserAsync(int userId, UserDto userDto);
+        public Task<bool> ChangeUserPasswordAsync(int userId, string password);
 
         public Task<bool> DeleteUserAsync(int userId);
     }

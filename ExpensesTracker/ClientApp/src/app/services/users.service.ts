@@ -21,6 +21,10 @@ export class UsersService {
     return this.http.put<UserModel>(this.serviceUrl + userId, user);
   }
 
+  changeUserPassword(userId: number, newPassword: string):Observable<boolean> {
+    return this.http.put<boolean>(this.serviceUrl + userId + '/changeUserPassword', {newPassword});
+  }
+
   deleteUser(userId: number): Observable<boolean> {
     return this.http.delete<boolean>(this.serviceUrl + userId);
   }

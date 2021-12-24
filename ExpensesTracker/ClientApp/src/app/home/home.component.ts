@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   currentUserId: number = 0;
   // @ts-ignore
   currentUser: UserModel;
+  currentDate = new Date();
 
   constructor(private expenseService: ExpensesService,
               private userService: UsersService,
@@ -51,7 +52,8 @@ export class HomeComponent implements OnInit {
   }
 
   getUserExpenses() {
-    this.expenseService.getUserExpenses(this.currentUserId).subscribe((response) => {
+    this.expenseService.getUserExpensesByQueryParams(this.currentUserId, this.currentDate.getFullYear(), this.currentDate.getMonth() + 1 )
+      .subscribe((response) => {
       this.userExpenses = response;
       if (response) {
         response.forEach(expense => {

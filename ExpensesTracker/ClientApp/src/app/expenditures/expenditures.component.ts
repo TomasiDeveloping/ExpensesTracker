@@ -36,6 +36,8 @@ export class ExpendituresComponent implements OnInit {
   groupedExpenses: { categoryName: string, groupAmount: number, expense: ExpenseModel[] }[] = [];
   expenses: ExpenseModel[] = [];
   currentUserId: number = 0;
+  currentYear = new Date().getFullYear();
+  currentMonth = new Date().getMonth() + 1;
 
   constructor(private expenseService: ExpensesService,
               private dialog: MatDialog,
@@ -48,12 +50,13 @@ export class ExpendituresComponent implements OnInit {
       const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
       this.currentUserId = +decodeToken.nameid;
     }
-    this.getUserExpenses();
+    this.getUserExpenses(this.currentYear, this.currentMonth);
     this.createYears();
   }
 
-  getUserExpenses() {
-    this.expenseService.getUserExpenses(this.currentUserId).subscribe((response) => {
+  getUserExpenses(year: number, month: number) {
+    this.groupedExpenses = [];
+    this.expenseService.getUserExpensesByQueryParams(this.currentUserId, year, month).subscribe((response) => {
       this.expenses = response;
       if (response) {
         response.forEach((expense) => {
@@ -86,11 +89,13 @@ export class ExpendituresComponent implements OnInit {
   }
 
   onYearChange(event: any) {
-    console.log(event.target.value);
+    this.currentYear = event.target.value;
+    this.getUserExpenses(this.currentYear, this.currentMonth);
   }
 
   onMonthChange(event: any) {
-    console.log(event.target.value);
+    this.currentMonth = +event.target.value;
+    this.getUserExpenses(this.currentYear, this.currentMonth);
   }
 
   onEditExpense(expense: ExpenseModel) {
@@ -102,7 +107,7 @@ export class ExpendituresComponent implements OnInit {
     dialogRef.afterClosed().subscribe(response => {
       if (response === 'update') {
         this.groupedExpenses = [];
-        this.getUserExpenses();
+        this.getUserExpenses(this.currentYear, this.currentMonth);
       }
     });
   }
@@ -128,11 +133,29 @@ export class ExpendituresComponent implements OnInit {
     this.expenseService.deleteExpense(expense.id).subscribe((response) => {
       if (response) {
         this.groupedExpenses = [];
-        this.getUserExpenses();
+        this.getUserExpenses(this.currentYear, this.currentMonth);
         this.toastr.success('Ausgabe wurde gelöscht', 'Löschen');
       }
     }, error => {
       Swal.fire('Löschen', error.error, 'error').then();
     });
+  }
+
+  getMonthName(month: number):string {
+    switch (month){
+      case 1: return 'Januar';
+      case 2: return 'Februar';
+      case 3: return 'März';
+      case 4: return 'April';
+      case 5: return 'Mai';
+      case 6: return 'Juni';
+      case 7: return 'Juli';
+      case 8: return 'August';
+      case 9: return 'September';
+      case 10: return 'Oktober';
+      case 11: return 'November';
+      case 12: return 'Dezember';
+      default: return '';
+    }
   }
 }

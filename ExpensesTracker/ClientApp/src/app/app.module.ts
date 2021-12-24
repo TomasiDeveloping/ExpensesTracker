@@ -20,6 +20,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { AuthComponent } from './auth/auth.component';
 import { EditExpensesComponent } from './home/edit-expenses/edit-expenses.component';
 import { RegisterComponent } from './auth/register/register.component';
+import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { RegisterComponent } from './auth/register/register.component';
     NgxSpinnerModule,
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

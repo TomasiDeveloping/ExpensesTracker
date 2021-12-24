@@ -28,3 +28,6 @@ h2 {
 .change-pw-btn button {
   width: 50%;
 }
+#cancel-user-change {
+  margin-right: 50px;
+}

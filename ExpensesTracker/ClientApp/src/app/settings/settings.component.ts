@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as jwt_decode from "jwt-decode";
 import {UsersService} from "../services/users.service";
 import {UserModel} from "../models/user.model";
-import {FormControl, FormGroup} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";
 import {AuthService} from "../services/auth.service";
@@ -20,6 +20,10 @@ export class SettingsComponent implements OnInit {
   userBudget = 0;
   // @ts-ignore
   userForm: FormGroup;
+  passwordForm = new FormGroup({
+    password: new FormControl('',[Validators.required]),
+    confirmPassword: new FormControl('',[Validators.required, this.matchValues('password')])
+  });
   passwordFieldTextType = false;
   confirmFieldTextType = false;
   isUserUpdate = false;
@@ -35,6 +39,14 @@ export class SettingsComponent implements OnInit {
       this.currentUserId = +decodeToken.nameid;
     }
     this.getCurrentUser();
+  }
+
+  matchValues(matchTo: string): ValidatorFn {
+    return (control: AbstractControl) => {
+      // @ts-ignore
+      return control?.value === control?.parent?.controls[matchTo].value
+        ? null : {isMatching: true};
+    };
   }
 
   createUserForm() {
@@ -139,6 +151,35 @@ export class SettingsComponent implements OnInit {
       }
     }, error => {
       Swal.fire('Account lösschen', error.error, 'error').then();
+    });
+  }
+
+  onCancelEditUser() {
+    this.isUserUpdate = false;
+    this.userForm.disable();
+  }
+
+  onPasswordChange() {
+    if (this.passwordForm.invalid) {
+      return;
+    }
+    const password = this.passwordForm.controls.password.value;
+    const confirmPassword = this.passwordForm.controls.confirmPassword.value;
+    if (password !== confirmPassword) {
+      Swal.fire('Passwort', 'Passwort nicht Identisch', 'warning').then();
+      this.passwordForm.reset();
+      return;
+    }
+    this.userService.changeUserPassword(this.currentUser.id, password).subscribe((response) => {
+      if (response) {
+        Swal.fire('Passwort ändern', 'Passwort wurde erfolgreich geändert, Du wirst automatisch ausgeloggt', 'success')
+          .then(() => this.authService.logout())
+      } else {
+        Swal.fire('Passwort ändern', 'Passwort konnte nicht geändert werden!', 'error')
+          .then(() => this.passwordForm.reset());
+      }
+    }, error => {
+      Swal.fire('Passwort ändern', error.error, 'error').then(() => this.passwordForm.reset());
     });
   }
 }

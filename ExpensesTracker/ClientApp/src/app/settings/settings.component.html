@@ -19,6 +19,7 @@
     </div>
     <div class="edit-user-btn">
     <button *ngIf="!isUserUpdate" class="btn btn-secondary" type="button" (click)="onEditUser()">Bearbeiten</button>
+      <button *ngIf="isUserUpdate" class="btn btn-danger" id="cancel-user-change" (click)="onCancelEditUser()">Abbrechen</button>
     <button *ngIf="isUserUpdate" class="btn btn-success" (click)="onSubmit()">Speichern</button>
     </div>
   </form>
@@ -31,12 +32,20 @@
   </div>
   <hr>
   <h4>Passwort ändern</h4>
-  <form>
+  <form [formGroup]="passwordForm">
   <div class="row">
     <div class="col-6">
       <label for="password">Neues Passwort</label>
       <div class="input-group">
-      <input class="form-control" [type]="passwordFieldTextType ? 'text' : 'password'" id="password">
+      <input
+        class="form-control"
+        formControlName="password"
+        [type]="passwordFieldTextType ? 'text' : 'password'"
+        [ngClass]="{
+                        'is-invalid': passwordForm.controls.password.invalid && (passwordForm.controls.password.dirty || passwordForm.controls.password.touched),
+                        'is-valid': passwordForm.controls.password.valid
+                      }"
+        id="password">
       <span class="input-group-text" (click)="togglePasswordFieldTextType()">
               <i
                 [ngClass]="{
@@ -46,12 +55,25 @@
                 class="fa"
               ></i>
         </span>
+        <div *ngIf="passwordForm.controls.password.errors &&
+                 (passwordForm.controls.password.dirty || passwordForm.controls.password.touched)"
+             class="invalid-feedback">
+          <p *ngIf="passwordForm.controls.password.errors.required">Passwort ist ein Pflichtfeld</p>
+        </div>
       </div>
     </div>
     <div class="col-6">
       <label for="confirmPassword">Passwort bestätigen</label>
       <div class="input-group">
-        <input class="form-control" [type]="confirmFieldTextType ? 'text' : 'password'" id="confirmPassword">
+        <input
+          class="form-control"
+          formControlName="confirmPassword"
+          [type]="confirmFieldTextType ? 'text' : 'password'"
+          [ngClass]="{
+                        'is-invalid': passwordForm.controls.confirmPassword.invalid && (passwordForm.controls.confirmPassword.dirty || passwordForm.controls.confirmPassword.touched),
+                        'is-valid': passwordForm.controls.confirmPassword.valid
+                      }"
+          id="confirmPassword">
         <span class="input-group-text" (click)="toggleConfirmFieldTextType()">
               <i
                 [ngClass]="{
@@ -61,11 +83,17 @@
                 class="fa"
               ></i>
         </span>
+        <div *ngIf="passwordForm.controls.confirmPassword.errors &&
+                 (passwordForm.controls.confirmPassword.dirty || passwordForm.controls.confirmPassword.touched)"
+             class="invalid-feedback">
+          <p *ngIf="passwordForm.controls.confirmPassword.errors.required">Passwort bestätigen ist ein Pflichtfeld</p>
+          <p *ngIf="passwordForm.controls.confirmPassword.errors.isMatching">Passwort nicht identisch</p>
+        </div>
       </div>
     </div>
   </div>
     <div class="change-pw-btn">
-      <button class="btn btn-success">Passwort ändern</button>
+      <button class="btn btn-success" [disabled]="passwordForm.invalid" (click)="onPasswordChange()">Passwort ändern</button>
     </div>
   </form>
   <hr>

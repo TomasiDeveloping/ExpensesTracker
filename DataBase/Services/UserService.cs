@@ -76,5 +76,18 @@ namespace DataBase.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> ChangeUserPasswordAsync(int userId, string password)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) return false;
+
+            var passwordHashAndSalt = PasswordService.CreateNewPassword(password);
+
+            user.Salt = passwordHashAndSalt.PasswordSalt;
+            user.Password = passwordHashAndSalt.PasswordHash;
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

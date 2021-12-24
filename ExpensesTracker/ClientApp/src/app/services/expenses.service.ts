@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ExpenseModel} from "../models/expense.model";
 
@@ -23,6 +23,13 @@ export class ExpensesService {
 
   getUserExpenses(userId: number): Observable<ExpenseModel[]> {
     return this.http.get<ExpenseModel[]>(this.serviceUrl + 'user/' + userId);
+  }
+
+  getUserExpensesByQueryParams(userId: number, year: number, month: number): Observable<ExpenseModel[]> {
+    let params = new HttpParams();
+    params = params.set('year', year);
+    params = params.set('month', month);
+    return this.http.get<ExpenseModel[]>(this.serviceUrl + 'user/' + userId, {params});
   }
 
   getUserExpensesByCategory(userId: number, categoryId: number): Observable<ExpenseModel[]> {

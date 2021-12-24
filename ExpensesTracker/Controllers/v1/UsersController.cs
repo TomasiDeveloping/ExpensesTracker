@@ -1,9 +1,12 @@
-﻿using Core.DTOs;
+﻿using System.Text.Json.Nodes;
+using Core.DTOs;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpensesTracker.Controllers.v1
 {
+    [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
@@ -39,6 +42,22 @@ namespace ExpensesTracker.Controllers.v1
             {
                 var newUser = await _service.InsertUserAsync(userDto);
                 return Ok(newUser);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{userId:int}/[action]")]
+        public async Task<IActionResult> ChangeUserPassword(int userId, [FromBody] JsonObject requestBody)
+        {
+            try
+            {
+                var password = requestBody["newPassword"]?.ToString();
+                if (string.IsNullOrEmpty(password)) return BadRequest("Password is empty!");
+                var checkChangePassword = await _service.ChangeUserPasswordAsync(userId, password);
+                return Ok(checkChangePassword);
             }
             catch (Exception e)
             {

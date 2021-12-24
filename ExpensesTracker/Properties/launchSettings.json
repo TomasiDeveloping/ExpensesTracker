@@ -1,4 +1,34 @@
-﻿{
+﻿//{
+//  "iisSettings": {
+//    "windowsAuthentication": false,
+//    "anonymousAuthentication": true,
+//    "iisExpress": {
+//      "applicationUrl": "http://localhost:40769",
+//      "sslPort": 44360
+//    }
+//  },
+//  "profiles": {
+//    "ExpensesTracker": {
+//      "commandName": "Project",
+//      "launchBrowser": true,
+//      "applicationUrl": "https://localhost:7184;http://localhost:5184",
+//      "environmentVariables": {
+//        "ASPNETCORE_ENVIRONMENT": "Development",
+//        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+//      }
+//    },
+//    "IIS Express": {
+//      "commandName": "IISExpress",
+//      "launchBrowser": true,
+//      "environmentVariables": {
+//        "ASPNETCORE_ENVIRONMENT": "Development",
+//        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+//      }
+//    }
+//  }
+//}
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -10,23 +40,20 @@
   "profiles": {
     "ExpensesTracker": {
       "commandName": "Project",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
-      // REMOVE launchURL for start app with Angular
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7184;http://localhost:5184",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      // REMOVE launchURL for start app with Angular
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
