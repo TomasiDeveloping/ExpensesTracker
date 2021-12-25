@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Core.DTOs;
-using Core.Helper;
+using Core.Helper.Services;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +33,12 @@ namespace DataBase.Services
         public async Task<User?> GetUserByEmailForLoginAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<UserDto?> GetUserByEmailAsync(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return user == null ? null : _mapper.Map<UserDto>(user);
         }
 
         public async Task<UserDto> InsertUserAsync(UserDto userDto)

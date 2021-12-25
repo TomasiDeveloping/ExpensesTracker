@@ -3,10 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataBase
 {
-    public partial class ExpensesTrackerContext : DbContext
+    public class ExpensesTrackerContext : DbContext
     {
-        public ExpensesTrackerContext(DbContextOptions<ExpensesTrackerContext> options) : base(options)
+        public ExpensesTrackerContext(DbContextOptions<ExpensesTrackerContext> options, DbSet<User> users, DbSet<Category> categories, DbSet<Expense> expenses) : base(options)
         {
+            Users = users;
+            Categories = categories;
+            Expenses = expenses;
         }
 
         public DbSet<User> Users { get; set; }
@@ -20,6 +23,7 @@ namespace DataBase
             modelBuilder.Entity<User>().Property(u => u.FirstName).HasMaxLength(100).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.LastName).HasMaxLength(100).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(100).IsRequired();
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<User>().Property(u => u.Password).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.Salt).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.CreatedAt).IsRequired();

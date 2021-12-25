@@ -1,13 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Core.Models;
-using System.IdentityModel.Tokens.Jwt;
-using Core.DTOs;
 using Core.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Core.Helper
+namespace Core.Helper.Services
 {
     public class TokenService : ITokenService
     {

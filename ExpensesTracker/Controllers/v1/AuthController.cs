@@ -1,8 +1,11 @@
-﻿using Core.DTOs;
-using Core.Helper;
+﻿using System.Text.Json.Nodes;
+using Core.DTOs;
+using Core.Helper.Classes;
+using Core.Helper.Services;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace ExpensesTracker.Controllers.v1
 {
@@ -13,11 +16,21 @@ namespace ExpensesTracker.Controllers.v1
     {
         private readonly ITokenService _tokenService;
         private readonly IUserService _userService;
+        private readonly EmailService _emailService;
 
-        public AuthController(ITokenService tokenService, IUserService userService)
+        public AuthController(ITokenService tokenService, IUserService userService, IOptions<EmailSettings> options)
         {
             _tokenService = tokenService;
             _userService = userService;
+            _emailService = new EmailService(options);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> CheckEmailExists([FromQuery] string email)
+        {
+            var user = await _userService.GetUserByEmailAsync(email);
+            return Ok(user != null);
         }
 
         [AllowAnonymous]
@@ -59,6 +72,33 @@ namespace ExpensesTracker.Controllers.v1
                 UserId = newUser.Id,
                 Token = _tokenService.CreateToken(newUser.Id.ToString(), newUser.Email)
             });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ForgotPassword([FromBody] JsonObject requestJsonObject)
+        {
+            try
+            {
+                var email = requestJsonObject["email"]?.ToString();
+                if (string.IsNullOrEmpty(email)) return BadRequest("Keine E-mMil Adresse!");
+
+                var user = await _userService.GetUserByEmailAsync(email);
+                if (user == null) return BadRequest("E-Mail nicht Registriert!");
+
+                var randomPassword = PasswordService.CreateRandomPassword();
+                var checkUpdatePassword = await _userService.ChangeUserPasswordAsync(user.Id, randomPassword);
+                if (!checkUpdatePassword) return BadRequest("Passwort konnte nicht geändert werden!");
+
+                var message = EmailMessagesService.CreateForgotPasswordMessage(randomPassword);
+                var checkEmailSend = await _emailService.SendEmailAsync(user.Email, message, "Neues Passwort");
+                if (!checkEmailSend) return BadRequest("E-Mail mit neuem Passwort konnte nicht gesendet werden!");
+                return Ok(true);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

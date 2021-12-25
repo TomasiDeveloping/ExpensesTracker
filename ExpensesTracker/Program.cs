@@ -1,5 +1,6 @@
 using System.Text;
-using Core.Helper;
+using Core.Helper.Classes;
+using Core.Helper.Services;
 using Core.Interfaces;
 using DataBase;
 using DataBase.Profiles;
@@ -7,7 +8,6 @@ using DataBase.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -81,6 +81,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -148,6 +150,8 @@ app.Run();
 //            ValidateAudience = false
 //        };
 //    });
+
+// builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 //builder.Services.AddCors();
 

@@ -9,6 +9,7 @@ namespace Core.Interfaces
 
         public Task<UserDto?> GetUserByIdAsync(int userId);
         public Task<User?> GetUserByEmailForLoginAsync(string email);
+        public Task<UserDto?> GetUserByEmailAsync(string email);
 
         public Task<UserDto> InsertUserAsync(UserDto userDto);
 

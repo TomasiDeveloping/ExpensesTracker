@@ -1,4 +1,4 @@
-﻿namespace Core.Helper
+﻿namespace Core.Helper.Classes
 {
     public class Password
     {
