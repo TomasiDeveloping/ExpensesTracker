@@ -5,11 +5,8 @@ namespace DataBase
 {
     public class ExpensesTrackerContext : DbContext
     {
-        public ExpensesTrackerContext(DbContextOptions<ExpensesTrackerContext> options, DbSet<User> users, DbSet<Category> categories, DbSet<Expense> expenses) : base(options)
+        public ExpensesTrackerContext(DbContextOptions<ExpensesTrackerContext> options) : base(options)
         {
-            Users = users;
-            Categories = categories;
-            Expenses = expenses;
         }
 
         public DbSet<User> Users { get; set; }
