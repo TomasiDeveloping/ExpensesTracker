@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -11,7 +11,8 @@ export class ExpensesService {
 
   serviceUrl = environment.apiUrl + 'expenses/';
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {
+  }
 
   getExpenses(): Observable<ExpenseModel[]> {
     return this.http.get<ExpenseModel[]>(this.serviceUrl);

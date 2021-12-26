@@ -40,7 +40,7 @@
           class="form-control"
           formControlName="password"
           id="inputPassword">
-        <span class="input-group-text" (click)="toggleFieldTextType()">
+        <span (click)="toggleFieldTextType()" class="input-group-text">
               <i
                 [ngClass]="{
                       'fa-eye-slash': !fieldTextType,
@@ -59,10 +59,14 @@
     <div class="text-center mt-2">
       <div (click)="onForgotPassword()" class="forgotPassword">Passwort vergessen ?</div>
     </div>
-    <button class="btn btn-lg btn-success mt-4" [disabled]="loginForm.invalid"
+    <button [disabled]="loginForm.invalid" class="btn btn-lg btn-success mt-4"
             type="submit"><i class="fa fa-sign-in"></i> Login
     </button>
-    <button id="register" type="button" class="btn btn-outline-info" (click)="onRegister()">Konto erstellen</button>
+    <button (click)="onRegister()" class="btn btn-outline-info" id="register" type="button">Konto erstellen</button>
   </form>
+  <div class="footer">
+    <div id="footer-content">&copy; 2021 -  {{currentYear}} All Rights Reserved by <span (click)="onFooter()">Tomasi Developing</span>
+    </div>
+  </div>
 </div>
 

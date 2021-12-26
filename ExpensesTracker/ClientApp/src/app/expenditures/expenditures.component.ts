@@ -82,8 +82,8 @@ export class ExpendituresComponent implements OnInit {
   }
 
   createYears() {
-    let year = this.date.getFullYear();
-    for (let i = 0; i < 4; i++) {
+    let year = this.date.getFullYear() + 1;
+    for (let i = 0; i < 6; i++) {
       this.years.push(year - i);
     }
   }
@@ -129,6 +129,37 @@ export class ExpendituresComponent implements OnInit {
     })
   }
 
+  getMonthName(month: number): string {
+    switch (month) {
+      case 1:
+        return 'Januar';
+      case 2:
+        return 'Februar';
+      case 3:
+        return 'März';
+      case 4:
+        return 'April';
+      case 5:
+        return 'Mai';
+      case 6:
+        return 'Juni';
+      case 7:
+        return 'Juli';
+      case 8:
+        return 'August';
+      case 9:
+        return 'September';
+      case 10:
+        return 'Oktober';
+      case 11:
+        return 'November';
+      case 12:
+        return 'Dezember';
+      default:
+        return '';
+    }
+  }
+
   private deleteExpense(expense: ExpenseModel) {
     this.expenseService.deleteExpense(expense.id).subscribe((response) => {
       if (response) {
@@ -139,23 +170,5 @@ export class ExpendituresComponent implements OnInit {
     }, error => {
       Swal.fire('Löschen', error.error, 'error').then();
     });
-  }
-
-  getMonthName(month: number):string {
-    switch (month){
-      case 1: return 'Januar';
-      case 2: return 'Februar';
-      case 3: return 'März';
-      case 4: return 'April';
-      case 5: return 'Mai';
-      case 6: return 'Juni';
-      case 7: return 'Juli';
-      case 8: return 'August';
-      case 9: return 'September';
-      case 10: return 'Oktober';
-      case 11: return 'November';
-      case 12: return 'Dezember';
-      default: return '';
-    }
   }
 }

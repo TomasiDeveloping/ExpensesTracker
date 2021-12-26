@@ -27,7 +27,7 @@ export class CategoryEditDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.categoryForm = new FormGroup( {
+    this.categoryForm = new FormGroup({
       id: new FormControl(this.currentCategory.id),
       name: new FormControl(this.currentCategory.name, [Validators.required]),
       userId: new FormControl(this.currentCategory.userId)

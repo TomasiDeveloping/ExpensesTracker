@@ -4,12 +4,12 @@
   <div class="detail-container">
     <div class="row">
       <div class="col-6">
-        <select [ngModel]="date.getMonth() + 1" class="form-select" (change)="onMonthChange($event)">
+        <select (change)="onMonthChange($event)" [ngModel]="date.getMonth() + 1" class="form-select">
           <option *ngFor="let month of months" [value]="month.value">{{month.name}}</option>
         </select>
       </div>
       <div class="col-6">
-        <select class="form-select" (change)="onYearChange($event)">
+        <select (change)="onYearChange($event)" [ngModel]="date.getFullYear()" class="form-select">
           <option *ngFor="let year of years" [value]="year">{{year}}</option>
         </select>
       </div>
@@ -18,13 +18,14 @@
     <div *ngFor="let categories of groupedExpenses" class="expenses-container">
       <h3>{{categories.categoryName}}</h3>
       <ol class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-start" *ngFor="let expense of categories.expense">
+        <li *ngFor="let expense of categories.expense"
+            class="list-group-item d-flex justify-content-between align-items-start">
           <div class="ms-2 me-auto">
             <div class="fw-bold">{{expense.description}}</div>
             {{expense.createDate | date: 'dd.MM.yyyy'}}
             <div>
-              <span class="material-icons edit" (click)="onEditExpense(expense)">edit</span>
-              <span class="material-icons delete" (click)="onDeleteExpense(expense)">delete</span>
+              <span (click)="onEditExpense(expense)" class="material-icons edit">edit</span>
+              <span (click)="onDeleteExpense(expense)" class="material-icons delete">delete</span>
             </div>
           </div>
           <span class="badge bg-warning">{{expense.amount | currency: 'CHF '}}</span>

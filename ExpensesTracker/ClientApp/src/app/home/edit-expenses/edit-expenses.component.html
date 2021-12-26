@@ -35,7 +35,7 @@
         <p *ngIf="expenseForm.controls.categoryId.errors.required">Kategorie ist ein Pflichtfeld</p>
       </div>
     </div>
-    <div class="mb-3" *ngIf="isNewCategory">
+    <div *ngIf="isNewCategory" class="mb-3">
       <label class="form-label" for="categoryName">Neue Kategorie</label>
       <input
         [ngClass]="{

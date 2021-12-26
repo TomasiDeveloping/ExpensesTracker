@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -11,7 +11,8 @@ export class UsersService {
 
   serviceUrl = environment.apiUrl + 'users/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getUserById(userId: number): Observable<UserModel> {
     return this.http.get<UserModel>(this.serviceUrl + userId);
@@ -21,7 +22,7 @@ export class UsersService {
     return this.http.put<UserModel>(this.serviceUrl + userId, user);
   }
 
-  changeUserPassword(userId: number, newPassword: string):Observable<boolean> {
+  changeUserPassword(userId: number, newPassword: string): Observable<boolean> {
     return this.http.put<boolean>(this.serviceUrl + userId + '/changeUserPassword', {newPassword});
   }
 

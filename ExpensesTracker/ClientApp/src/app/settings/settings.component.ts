@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as jwt_decode from "jwt-decode";
 import {UsersService} from "../services/users.service";
 import {UserModel} from "../models/user.model";
@@ -6,6 +6,9 @@ import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";
 import {AuthService} from "../services/auth.service";
+import {MatDialog} from "@angular/material/dialog";
+import {ChangelogComponent} from "./changelog/changelog.component";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-settings',
@@ -21,16 +24,19 @@ export class SettingsComponent implements OnInit {
   // @ts-ignore
   userForm: FormGroup;
   passwordForm = new FormGroup({
-    password: new FormControl('',[Validators.required]),
-    confirmPassword: new FormControl('',[Validators.required, this.matchValues('password')])
+    password: new FormControl('', [Validators.required]),
+    confirmPassword: new FormControl('', [Validators.required, this.matchValues('password')])
   });
   passwordFieldTextType = false;
   confirmFieldTextType = false;
   isUserUpdate = false;
+  appVersion = environment.appVersion;
 
   constructor(private userService: UsersService,
               private toastr: ToastrService,
-              private authService: AuthService) { }
+              private dialog: MatDialog,
+              private authService: AuthService) {
+  }
 
   ngOnInit(): void {
     const token = localStorage.getItem('expenseToken');
@@ -181,5 +187,17 @@ export class SettingsComponent implements OnInit {
     }, error => {
       Swal.fire('Passwort ändern', error.error, 'error').then(() => this.passwordForm.reset());
     });
+  }
+
+  onChangeLog() {
+    this.dialog.open(ChangelogComponent, {
+      width: '80%',
+      height: 'auto',
+      autoFocus: false
+    })
+  }
+
+  onContactSupport() {
+
   }
 }

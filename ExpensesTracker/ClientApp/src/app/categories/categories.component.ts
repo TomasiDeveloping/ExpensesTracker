@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CategoriesService} from "../services/categories.service";
 import {CategoryModel} from "../models/category.model";
 import Swal from 'sweetalert2';
@@ -19,7 +19,8 @@ export class CategoriesComponent implements OnInit {
 
   constructor(private categoryService: CategoriesService,
               private toastr: ToastrService,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     const token = localStorage.getItem('expenseToken');
@@ -50,18 +51,6 @@ export class CategoriesComponent implements OnInit {
     this.openDialog(category, true);
   }
 
-  private deleteCategory(category: CategoryModel) {
-    this.categoryService.deleteCategory(category.id).subscribe((response) => {
-      if (response) {
-        this.getUserCategories();
-        this.toastr.success(category.name + ' gelöscht', 'Löschen');
-      } else {
-      }
-    }, error => {
-      Swal.fire('Löschen', 'Error ' + error.error, 'error').then();
-    });
-  }
-
   openDialog(category: CategoryModel, isUpdate: boolean) {
     const dialogRef = this.dialog.open(CategoryEditDialogComponent, {
       width: '80%',
@@ -90,5 +79,17 @@ export class CategoriesComponent implements OnInit {
         this.deleteCategory(category);
       }
     })
+  }
+
+  private deleteCategory(category: CategoryModel) {
+    this.categoryService.deleteCategory(category.id).subscribe((response) => {
+      if (response) {
+        this.getUserCategories();
+        this.toastr.success(category.name + ' gelöscht', 'Löschen');
+      } else {
+      }
+    }, error => {
+      Swal.fire('Löschen', 'Error ' + error.error, 'error').then();
+    });
   }
 }

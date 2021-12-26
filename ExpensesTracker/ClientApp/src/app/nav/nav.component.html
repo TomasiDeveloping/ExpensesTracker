@@ -1,27 +1,30 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/">Kostenmanager</a>
-    <button class="navbar-toggler" type="button" (click)="isShown = !isShown" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <button (click)="isShown = !isShown" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler" data-bs-target="#navbarColor02" data-bs-toggle="collapse"
+            type="button">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarColor02" [ngClass]="{'show': isShown}">
+    <div [ngClass]="{'show': isShown}" class="collapse navbar-collapse" id="navbarColor02">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" (click)="isShown = false" routerLinkActive="active">Home
+          <a (click)="isShown = false" class="nav-link" routerLink="/home" routerLinkActive="active">Home
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/ausgaben" (click)="isShown = false" routerLinkActive="active">Ausgaben</a>
+          <a (click)="isShown = false" class="nav-link" routerLink="/ausgaben" routerLinkActive="active">Ausgaben</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/kategorien" (click)="isShown = false" routerLinkActive="active">Kategorien</a>
+          <a (click)="isShown = false" class="nav-link" routerLink="/kategorien"
+             routerLinkActive="active">Kategorien</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/einstellungen" (click)="isShown = false" routerLinkActive="active">Einstellungen</a>
+          <a (click)="isShown = false" class="nav-link" routerLink="/einstellungen" routerLinkActive="active">Einstellungen</a>
         </li>
         <li class="nav-item" id="logout">
-          <a class="nav-link" (click)="onLogout()">Logout</a>
+          <a (click)="onLogout()" class="nav-link">Logout</a>
         </li>
       </ul>
     </div>

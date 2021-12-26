@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
 import {RegisterComponent} from "./register/register.component";
+import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
 
 @Component({
   selector: 'app-auth',
@@ -15,10 +16,12 @@ export class AuthComponent implements OnInit {
   // @ts-ignore
   loginForm: FormGroup
   fieldTextType: Boolean = false;
+  currentYear = new Date().getFullYear();
 
   constructor(private authService: AuthService,
               private toastr: ToastrService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.createLoginForm();
@@ -32,8 +35,7 @@ export class AuthComponent implements OnInit {
   }
 
   onLogin() {
-    if (this.loginForm.invalid)
-    {
+    if (this.loginForm.invalid) {
       this.toastr.error('Fehler im Eingabefeld', 'Login');
       return;
     }
@@ -41,7 +43,11 @@ export class AuthComponent implements OnInit {
   }
 
   onForgotPassword() {
-
+    this.dialog.open(ForgotPasswordComponent, {
+      width: '100%',
+      height: 'auto',
+      autoFocus: false
+    });
   }
 
   toggleFieldTextType() {
@@ -54,5 +60,9 @@ export class AuthComponent implements OnInit {
       height: 'auto',
       autoFocus: false
     });
+  }
+
+  onFooter() {
+    window.open('https://tomasi-developing.ch');
   }
 }

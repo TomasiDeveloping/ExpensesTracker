@@ -35,13 +35,15 @@ h1 {
   max-width: 500px;
   padding: 40px;
   margin: 70px auto;
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0, 0, 0, 0.7);
   border-radius: 6px;
   box-shadow: 1px 1px 1px rgb(49, 45, 45);
 }
-form label, h1{
+
+form label, h1 {
   color: white;
 }
+
 form h1 {
   padding: 0;
   margin: 0;
@@ -62,4 +64,27 @@ form h1 {
 
 button {
   width: 100%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #918e8e;
+}
+
+#footer-content {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+#footer-content span {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #592929;
 }

@@ -6,47 +6,49 @@
     <div class="row">
       <div class="col-6">
         <label for="lastName">Vorname</label>
-        <input class="form-control" type="text" formControlName="lastName" id="lastName">
+        <input class="form-control" formControlName="lastName" id="lastName" type="text">
       </div>
       <div class="col-6">
         <label for="firstName">Nachname</label>
-        <input class="form-control" type="text" formControlName="firstName" id="firstName">
+        <input class="form-control" formControlName="firstName" id="firstName" type="text">
       </div>
     </div>
     <div>
       <label for="email">E-Mail</label>
-      <input class="form-control" type="email" formControlName="email" id="email">
+      <input class="form-control" formControlName="email" id="email" type="email">
     </div>
     <div class="edit-user-btn">
-    <button *ngIf="!isUserUpdate" class="btn btn-secondary" type="button" (click)="onEditUser()">Bearbeiten</button>
-      <button *ngIf="isUserUpdate" class="btn btn-danger" id="cancel-user-change" (click)="onCancelEditUser()">Abbrechen</button>
-    <button *ngIf="isUserUpdate" class="btn btn-success" (click)="onSubmit()">Speichern</button>
+      <button (click)="onEditUser()" *ngIf="!isUserUpdate" class="btn btn-secondary" type="button">Bearbeiten</button>
+      <button (click)="onCancelEditUser()" *ngIf="isUserUpdate" class="btn btn-danger" id="cancel-user-change">
+        Abbrechen
+      </button>
+      <button (click)="onSubmit()" *ngIf="isUserUpdate" class="btn btn-success">Speichern</button>
     </div>
   </form>
   <hr>
   <h4>Budget</h4>
   <div class="col-8">
-    <label for="budget" class="form-label">Budget</label>
-    <input [(ngModel)]="userBudget" min="0" class="form-control" type="number" name="budget" id="budget">
-    <button id="changeBudgetBtn" class="btn btn-success" (click)="onBudgetChange()">Monatsbudget ändern</button>
+    <label class="form-label" for="budget">Budget</label>
+    <input [(ngModel)]="userBudget" class="form-control" id="budget" min="0" name="budget" type="number">
+    <button (click)="onBudgetChange()" class="btn btn-success" id="changeBudgetBtn">Monatsbudget ändern</button>
   </div>
   <hr>
   <h4>Passwort ändern</h4>
   <form [formGroup]="passwordForm">
-  <div class="row">
-    <div class="col-6">
-      <label for="password">Neues Passwort</label>
-      <div class="input-group">
-      <input
-        class="form-control"
-        formControlName="password"
-        [type]="passwordFieldTextType ? 'text' : 'password'"
-        [ngClass]="{
+    <div class="row">
+      <div class="col-6">
+        <label for="password">Neues Passwort</label>
+        <div class="input-group">
+          <input
+            [ngClass]="{
                         'is-invalid': passwordForm.controls.password.invalid && (passwordForm.controls.password.dirty || passwordForm.controls.password.touched),
                         'is-valid': passwordForm.controls.password.valid
                       }"
-        id="password">
-      <span class="input-group-text" (click)="togglePasswordFieldTextType()">
+            [type]="passwordFieldTextType ? 'text' : 'password'"
+            class="form-control"
+            formControlName="password"
+            id="password">
+          <span (click)="togglePasswordFieldTextType()" class="input-group-text">
               <i
                 [ngClass]="{
                       'fa-eye-slash': !passwordFieldTextType,
@@ -55,26 +57,26 @@
                 class="fa"
               ></i>
         </span>
-        <div *ngIf="passwordForm.controls.password.errors &&
+          <div *ngIf="passwordForm.controls.password.errors &&
                  (passwordForm.controls.password.dirty || passwordForm.controls.password.touched)"
-             class="invalid-feedback">
-          <p *ngIf="passwordForm.controls.password.errors.required">Passwort ist ein Pflichtfeld</p>
+               class="invalid-feedback">
+            <p *ngIf="passwordForm.controls.password.errors.required">Passwort ist ein Pflichtfeld</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-6">
-      <label for="confirmPassword">Passwort bestätigen</label>
-      <div class="input-group">
-        <input
-          class="form-control"
-          formControlName="confirmPassword"
-          [type]="confirmFieldTextType ? 'text' : 'password'"
-          [ngClass]="{
+      <div class="col-6">
+        <label for="confirmPassword">Passwort bestätigen</label>
+        <div class="input-group">
+          <input
+            [ngClass]="{
                         'is-invalid': passwordForm.controls.confirmPassword.invalid && (passwordForm.controls.confirmPassword.dirty || passwordForm.controls.confirmPassword.touched),
                         'is-valid': passwordForm.controls.confirmPassword.valid
                       }"
-          id="confirmPassword">
-        <span class="input-group-text" (click)="toggleConfirmFieldTextType()">
+            [type]="confirmFieldTextType ? 'text' : 'password'"
+            class="form-control"
+            formControlName="confirmPassword"
+            id="confirmPassword">
+          <span (click)="toggleConfirmFieldTextType()" class="input-group-text">
               <i
                 [ngClass]="{
                       'fa-eye-slash': !confirmFieldTextType,
@@ -83,22 +85,34 @@
                 class="fa"
               ></i>
         </span>
-        <div *ngIf="passwordForm.controls.confirmPassword.errors &&
+          <div *ngIf="passwordForm.controls.confirmPassword.errors &&
                  (passwordForm.controls.confirmPassword.dirty || passwordForm.controls.confirmPassword.touched)"
-             class="invalid-feedback">
-          <p *ngIf="passwordForm.controls.confirmPassword.errors.required">Passwort bestätigen ist ein Pflichtfeld</p>
-          <p *ngIf="passwordForm.controls.confirmPassword.errors.isMatching">Passwort nicht identisch</p>
+               class="invalid-feedback">
+            <p *ngIf="passwordForm.controls.confirmPassword.errors.required">Passwort bestätigen ist ein Pflichtfeld</p>
+            <p *ngIf="passwordForm.controls.confirmPassword.errors.isMatching">Passwort nicht identisch</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
     <div class="change-pw-btn">
-      <button class="btn btn-success" [disabled]="passwordForm.invalid" (click)="onPasswordChange()">Passwort ändern</button>
+      <button (click)="onPasswordChange()" [disabled]="passwordForm.invalid" class="btn btn-success">Passwort ändern
+      </button>
     </div>
   </form>
   <hr>
+  <h4>Kostenmanager</h4>
+  <div class="expense-tracker-container">
+    <div>Version: {{appVersion}}
+      <span (click)="onChangeLog()" class="material-icons" data-bs-placement="top" data-bs-toggle="tooltip"
+            id="info-icon" title="Änderungsprotokoll">help</span>
+    </div>
+    <div>
+      <button (click)="onContactSupport()" class="btn bg-info">Support kontaktieren</button>
+    </div>
+  </div>
+  <hr>
   <h4>Account löschen</h4>
   <div class="delete-container">
-    <button class="btn btn-danger btn-sm" (click)="onDeleteAccount()">Account Löschen</button>
+    <button (click)="onDeleteAccount()" class="btn btn-danger btn-sm">Account Löschen</button>
   </div>
 </div>

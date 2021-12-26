@@ -6,13 +6,14 @@ import {AuthService} from "./services/auth.service";
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent implements OnInit, OnDestroy{
+export class AppComponent implements OnInit, OnDestroy {
   title = 'app';
 
   isLogin = false;
   private userSub: Subscription | undefined;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
 
   ngOnInit(): void {
     this.authService.autoLogin();

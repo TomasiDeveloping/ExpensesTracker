@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {BehaviorSubject, map} from "rxjs";
+import {BehaviorSubject, map, Observable} from "rxjs";
 import {AppUser} from "../models/appUser.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
 import {UsersService} from "./users.service";
 import Swal from "sweetalert2";
@@ -19,7 +19,8 @@ export class AuthService {
 
   constructor(private http: HttpClient,
               private toastr: ToastrService,
-              private userService: UsersService) { }
+              private userService: UsersService) {
+  }
 
   get userIsAuthenticated() {
     return this.currentUserSource.asObservable().pipe(map(appUser => {
@@ -32,6 +33,14 @@ export class AuthService {
 
   get currentUser() {
     return this.currentUserSource.asObservable();
+  }
+
+  private static setUserData(appUser: AppUser) {
+    localStorage.setItem('expenseToken', appUser.token);
+  }
+
+  private static removeUserData() {
+    localStorage.removeItem('expenseToken');
   }
 
   login(email: string, password: string) {
@@ -73,28 +82,18 @@ export class AuthService {
     }
   }
 
-  logout() {
-    AuthService.removeUserData();
-    this.currentUserSource.next(null);
-  }
-
-  // forgotPassword(email: string): Observable<boolean> {
-  //   let params = new HttpParams();
-  //   params = params.set('email', email);
-  //   return this.http.get<boolean>(this.apiUrl + 'forgotPassword', {params: params});
-  // }
-
   // checkEmailIfExists(email: string): Observable<boolean> {
   //   let params = new HttpParams();
   //   params = params.set('email', email);
   //   return this.http.get<boolean>(this.apiUrl + 'CheckEmailExists', {params: params});
   // }
 
-  private static setUserData(appUser: AppUser) {
-    localStorage.setItem('expenseToken', appUser.token);
+  logout() {
+    AuthService.removeUserData();
+    this.currentUserSource.next(null);
   }
 
-  private static removeUserData() {
-    localStorage.removeItem('expenseToken');
+  forgotPassword(email: string): Observable<boolean> {
+    return this.http.post<boolean>(this.serviceUrl + 'forgotPassword', {email: email});
   }
 }
