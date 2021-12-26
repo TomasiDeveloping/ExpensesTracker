@@ -147,10 +147,10 @@ export class SettingsComponent implements OnInit {
       if (response) {
         this.authService.logout();
       } else {
-        this.toastr.error('Deien Account konnte nicht gelöscht werden');
+        this.toastr.error('Dein Account konnte nicht gelöscht werden');
       }
     }, error => {
-      Swal.fire('Account lösschen', error.error, 'error').then();
+      Swal.fire('Account löschen', error.error, 'error').then();
     });
   }
 

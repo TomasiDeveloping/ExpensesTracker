@@ -53,7 +53,7 @@ export class CategoryEditDialogComponent implements OnInit {
   private updateCategory(category: CategoryModel) {
     this.categoryService.updateCategory(category.id, category).subscribe((response) => {
       this.dialogRef.close('update');
-      this.toastr.success(response.name + ' erfolgreih bearbeitet', 'Bearbeiten');
+      this.toastr.success(response.name + ' erfolgreich bearbeitet', 'Bearbeiten');
     }, error => {
       Swal.fire('Bearbeiten', 'Error ' + error.error, 'error').then();
     });

@@ -124,7 +124,7 @@ export class EditExpensesComponent implements OnInit {
           concatMap(() => this.expenseService.insertExpense(expense))).subscribe((response) => {
         if (response) {
           this.dialogRef.close('update');
-          this.toastr.success('Ausgabe erfolgreih hinzugefügt', 'Hinzufügen');
+          this.toastr.success('Ausgabe erfolgreich hinzugefügt', 'Hinzufügen');
         }
       }, error => {
         Swal.fire('Hinzufügen', error.error, 'error').then();
@@ -132,7 +132,7 @@ export class EditExpensesComponent implements OnInit {
     } else {
       this.expenseService.insertExpense(expense).subscribe((response) => {
         if (response) {
-          this.toastr.success('Ausgabe erfolgreich Hinzugefügt', 'Hinzugefügt');
+          this.toastr.success('Ausgabe erfolgreich hinzugefügt', 'Hinzugefügt');
           this.dialogRef.close('update');
         }
       }, error => {
