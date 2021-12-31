@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
 using Core.DTOs;
+using Core.Helper.Classes;
+using Core.Helper.Services;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +67,20 @@ namespace DataBase.Services
                 .Where(e => e.UserId == userId && e.CategoryId == categoryId)
                 .ToListAsync();
             return _mapper.Map<List<ExpenseDto>>(userExpensesByCategory);
+        }
+
+        public async Task<XLWorkbook> CreateYearlyExcelReportAsync(Report report)
+        {
+            var startDate = new DateTime(report.Year, 1, 1);
+            var endDate = new DateTime(report.Year, 12, 31);
+            var userExpenses = await _context.Expenses
+                .Include(e => e.Category)
+                .Where(e => e.UserId == report.UserId && e.CreateDate >= startDate && e.CreateDate <= endDate)
+                .OrderBy(e => e.CreateDate)
+                .ThenBy(e => e.CategoryId)
+                .ToListAsync();
+            var workbook = ExcelService.CreateYearlyExcelReport(report.Year, _mapper.Map<List<ExpenseDto>>(userExpenses));
+            return workbook;
         }
 
         public async Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto)

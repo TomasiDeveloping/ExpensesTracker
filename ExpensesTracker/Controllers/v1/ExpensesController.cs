@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.Helper.Classes;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +64,30 @@ namespace ExpensesTracker.Controllers.v1
             {
                 var newExpense = await _service.InsertExpenseAsync(expenseDto);
                 return Ok(newExpense);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateYearlyExcelReport(Report report)
+        {
+            try
+            {
+                var workBook = await _service.CreateYearlyExcelReportAsync(report);
+                await using var stream = new MemoryStream();
+                workBook.SaveAs(stream);
+                var content = stream.ToArray();
+                var filename = $"Ausgaben_{report.Year}";
+                Response.Headers.Add("x-file-name", filename);
+                Response.Headers.Add("Access-Control-Expose-Headers", "x-file-name");
+                return File(
+                    content,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    filename);
             }
             catch (Exception e)
             {

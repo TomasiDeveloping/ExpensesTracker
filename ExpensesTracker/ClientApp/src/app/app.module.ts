@@ -23,6 +23,7 @@ import {RegisterComponent} from './auth/register/register.component';
 import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 import {ForgotPasswordComponent} from './auth/forgot-password/forgot-password.component';
 import {ChangelogComponent} from './settings/changelog/changelog.component';
+import { ReportsComponent } from './reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {ChangelogComponent} from './settings/changelog/changelog.component';
     EditExpensesComponent,
     RegisterComponent,
     ForgotPasswordComponent,
-    ChangelogComponent
+    ChangelogComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,7 @@ import {ChangelogComponent} from './settings/changelog/changelog.component';
     }),
     BrowserAnimationsModule,
     MatDialogModule,
-    NgxSpinnerModule,
+    NgxSpinnerModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},

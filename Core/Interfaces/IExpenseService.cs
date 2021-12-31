@@ -1,4 +1,6 @@
-﻿using Core.DTOs;
+﻿using ClosedXML.Excel;
+using Core.DTOs;
+using Core.Helper.Classes;
 
 namespace Core.Interfaces
 {
@@ -13,6 +15,7 @@ namespace Core.Interfaces
 
         Task<List<ExpenseDto>> GetExpensesByUserIdAndCategoryId(int userId, int categoryId);
 
+        Task<XLWorkbook> CreateYearlyExcelReportAsync(Report report);
         Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto);
 
         Task<ExpenseDto?> UpdateExpenseAsync(int expenseId, ExpenseDto expenseDto);
