@@ -71,8 +71,7 @@ namespace ExpensesTracker.Controllers.v1
                 return BadRequest(e.Message);
             }
         }
-
-        [AllowAnonymous]
+        
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateYearlyExcelReport(Report report)
         {
@@ -96,7 +95,6 @@ namespace ExpensesTracker.Controllers.v1
             }
         }
 
-        [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateMonthlyExcelReport(Report report)
         {
