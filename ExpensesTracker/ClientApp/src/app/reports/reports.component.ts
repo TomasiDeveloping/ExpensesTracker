@@ -3,7 +3,6 @@ import {ExpensesService} from "../services/expenses.service";
 import * as jwt_decode from "jwt-decode";
 import {ReportModel} from "../models/report.model";
 import Swal from "sweetalert2";
-import {CurrencyPipe} from "@angular/common";
 
 @Component({
   selector: 'app-reports',
@@ -21,7 +20,7 @@ export class ReportsComponent implements OnInit {
     userId = 0;
     year = 0;
   };
-  yearlyExpenses: {name: string, value: number}[] = [];
+  yearlyExpenses: { name: string, value: number }[] = [];
   months = [
     {name: 'Januar', value: 1},
     {name: 'Februar', value: 2},
@@ -37,15 +36,8 @@ export class ReportsComponent implements OnInit {
     {name: 'Dezember', value: 12},
   ];
   years: number[] = [];
-  saleData = [
-    { name: "Mobiles", value: 105000 },
-    { name: "Laptop", value: 55000 },
-    { name: "AC", value: 15000 },
-    { name: "Headset", value: 150000 },
-    { name: "Fridge", value: 20000 }
-  ];
 
-  constructor(private expenseService: ExpensesService, private crPipe: CurrencyPipe) {
+  constructor(private expenseService: ExpensesService) {
   }
 
   ngOnInit(): void {
@@ -59,7 +51,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getUserYearExpenses() {
-    this.disableAnimations();
+    this.disableAnimations(); //Workaround for ngx charts when animation is set to true the values can not be adjusted with custom methods
     this.yearlyExpenses = [];
     this.expenseService.getUserYearlyExpenses(this.currentUserId, this.currentYear).subscribe({
       next: ((response) => {
@@ -139,14 +131,16 @@ export class ReportsComponent implements OnInit {
   setValueFormatting(c: any): any {
     return c.toFixed(2);
   }
-  disableAnimations(){
+
+  setLabelFormatting(c: any): any {
+    return `CHF ${c}`;
+  }
+
+  //Workaround for ngx charts when animation is set to true the values can not be adjusted with custom methods
+  disableAnimations() {
     this.animations = true;
     setTimeout(() => {
       this.animations = false;
     }, 1000);
-  }
-
-  setLabelFormatting(c: any): any {
-    return `CHF ${c}`;
   }
 }

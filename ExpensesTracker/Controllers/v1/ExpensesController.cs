@@ -58,7 +58,6 @@ namespace ExpensesTracker.Controllers.v1
             return Ok(expense);
         }
 
-        [AllowAnonymous]
         [HttpGet("{userId:int}/[action]")]
         public async Task<IActionResult> GetUserYearlyExpenses(int userId, [FromQuery] int year)
         {

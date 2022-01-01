@@ -23,9 +23,8 @@ import {RegisterComponent} from './auth/register/register.component';
 import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 import {ForgotPasswordComponent} from './auth/forgot-password/forgot-password.component';
 import {ChangelogComponent} from './settings/changelog/changelog.component';
-import { ReportsComponent } from './reports/reports.component';
+import {ReportsComponent} from './reports/reports.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
-import {CurrencyPipe} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -60,7 +59,6 @@ import {CurrencyPipe} from "@angular/common";
     NgxChartsModule,
   ],
   providers: [
-    CurrencyPipe,
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
   ],
