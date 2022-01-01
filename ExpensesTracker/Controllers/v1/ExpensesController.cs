@@ -58,6 +58,22 @@ namespace ExpensesTracker.Controllers.v1
             return Ok(expense);
         }
 
+        [AllowAnonymous]
+        [HttpGet("{userId:int}/[action]")]
+        public async Task<IActionResult> GetUserYearlyExpenses(int userId, [FromQuery] int year)
+        {
+            try
+            {
+                var userExpenses = await _service.GetUserYearlyExpensesAsync(userId, year);
+                if (!userExpenses.Any()) return NoContent();
+                return Ok(userExpenses);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(ExpenseDto expenseDto)
         {

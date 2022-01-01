@@ -34,6 +34,12 @@ export class ExpensesService {
     return this.http.get<ExpenseModel[]>(this.serviceUrl + 'user/' + userId, {params});
   }
 
+  getUserYearlyExpenses(userId: number, year: number): Observable<ExpenseModel[]> {
+    let params = new HttpParams();
+    params = params.append('year', year);
+    return this.http.get<ExpenseModel[]>(this.serviceUrl + userId + '/GetUserYearlyExpenses', {params});
+  }
+
   getUserExpensesByCategory(userId: number, categoryId: number): Observable<ExpenseModel[]> {
     return this.http.get<ExpenseModel[]>(this.serviceUrl + 'user/' + userId + 'category/' + categoryId);
   }

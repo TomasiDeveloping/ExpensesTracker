@@ -37,6 +37,7 @@ export class EditExpensesComponent implements OnInit {
   }
 
   createExpenseForm() {
+    const date = new Date(this.currentExpense.createDate);
     this.expenseForm = new FormGroup({
       id: new FormControl(this.currentExpense.id),
       userId: new FormControl(this.currentExpense.userId),
@@ -44,7 +45,12 @@ export class EditExpensesComponent implements OnInit {
       categoryName: new FormControl(''),
       description: new FormControl(this.currentExpense.description, [Validators.maxLength(255)]),
       amount: new FormControl(this.currentExpense.amount, [Validators.required]),
-      createDate: new FormControl(new Date(this.currentExpense.createDate).toISOString().substr(0, 10), [Validators.required])
+      createDate: new FormControl(new Date(
+        Date.UTC(date.getFullYear(),
+          date.getMonth(),
+          date.getDate()))
+        .toISOString().substr(0,10)
+      )
     });
   }
 

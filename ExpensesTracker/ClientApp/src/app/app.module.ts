@@ -24,6 +24,8 @@ import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 import {ForgotPasswordComponent} from './auth/forgot-password/forgot-password.component';
 import {ChangelogComponent} from './settings/changelog/changelog.component';
 import { ReportsComponent } from './reports/reports.component';
+import {NgxChartsModule} from "@swimlane/ngx-charts";
+import {CurrencyPipe} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -40,7 +42,7 @@ import { ReportsComponent } from './reports/reports.component';
     RegisterComponent,
     ForgotPasswordComponent,
     ChangelogComponent,
-    ReportsComponent
+    ReportsComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,9 +56,11 @@ import { ReportsComponent } from './reports/reports.component';
     }),
     BrowserAnimationsModule,
     MatDialogModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgxChartsModule,
   ],
   providers: [
+    CurrencyPipe,
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
   ],

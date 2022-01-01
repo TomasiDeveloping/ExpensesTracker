@@ -93,6 +93,8 @@ namespace Core.Helper.Services
                 worksheet.Cell(row, 1).SetValue(key);
                 worksheet.Cell(row, 2).Style.Font.SetFontSize(12).Font.SetBold();
                 worksheet.Cell(row, 2).SetValue($"{value:0.00}");
+                worksheet.Cell(row, 3).Style.Font.SetFontSize(12).Font.SetBold();
+                worksheet.Cell(row, 3).SetValue($"{((100 / statistic.TotalSum) * value):0.00}%");
                 row++;
             }
 
@@ -174,6 +176,8 @@ namespace Core.Helper.Services
                 worksheet.Cell(row, 1).SetValue(category.CategoryName);
                 worksheet.Cell(row, 2).Style.Font.SetFontSize(12).Font.SetBold();
                 worksheet.Cell(row, 2).SetValue($"{category.CategoryAmount:0.00}");
+                worksheet.Cell(row, 3).Style.Font.SetFontSize(12).Font.SetBold();
+                worksheet.Cell(row, 3).SetValue($"{((100 / statistic.TotalSum) * category.CategoryAmount):0.00}%");
                 row++;
             }
 

@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="report-button">
-      <button (click)="onCreateMonthlyExcelReport()" class="btn btn-success">Monats
+      <button (click)="onCreateMonthlyExcelReport()" class="btn btn-warning">Download Monats
         Statistik {{getMonthName(currentMonth)}} {{currentYear}}</button>
     </div>
     <hr>
@@ -29,8 +29,23 @@
       </div>
     </div>
     <div class="report-button">
-      <button (click)="onCreateYearlyExcelReport()" class="btn btn-success">Jahres Statistik {{currentYear}}</button>
+      <button (click)="onCreateYearlyExcelReport()" class="btn btn-warning">Download Jahres Statistik {{currentYear}}</button>
     </div>
     <hr>
   </div>
 </div>
+<ng-container *ngIf="yearlyExpenses && yearlyExpenses.length > 0; else noContent">
+<!--  <h2>Ausgaben im Jahr {{currentYear}}</h2>-->
+  <ngx-charts-advanced-pie-chart
+    [results]="yearlyExpenses"
+    [animations]="animations"
+    [label]="'Total ' + currentYear.toString()"
+    [valueFormatting]="setValueFormatting"
+    [percentageFormatting]="setValueFormatting"
+    [gradient]="false" >
+  </ngx-charts-advanced-pie-chart>
+</ng-container>
+<ng-template #noContent>
+  <h2>Keine Ausgaben in {{currentYear}}</h2>
+</ng-template>
+

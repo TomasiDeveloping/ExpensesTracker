@@ -3,6 +3,7 @@ import {ExpensesService} from "../services/expenses.service";
 import * as jwt_decode from "jwt-decode";
 import {ReportModel} from "../models/report.model";
 import Swal from "sweetalert2";
+import {CurrencyPipe} from "@angular/common";
 
 @Component({
   selector: 'app-reports',
@@ -11,6 +12,7 @@ import Swal from "sweetalert2";
 })
 export class ReportsComponent implements OnInit {
 
+  animations: boolean = false;
   currentYear = new Date().getFullYear();
   currentMonth = new Date().getMonth() + 1;
   currentUserId = 0;
@@ -19,7 +21,7 @@ export class ReportsComponent implements OnInit {
     userId = 0;
     year = 0;
   };
-
+  yearlyExpenses: {name: string, value: number}[] = [];
   months = [
     {name: 'Januar', value: 1},
     {name: 'Februar', value: 2},
@@ -35,8 +37,15 @@ export class ReportsComponent implements OnInit {
     {name: 'Dezember', value: 12},
   ];
   years: number[] = [];
+  saleData = [
+    { name: "Mobiles", value: 105000 },
+    { name: "Laptop", value: 55000 },
+    { name: "AC", value: 15000 },
+    { name: "Headset", value: 150000 },
+    { name: "Fridge", value: 20000 }
+  ];
 
-  constructor(private expenseService: ExpensesService) {
+  constructor(private expenseService: ExpensesService, private crPipe: CurrencyPipe) {
   }
 
   ngOnInit(): void {
@@ -46,6 +55,28 @@ export class ReportsComponent implements OnInit {
       const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
       this.currentUserId = +decodeToken.nameid;
     }
+    this.getUserYearExpenses();
+  }
+
+  getUserYearExpenses() {
+    this.disableAnimations();
+    this.yearlyExpenses = [];
+    this.expenseService.getUserYearlyExpenses(this.currentUserId, this.currentYear).subscribe({
+      next: ((response) => {
+        if (response && response.length > 0) {
+          response.forEach((expense) => {
+            const checkExpenseExists = this.yearlyExpenses.find(e => e.name === expense.categoryName);
+            if (checkExpenseExists) {
+              const currentCategory = this.yearlyExpenses.find(e => e.name === expense.categoryName);
+              // @ts-ignore
+              currentCategory.value += expense.amount;
+            } else {
+              this.yearlyExpenses.push({name: expense.categoryName, value: expense.amount})
+            }
+          })
+        }
+      })
+    });
   }
 
   createYears() {
@@ -96,11 +127,26 @@ export class ReportsComponent implements OnInit {
 
   onYearChange(event: any) {
     this.currentYear = event.target.value;
+    this.getUserYearExpenses();
   }
 
   getMonthName(monthValue: number): string {
     const month = this.months.find(e => e.value === monthValue);
     // @ts-ignore
     return month.name;
+  }
+
+  setValueFormatting(c: any): any {
+    return c.toFixed(2);
+  }
+  disableAnimations(){
+    this.animations = true;
+    setTimeout(() => {
+      this.animations = false;
+    }, 1000);
+  }
+
+  setLabelFormatting(c: any): any {
+    return `CHF ${c}`;
   }
 }
