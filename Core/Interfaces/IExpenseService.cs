@@ -16,6 +16,7 @@ namespace Core.Interfaces
         Task<List<ExpenseDto>> GetExpensesByUserIdAndCategoryId(int userId, int categoryId);
 
         Task<XLWorkbook> CreateYearlyExcelReportAsync(Report report);
+        Task<XLWorkbook> CreateMonthlyExcelReportAsync(Report report);
         Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto);
 
         Task<ExpenseDto?> UpdateExpenseAsync(int expenseId, ExpenseDto expenseDto);

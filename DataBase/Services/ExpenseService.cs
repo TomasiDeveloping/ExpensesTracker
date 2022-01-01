@@ -83,6 +83,21 @@ namespace DataBase.Services
             return workbook;
         }
 
+        public async Task<XLWorkbook> CreateMonthlyExcelReportAsync(Report report)
+        {
+            var startDate = new DateTime(report.Year, report.Month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+            var userExpenses = await _context.Expenses
+                .Include(e => e.Category)
+                .Where(e => e.UserId == report.UserId && e.CreateDate >= startDate && e.CreateDate <= endDate)
+                .OrderBy(e => e.CreateDate)
+                .ThenBy(e => e.CategoryId)
+                .ToListAsync();
+            var workbook = ExcelService.CreateMonthlyExcelReport(report.Year, report.Month, _mapper.Map<List<ExpenseDto>>(userExpenses));
+            return workbook;
+
+        }
+
         public async Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto)
         {
             var newExpense = _mapper.Map<Expense>(expenseDto);

@@ -1,4 +1,36 @@
 <div class="container">
-  <h2>Berichte</h2>
+  <h2>Statistiken</h2>
   <hr>
+  <div class="detail-container">
+    <div class="row">
+      <div class="col-6">
+        <select (change)="onMonthChange($event)" [ngModel]="currentMonth" class="form-select">
+          <option *ngFor="let month of months" [value]="month.value">{{month.name}}</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <select (change)="onYearChange($event)" [ngModel]="currentYear" class="form-select">
+          <option *ngFor="let year of years" [value]="year">{{year}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="report-button">
+      <button (click)="onCreateMonthlyExcelReport()" class="btn btn-success">Monats
+        Statistik {{getMonthName(currentMonth)}} {{currentYear}}</button>
+    </div>
+    <hr>
+  </div>
+  <div class="detail-container">
+    <div class="row">
+      <div class="offset-3 col-6 offset-3">
+        <select (change)="onYearChange($event)" [ngModel]="currentYear" class="form-select">
+          <option *ngFor="let year of years" [value]="year">{{year}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="report-button">
+      <button (click)="onCreateYearlyExcelReport()" class="btn btn-success">Jahres Statistik {{currentYear}}</button>
+    </div>
+    <hr>
+  </div>
 </div>

@@ -1,4 +1,15 @@
-.container h2{
+.container h2 {
   text-align: center;
   margin: 20px 0;
+}
+
+.detail-container {
+  width: 85%;
+  margin: auto;
+}
+
+.report-button {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
 }
