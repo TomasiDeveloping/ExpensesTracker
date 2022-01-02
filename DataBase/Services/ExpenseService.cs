@@ -24,6 +24,7 @@ namespace DataBase.Services
         {
             var expenses = await _context.Expenses
                 .Include(e => e.Category)
+                .AsNoTracking()
                 .ToListAsync();
             return _mapper.Map<List<ExpenseDto>>(expenses);
         }
@@ -32,6 +33,7 @@ namespace DataBase.Services
         {
             var expense = await _context.Expenses
                 .Include(e => e.Category)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == expenseId);
             return expense == null ? null : _mapper.Map<ExpenseDto>(expense);
         }
@@ -43,6 +45,7 @@ namespace DataBase.Services
                 .Where(e => e.UserId == userId)
                 .OrderBy(e => e.CategoryId)
                 .ThenByDescending(e => e.CreateDate)
+                .AsNoTracking()
                 .ToListAsync();
             return _mapper.Map<List<ExpenseDto>>(userExpenses);
         }
@@ -53,8 +56,9 @@ namespace DataBase.Services
             var endDate = new DateTime(year, 12, 31);
             var userExpenses = await _context.Expenses
                 .Include(e => e.Category)
-                .Where(e => e.UserId ==  userId && e.CreateDate >= startDate && e.CreateDate <= endDate)
+                .Where(e => e.UserId == userId && e.CreateDate >= startDate && e.CreateDate <= endDate)
                 .OrderBy(e => e.CategoryId)
+                .AsNoTracking()
                 .ToListAsync();
             return _mapper.Map<List<ExpenseDto>>(userExpenses);
         }
@@ -68,6 +72,7 @@ namespace DataBase.Services
                 .Where(e => e.UserId == userId && e.CreateDate >= dateFrom && e.CreateDate <= dateTo)
                 .OrderBy(e => e.CategoryId)
                 .ThenByDescending(e => e.CreateDate)
+                .AsNoTracking()
                 .ToListAsync();
             return _mapper.Map<List<ExpenseDto>>(userExpenses);
         }
@@ -77,6 +82,7 @@ namespace DataBase.Services
             var userExpensesByCategory = await _context.Expenses
                 .Include(e => e.Category)
                 .Where(e => e.UserId == userId && e.CategoryId == categoryId)
+                .AsNoTracking()
                 .ToListAsync();
             return _mapper.Map<List<ExpenseDto>>(userExpensesByCategory);
         }
@@ -90,6 +96,7 @@ namespace DataBase.Services
                 .Where(e => e.UserId == report.UserId && e.CreateDate >= startDate && e.CreateDate <= endDate)
                 .OrderBy(e => e.CreateDate)
                 .ThenBy(e => e.CategoryId)
+                .AsNoTracking()
                 .ToListAsync();
             var workbook = ExcelService.CreateYearlyExcelReport(report.Year, _mapper.Map<List<ExpenseDto>>(userExpenses));
             return workbook;
@@ -104,10 +111,10 @@ namespace DataBase.Services
                 .Where(e => e.UserId == report.UserId && e.CreateDate >= startDate && e.CreateDate <= endDate)
                 .OrderBy(e => e.CreateDate)
                 .ThenBy(e => e.CategoryId)
+                .AsNoTracking()
                 .ToListAsync();
             var workbook = ExcelService.CreateMonthlyExcelReport(report.Year, report.Month, _mapper.Map<List<ExpenseDto>>(userExpenses));
             return workbook;
-
         }
 
         public async Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto)

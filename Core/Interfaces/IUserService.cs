@@ -8,12 +8,15 @@ namespace Core.Interfaces
         public Task<List<UserDto>> GetUsersAsync();
 
         public Task<UserDto?> GetUserByIdAsync(int userId);
+
         public Task<User?> GetUserByEmailForLoginAsync(string email);
+
         public Task<UserDto?> GetUserByEmailAsync(string email);
 
         public Task<UserDto> InsertUserAsync(UserDto userDto);
 
         public Task<UserDto?> UpdateUserAsync(int userId, UserDto userDto);
+
         public Task<bool> ChangeUserPasswordAsync(int userId, string password);
 
         public Task<bool> DeleteUserAsync(int userId);

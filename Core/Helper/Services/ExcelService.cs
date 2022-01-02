@@ -28,7 +28,7 @@ namespace Core.Helper.Services
 
             // Start on row 3
             var row = 3;
-            
+
             foreach (var month in statistic.StatisticMonths)
             {
                 worksheet.Cell(row, 1).SetValue("Monat");
@@ -58,9 +58,8 @@ namespace Core.Helper.Services
                 worksheet.Cell(row, 1).WorksheetRow().Height = 20;
                 worksheet.Cell(row, 2).WorksheetRow().Height = 20;
                 row++;
-
             }
-            
+
             row++;
             worksheet.Cell(row, 1).SetValue($"Total {year}");
             worksheet.Cell(row, 1).Style.Font.SetFontSize(18).Font.SetBold();
@@ -97,7 +96,6 @@ namespace Core.Helper.Services
                 worksheet.Cell(row, 3).SetValue($"{((100 / statistic.TotalSum) * value):0.00}%");
                 row++;
             }
-
 
             return workbook;
         }

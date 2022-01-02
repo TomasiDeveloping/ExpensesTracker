@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Core.Helper.Classes;
+﻿using Core.Helper.Classes;
+using System.Text;
 
 namespace Core.Helper.Services
 {

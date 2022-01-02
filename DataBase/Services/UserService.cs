@@ -20,19 +20,26 @@ namespace DataBase.Services
 
         public async Task<List<UserDto>> GetUsersAsync()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users
+                .AsNoTracking()
+                .ToListAsync();
             return _mapper.Map<List<UserDto>>(users);
         }
 
         public async Task<UserDto?> GetUserByIdAsync(int userId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId);
             return user == null ? null : _mapper.Map<UserDto>(user);
         }
 
         public async Task<User?> GetUserByEmailForLoginAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email == email);
+            return user;
         }
 
         public async Task<UserDto?> GetUserByEmailAsync(string email)

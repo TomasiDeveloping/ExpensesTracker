@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Nodes;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Nodes;
 
 namespace ExpensesTracker.Controllers.v1
 {

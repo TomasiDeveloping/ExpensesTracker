@@ -1,19 +1,17 @@
-﻿using System.Net;
-using System.Net.Mail;
-using Core.Helper.Classes;
+﻿using Core.Helper.Classes;
 using Microsoft.Extensions.Options;
+using System.Net;
+using System.Net.Mail;
 
 namespace Core.Helper.Services
 {
     public class EmailService
     {
-
         private readonly string _host;
         private readonly int _port;
         private readonly string _userName;
         private readonly string _password;
         private readonly string _senderAddress;
-
 
         public EmailService(IOptions<EmailSettings> conf)
         {
@@ -47,7 +45,6 @@ namespace Core.Helper.Services
             {
                 return false;
             }
-
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Text;
 using Core.Helper.Classes;
 using Core.Helper.Services;
 using Core.Interfaces;
@@ -10,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 //##############################################################################
 //#################### When GUI is hosted separately ###########################
 //##############################################################################
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -113,9 +112,7 @@ app.Run();
 //################# Who GUI and API are hosted together ########################
 //##############################################################################
 
-
 //var builder = WebApplication.CreateBuilder(args);
-
 
 //builder.Services.AddControllersWithViews();
 
@@ -174,7 +171,6 @@ app.Run();
 //    option.AllowAnyMethod();
 //    option.AllowAnyOrigin();
 //});
-
 
 //app.UseHttpsRedirection();
 //app.UseStaticFiles();

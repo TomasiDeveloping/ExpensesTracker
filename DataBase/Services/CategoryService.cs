@@ -19,19 +19,26 @@ namespace DataBase.Services
 
         public async Task<List<CategoryDto>> GetCategoriesAsync()
         {
-            var categories = await _context.Categories.ToListAsync();
+            var categories = await _context.Categories
+                .AsNoTracking()
+                .ToListAsync();
             return _mapper.Map<List<CategoryDto>>(categories);
         }
 
         public async Task<List<CategoryDto>> GetCategoriesByUserIdAsync(int userId)
         {
-            var userCategories = await _context.Categories.Where(c => c.UserId == userId).ToListAsync();
+            var userCategories = await _context.Categories
+                .Where(c => c.UserId == userId)
+                .AsNoTracking()
+                .ToListAsync();
             return _mapper.Map<List<CategoryDto>>(userCategories);
         }
 
         public async Task<CategoryDto?> GetCategoryByIdAsync(int categoryId)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+            var category = await _context.Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == categoryId);
             return category == null ? null : _mapper.Map<CategoryDto>(category);
         }
 

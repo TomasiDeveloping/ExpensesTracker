@@ -86,7 +86,7 @@ namespace ExpensesTracker.Controllers.v1
                 return BadRequest(e.Message);
             }
         }
-        
+
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateYearlyExcelReport(Report report)
         {
