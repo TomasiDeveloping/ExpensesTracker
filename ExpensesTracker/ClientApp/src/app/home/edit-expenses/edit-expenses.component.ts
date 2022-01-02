@@ -49,7 +49,7 @@ export class EditExpensesComponent implements OnInit {
         Date.UTC(date.getFullYear(),
           date.getMonth(),
           date.getDate()))
-        .toISOString().substr(0,10)
+        .toISOString().substring(0, 10)
       )
     });
   }
@@ -98,22 +98,28 @@ export class EditExpensesComponent implements OnInit {
       this.categoryService.insertCategory(category)
         .pipe(tap(res => expense.categoryId = res.id),
           concatMap(() => this.expenseService.updateExpense(expense.id, expense)
-          )).subscribe((response) => {
-        if (response) {
-          this.dialogRef.close('update');
-          this.toastr.success('Ausgabe erfolgreich geändert', 'Update');
+          )).subscribe({
+        next: ((response) => {
+          if (response) {
+            this.dialogRef.close('update');
+            this.toastr.success('Ausgabe erfolgreich geändert', 'Update');
+          }
+        }),
+        error: (error) => {
+          Swal.fire('Update', error.error, 'error').then();
         }
-      }, error => {
-        Swal.fire('Update', error.error, 'error').then();
       });
     } else {
-      this.expenseService.updateExpense(expense.id, expense).subscribe((response) => {
-        if (response) {
-          this.toastr.success('Ausgabe erfolgreich geändert', 'Update');
-          this.dialogRef.close('update');
+      this.expenseService.updateExpense(expense.id, expense).subscribe({
+        next: ((response) => {
+          if (response) {
+            this.toastr.success('Ausgabe erfolgreich geändert', 'Update');
+            this.dialogRef.close('update');
+          }
+        }),
+        error: (error) => {
+          Swal.fire('Update', error.error, 'error').then();
         }
-      }, error => {
-        Swal.fire('Update', error.error, 'error').then();
       });
     }
   }
@@ -127,22 +133,28 @@ export class EditExpensesComponent implements OnInit {
       }
       this.categoryService.insertCategory(category)
         .pipe(tap(res => expense.categoryId = res.id),
-          concatMap(() => this.expenseService.insertExpense(expense))).subscribe((response) => {
-        if (response) {
-          this.dialogRef.close('update');
-          this.toastr.success('Ausgabe erfolgreich hinzugefügt', 'Hinzufügen');
+          concatMap(() => this.expenseService.insertExpense(expense))).subscribe({
+        next: ((response) => {
+          if (response) {
+            this.dialogRef.close('update');
+            this.toastr.success('Ausgabe erfolgreich hinzugefügt', 'Hinzufügen');
+          }
+        }),
+        error: (error) => {
+          Swal.fire('Hinzufügen', error.error, 'error').then();
         }
-      }, error => {
-        Swal.fire('Hinzufügen', error.error, 'error').then();
       })
     } else {
-      this.expenseService.insertExpense(expense).subscribe((response) => {
-        if (response) {
-          this.toastr.success('Ausgabe erfolgreich hinzugefügt', 'Hinzugefügt');
-          this.dialogRef.close('update');
+      this.expenseService.insertExpense(expense).subscribe({
+        next: ((response) => {
+          if (response) {
+            this.toastr.success('Ausgabe erfolgreich hinzugefügt', 'Hinzugefügt');
+            this.dialogRef.close('update');
+          }
+        }),
+        error: (error) => {
+          Swal.fire('Hinzufügen', error.error, 'error').then();
         }
-      }, error => {
-        Swal.fire('Hinzufügen', error.error, 'error').then();
       })
     }
   }

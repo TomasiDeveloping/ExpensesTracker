@@ -25,6 +25,7 @@ import {ForgotPasswordComponent} from './auth/forgot-password/forgot-password.co
 import {ChangelogComponent} from './settings/changelog/changelog.component';
 import {ReportsComponent} from './reports/reports.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
+import {MonthNamePipe} from './util/month-name.pipe';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     ForgotPasswordComponent,
     ChangelogComponent,
     ReportsComponent,
+    MonthNamePipe,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +61,7 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     NgxChartsModule,
   ],
   providers: [
+    MonthNamePipe,
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
   ],

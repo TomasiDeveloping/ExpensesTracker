@@ -16,7 +16,7 @@
     </div>
     <div class="report-button">
       <button (click)="onCreateMonthlyExcelReport()" class="btn btn-warning">Download Monats
-        Statistik {{getMonthName(currentMonth)}} {{currentYear}}</button>
+        Statistik {{currentMonth | monthName}} {{currentYear}}</button>
     </div>
     <hr>
   </div>

@@ -36,7 +36,7 @@
       </ol>
     </div>
     <ng-template [ngIf]="groupedExpenses.length <= 0">
-      <h2>Keine Ausgaben für {{getMonthName(currentMonth)}} {{currentYear}}</h2>
+      <h2>Keine Ausgaben für {{currentMonth | monthName}} {{currentYear}}</h2>
     </ng-template>
   </div>
 </div>

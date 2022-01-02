@@ -16,14 +16,14 @@ export class SpinnerService {
       type: 'line-scale',
       bdColor: 'rgba(0, 0, 0, 0.8)',
       color: '#f47c3c'
-    });
+    }).then();
   }
 
   idle(): void {
     this.busyRequestCount--;
     if (this.busyRequestCount <= 0) {
       this.busyRequestCount = 0;
-      this.spinnerService.hide();
+      this.spinnerService.hide().then();
     }
   }
 }

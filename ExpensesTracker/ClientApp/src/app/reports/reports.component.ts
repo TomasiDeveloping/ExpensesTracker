@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
-import * as jwt_decode from "jwt-decode";
 import {ReportModel} from "../models/report.model";
 import Swal from "sweetalert2";
+import {MonthNamePipe} from "../util/month-name.pipe";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-reports',
@@ -21,31 +22,20 @@ export class ReportsComponent implements OnInit {
     year = 0;
   };
   yearlyExpenses: { name: string, value: number }[] = [];
-  months = [
-    {name: 'Januar', value: 1},
-    {name: 'Februar', value: 2},
-    {name: 'März', value: 3},
-    {name: 'April', value: 4},
-    {name: 'Mai', value: 5},
-    {name: 'Juni', value: 6},
-    {name: 'Juli', value: 7},
-    {name: 'August', value: 8},
-    {name: 'September', value: 9},
-    {name: 'Oktober', value: 10},
-    {name: 'November', value: 11},
-    {name: 'Dezember', value: 12},
-  ];
+  months: { name: string; value: number }[] = [];
   years: number[] = [];
 
-  constructor(private expenseService: ExpensesService) {
+  constructor(private expenseService: ExpensesService,
+              private authService: AuthService,
+              private monthPipe: MonthNamePipe) {
   }
 
   ngOnInit(): void {
     this.createYears();
-    const token = localStorage.getItem('expenseToken');
-    if (token) {
-      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
-      this.currentUserId = +decodeToken.nameid;
+    this.createMonths();
+    this.currentUserId = this.authService.getUserIdFromToken();
+    if (this.currentUserId <= 0) {
+      this.authService.logout();
     }
     this.getUserYearExpenses();
   }
@@ -74,6 +64,12 @@ export class ReportsComponent implements OnInit {
   createYears() {
     for (let i = 0; i < 5; i++) {
       this.years.push(this.currentYear - i);
+    }
+  }
+
+  createMonths() {
+    for (let i = 1; i <= 12; i++) {
+      this.months.push({name: this.monthPipe.transform(i), value: i});
     }
   }
 
@@ -120,12 +116,6 @@ export class ReportsComponent implements OnInit {
   onYearChange(event: any) {
     this.currentYear = event.target.value;
     this.getUserYearExpenses();
-  }
-
-  getMonthName(monthValue: number): string {
-    const month = this.months.find(e => e.value === monthValue);
-    // @ts-ignore
-    return month.name;
   }
 
   setValueFormatting(c: any): any {

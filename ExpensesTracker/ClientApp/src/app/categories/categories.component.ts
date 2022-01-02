@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
 import {CategoryEditDialogComponent} from "./category-edit-dialog/category-edit-dialog.component";
-import * as jwt_decode from "jwt-decode";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-categories',
@@ -18,15 +18,15 @@ export class CategoriesComponent implements OnInit {
   currentUserId = 0;
 
   constructor(private categoryService: CategoriesService,
+              private authService: AuthService,
               private toastr: ToastrService,
               public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('expenseToken');
-    if (token) {
-      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
-      this.currentUserId = +decodeToken.nameid;
+    this.currentUserId = this.authService.getUserIdFromToken();
+    if (this.currentUserId <= 0) {
+      this.authService.logout();
     }
     this.getUserCategories();
   }
@@ -82,14 +82,17 @@ export class CategoriesComponent implements OnInit {
   }
 
   private deleteCategory(category: CategoryModel) {
-    this.categoryService.deleteCategory(category.id).subscribe((response) => {
-      if (response) {
-        this.getUserCategories();
-        this.toastr.success(category.name + ' gelöscht', 'Löschen');
-      } else {
+    this.categoryService.deleteCategory(category.id).subscribe({
+      next: ((response) => {
+        if (response) {
+          this.getUserCategories();
+          this.toastr.success(category.name + ' gelöscht', 'Löschen');
+        } else {
+        }
+      }),
+      error: (error) => {
+        Swal.fire('Löschen', 'Error ' + error.error, 'error').then();
       }
-    }, error => {
-      Swal.fire('Löschen', 'Error ' + error.error, 'error').then();
     });
   }
 }

@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
-import * as jwt_decode from "jwt-decode";
 import {MatDialog} from "@angular/material/dialog";
 import {EditExpensesComponent} from "../home/edit-expenses/edit-expenses.component";
 import Swal from "sweetalert2";
 import {ToastrService} from "ngx-toastr";
+import {AuthService} from "../services/auth.service";
+import {MonthNamePipe} from "../util/month-name.pipe";
 
 @Component({
   selector: 'app-expenditures',
@@ -14,23 +15,8 @@ import {ToastrService} from "ngx-toastr";
 })
 export class ExpendituresComponent implements OnInit {
 
-  price = 120.50;
   date = new Date();
-  description = 'Neue Kaffemachine';
-  months = [
-    {value: 1, name: 'Januar'},
-    {value: 2, name: 'Februar'},
-    {value: 3, name: 'März'},
-    {value: 4, name: 'April'},
-    {value: 5, name: 'Mai'},
-    {value: 6, name: 'Juni'},
-    {value: 7, name: 'Juli'},
-    {value: 8, name: 'August'},
-    {value: 9, name: 'September'},
-    {value: 10, name: 'Oktober'},
-    {value: 11, name: 'November'},
-    {value: 12, name: 'Dezember'},
-  ];
+  months: { name: string, value: number }[] = [];
 
   years: number[] = [];
   groupedExpenses: { categoryName: string, groupAmount: number, expense: ExpenseModel[] }[] = [];
@@ -40,18 +26,20 @@ export class ExpendituresComponent implements OnInit {
   currentMonth = new Date().getMonth() + 1;
 
   constructor(private expenseService: ExpensesService,
+              private monthPipe: MonthNamePipe,
+              private authService: AuthService,
               private dialog: MatDialog,
               private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('expenseToken');
-    if (token) {
-      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
-      this.currentUserId = +decodeToken.nameid;
+    this.currentUserId = this.authService.getUserIdFromToken();
+    if (this.currentUserId <= 0) {
+      this.authService.logout();
     }
     this.getUserExpenses(this.currentYear, this.currentMonth);
     this.createYears();
+    this.createMonths();
   }
 
   getUserExpenses(year: number, month: number) {
@@ -85,6 +73,12 @@ export class ExpendituresComponent implements OnInit {
     let year = this.date.getFullYear() + 1;
     for (let i = 0; i < 6; i++) {
       this.years.push(year - i);
+    }
+  }
+
+  createMonths() {
+    for (let i = 1; i <= 12; i++) {
+      this.months.push({name: this.monthPipe.transform(i), value: i});
     }
   }
 
@@ -129,46 +123,18 @@ export class ExpendituresComponent implements OnInit {
     })
   }
 
-  getMonthName(month: number): string {
-    switch (month) {
-      case 1:
-        return 'Januar';
-      case 2:
-        return 'Februar';
-      case 3:
-        return 'März';
-      case 4:
-        return 'April';
-      case 5:
-        return 'Mai';
-      case 6:
-        return 'Juni';
-      case 7:
-        return 'Juli';
-      case 8:
-        return 'August';
-      case 9:
-        return 'September';
-      case 10:
-        return 'Oktober';
-      case 11:
-        return 'November';
-      case 12:
-        return 'Dezember';
-      default:
-        return '';
-    }
-  }
-
   private deleteExpense(expense: ExpenseModel) {
-    this.expenseService.deleteExpense(expense.id).subscribe((response) => {
-      if (response) {
-        this.groupedExpenses = [];
-        this.getUserExpenses(this.currentYear, this.currentMonth);
-        this.toastr.success('Ausgabe wurde gelöscht', 'Löschen');
+    this.expenseService.deleteExpense(expense.id).subscribe({
+      next: ((response) => {
+        if (response) {
+          this.groupedExpenses = [];
+          this.getUserExpenses(this.currentYear, this.currentMonth);
+          this.toastr.success('Ausgabe wurde gelöscht', 'Löschen');
+        }
+      }),
+      error: (error) => {
+        Swal.fire('Löschen', error.error, 'error').then();
       }
-    }, error => {
-      Swal.fire('Löschen', error.error, 'error').then();
     });
   }
 }

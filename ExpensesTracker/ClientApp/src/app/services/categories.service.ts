@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
@@ -11,14 +11,7 @@ export class CategoriesService {
 
   serviceUrl = environment.apiUrl + 'categories/';
 
-  constructor(private readonly http: HttpClient) { }
-
-  getCategories(): Observable<CategoryModel[]> {
-    return this.http.get<CategoryModel[]>(this.serviceUrl);
-  }
-
-  getCategoryById(categoryId: number): Observable<CategoryModel> {
-    return this.http.get<CategoryModel>(this.serviceUrl + categoryId);
+  constructor(private readonly http: HttpClient) {
   }
 
   getUserCategories(userId: number): Observable<CategoryModel[]> {

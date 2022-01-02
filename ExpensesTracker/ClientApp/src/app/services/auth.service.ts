@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {BehaviorSubject, map, Observable} from "rxjs";
 import {AppUser} from "../models/appUser.model";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
 import {UsersService} from "./users.service";
 import Swal from "sweetalert2";
@@ -43,22 +43,36 @@ export class AuthService {
     localStorage.removeItem('expenseToken');
   }
 
+  getUserIdFromToken(): number {
+    const token = localStorage.getItem('expenseToken');
+    if (token) {
+      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
+      return +decodeToken.nameid;
+    } else {
+      return 0;
+    }
+  }
+
   login(email: string, password: string) {
-    this.http.post<AppUser>(this.serviceUrl + 'Login', {email, password}).subscribe(response => {
+    this.http.post<AppUser>(this.serviceUrl + 'Login', {email, password}).subscribe({
+      next: ((response) => {
       this.currentUserSource.next(response);
       AuthService.setUserData(response);
-    }, error => {
+    }),
+      error: (error) => {
       this.toastr.error(error.error, 'Login');
-    });
+    }});
   }
 
   register(register: RegisterModel) {
-    this.http.post<AppUser>(this.serviceUrl + 'Register', register).subscribe(response => {
+    this.http.post<AppUser>(this.serviceUrl + 'Register', register).subscribe({
+      next: ((response) => {
       this.currentUserSource.next(response);
       AuthService.setUserData(response);
-    }, error => {
+    }),
+      error: (error) => {
       this.toastr.error(error.error, 'Registrieren')
-    })
+    }})
   }
 
   autoLogin() {

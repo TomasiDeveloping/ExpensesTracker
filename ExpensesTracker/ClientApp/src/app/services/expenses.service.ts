@@ -40,10 +40,6 @@ export class ExpensesService {
     return this.http.get<ExpenseModel[]>(this.serviceUrl + userId + '/GetUserYearlyExpenses', {params});
   }
 
-  getUserExpensesByCategory(userId: number, categoryId: number): Observable<ExpenseModel[]> {
-    return this.http.get<ExpenseModel[]>(this.serviceUrl + 'user/' + userId + 'category/' + categoryId);
-  }
-
   insertExpense(expense: ExpenseModel): Observable<ExpenseModel> {
     return this.http.post<ExpenseModel>(this.serviceUrl, expense);
   }

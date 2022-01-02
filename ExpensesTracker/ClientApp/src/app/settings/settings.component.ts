@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import * as jwt_decode from "jwt-decode";
 import {UsersService} from "../services/users.service";
 import {UserModel} from "../models/user.model";
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
@@ -39,10 +38,9 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('expenseToken');
-    if (token) {
-      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
-      this.currentUserId = +decodeToken.nameid;
+    this.currentUserId = this.authService.getUserIdFromToken();
+    if (this.currentUserId <= 0) {
+      this.authService.logout();
     }
     this.getCurrentUser();
   }
@@ -106,15 +104,18 @@ export class SettingsComponent implements OnInit {
 
   updateUser(user: UserModel) {
     this.currentUser.password = '';
-    this.userService.updateUser(user.id, user).subscribe((response) => {
-      if (response) {
-        this.getCurrentUser();
-        this.isUserUpdate = false;
-        this.userForm.disable();
-        this.toastr.success('Erfolgreich geändert', 'Update');
+    this.userService.updateUser(user.id, user).subscribe({
+      next: ((response) => {
+        if (response) {
+          this.getCurrentUser();
+          this.isUserUpdate = false;
+          this.userForm.disable();
+          this.toastr.success('Erfolgreich geändert', 'Update');
+        }
+      }),
+      error: (error) => {
+        Swal.fire('Update', error.error, 'error').then();
       }
-    }, error => {
-      Swal.fire('Update', error.error, 'error').then();
     });
   }
 
@@ -149,14 +150,17 @@ export class SettingsComponent implements OnInit {
   }
 
   deleteUserAccount() {
-    this.userService.deleteUser(this.currentUser.id).subscribe((response) => {
-      if (response) {
-        this.authService.logout();
-      } else {
-        this.toastr.error('Dein Account konnte nicht gelöscht werden');
+    this.userService.deleteUser(this.currentUser.id).subscribe({
+      next: ((response) => {
+        if (response) {
+          this.authService.logout();
+        } else {
+          this.toastr.error('Dein Account konnte nicht gelöscht werden');
+        }
+      }),
+      error: (error) => {
+        Swal.fire('Account löschen', error.error, 'error').then();
       }
-    }, error => {
-      Swal.fire('Account löschen', error.error, 'error').then();
     });
   }
 
@@ -176,16 +180,19 @@ export class SettingsComponent implements OnInit {
       this.passwordForm.reset();
       return;
     }
-    this.userService.changeUserPassword(this.currentUser.id, password).subscribe((response) => {
-      if (response) {
-        Swal.fire('Passwort ändern', 'Passwort wurde erfolgreich geändert, Du wirst automatisch ausgeloggt', 'success')
-          .then(() => this.authService.logout())
-      } else {
-        Swal.fire('Passwort ändern', 'Passwort konnte nicht geändert werden!', 'error')
-          .then(() => this.passwordForm.reset());
+    this.userService.changeUserPassword(this.currentUser.id, password).subscribe({
+      next: ((response) => {
+        if (response) {
+          Swal.fire('Passwort ändern', 'Passwort wurde erfolgreich geändert, Du wirst automatisch ausgeloggt', 'success')
+            .then(() => this.authService.logout())
+        } else {
+          Swal.fire('Passwort ändern', 'Passwort konnte nicht geändert werden!', 'error')
+            .then(() => this.passwordForm.reset());
+        }
+      }),
+      error: (error) => {
+        Swal.fire('Passwort ändern', error.error, 'error').then(() => this.passwordForm.reset());
       }
-    }, error => {
-      Swal.fire('Passwort ändern', error.error, 'error').then(() => this.passwordForm.reset());
     });
   }
 

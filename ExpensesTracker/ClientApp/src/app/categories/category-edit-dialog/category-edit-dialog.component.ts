@@ -51,20 +51,26 @@ export class CategoryEditDialogComponent implements OnInit {
   }
 
   private updateCategory(category: CategoryModel) {
-    this.categoryService.updateCategory(category.id, category).subscribe((response) => {
-      this.dialogRef.close('update');
-      this.toastr.success(response.name + ' erfolgreich bearbeitet', 'Bearbeiten');
-    }, error => {
-      Swal.fire('Bearbeiten', 'Error ' + error.error, 'error').then();
+    this.categoryService.updateCategory(category.id, category).subscribe({
+      next: ((response) => {
+        this.dialogRef.close('update');
+        this.toastr.success(response.name + ' erfolgreich bearbeitet', 'Bearbeiten');
+      }),
+      error: (error) => {
+        Swal.fire('Bearbeiten', 'Error ' + error.error, 'error').then();
+      }
     });
   }
 
   private addCategory(category: CategoryModel) {
-    this.categoryService.insertCategory(category).subscribe((response) => {
-      this.dialogRef.close('update');
-      this.toastr.success(response.name + ' hinzugefügt', 'Hinzugefügt');
-    }, error => {
-      Swal.fire('Hinzugefügt', 'Error ' + error.error, 'error').then();
+    this.categoryService.insertCategory(category).subscribe({
+      next: ((response) => {
+        this.dialogRef.close('update');
+        this.toastr.success(response.name + ' hinzugefügt', 'Hinzugefügt');
+      }),
+      error: (error) => {
+        Swal.fire('Hinzugefügt', 'Error ' + error.error, 'error').then();
+      }
     });
   }
 }

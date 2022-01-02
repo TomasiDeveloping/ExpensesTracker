@@ -23,20 +23,23 @@ export class ForgotPasswordComponent implements OnInit {
 
   onSubmit() {
     if (this.forgotPasswordForm.invalid) {
-      return;
+      Swal.fire('Passwort vergessen', 'Bitte prüfe deine Eingaben', 'error').then();
     }
-    this.authService.forgotPassword(this.forgotPasswordForm.controls.email.value).subscribe((response) => {
-      if (response) {
-        Swal.fire('Passwort vergessen',
-          `Neues Passwort wurde an ${this.forgotPasswordForm.controls.email.value} gesendet. Bitte prüfe auch dein Spam- Ordner`,
-          'success').then(() => this.onClose());
-      } else {
-        Swal.fire('Passwort vergessen',
-          'Neues Passwort konnte nicht gesendet werden. Bitte melde Dich beim Support',
-          'error').then(() => this.onClose());
+    this.authService.forgotPassword(this.forgotPasswordForm.controls.email.value).subscribe({
+      next: ((response) => {
+        if (response) {
+          Swal.fire('Passwort vergessen',
+            `Neues Passwort wurde an ${this.forgotPasswordForm.controls.email.value} gesendet. Bitte prüfe auch dein Spam- Ordner`,
+            'success').then(() => this.onClose());
+        } else {
+          Swal.fire('Passwort vergessen',
+            'Neues Passwort konnte nicht gesendet werden. Bitte melde Dich beim Support',
+            'error').then(() => this.onClose());
+        }
+      }),
+      error: (error) => {
+        Swal.fire('Passwort vergessen', error.error, 'error').then();
       }
-    }, error => {
-      Swal.fire('Passwort vergessen', error.error, 'error').then();
     });
   }
 
