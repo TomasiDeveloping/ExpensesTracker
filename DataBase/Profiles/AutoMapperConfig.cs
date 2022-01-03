@@ -23,6 +23,16 @@ namespace DataBase.Profiles
             CreateMap<ExpenseDto, Expense>()
                 .ForMember(src => src.User, o => o.Ignore())
                 .ForMember(src => src.Category, o => o.Ignore());
+
+            CreateMap<Revenue, RevenueDto>()
+                .ForMember(src => src.CategoryName, o => o.MapFrom(r => r.RevenueCategory.Name));
+            CreateMap<RevenueDto, Revenue>()
+                .ForMember(src => src.User, o => o.Ignore())
+                .ForMember(src => src.RevenueCategory, o => o.Ignore());
+
+            CreateMap<RevenueCategory, RevenueCategoryDto>();
+            CreateMap<RevenueCategoryDto, RevenueCategory>()
+                .ForMember(src => src.User, o => o.Ignore());
         }
     }
 }

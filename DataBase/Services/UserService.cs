@@ -85,6 +85,11 @@ namespace DataBase.Services
             if (userExpenses.Any()) _context.Expenses.RemoveRange(userExpenses);
             var userCategories = await _context.Categories.Where(c => c.UserId == userId).ToListAsync();
             if (userCategories.Any()) _context.Categories.RemoveRange(userCategories);
+            var userRevenues = await _context.Revenues.Where(r => r.UserId == userId).ToListAsync();
+            if (userRevenues.Any()) _context.Revenues.RemoveRange(userRevenues);
+            var userRevenuesCategories =
+                await _context.RevenuesCategories.Where(rc => rc.UserId == userId).ToListAsync();
+            if (userRevenuesCategories.Any()) _context.RevenuesCategories.RemoveRange(userRevenuesCategories);
             _context.Users.Remove(userToDelete);
             await _context.SaveChangesAsync();
             return true;
