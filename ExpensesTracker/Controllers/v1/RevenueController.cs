@@ -1,6 +1,5 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpensesTracker.Controllers.v1
@@ -32,7 +31,6 @@ namespace ExpensesTracker.Controllers.v1
             if (revenue == null) return NotFound($"No Revenue found with id {revenueId}");
             return Ok(revenue);
         }
-
 
         [HttpGet("user/{userId:int}")]
         public async Task<IActionResult> GetRevenuesByUserId(int userId, [FromQuery] int? year = null, [FromQuery] int? month = null)

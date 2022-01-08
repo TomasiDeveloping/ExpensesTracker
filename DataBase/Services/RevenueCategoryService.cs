@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Core.DTOs;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 
 namespace DataBase.Services
 {
-    public class RevenueCategoryService: IRevenueCategoryService
+    public class RevenueCategoryService : IRevenueCategoryService
     {
         private readonly ExpensesTrackerContext _context;
         private readonly IMapper _mapper;
@@ -22,6 +16,7 @@ namespace DataBase.Services
             _context = context;
             _mapper = mapper;
         }
+
         public async Task<List<RevenueCategoryDto>> GetRevenueCategoriesAsync()
         {
             var revenueCategories = await _context.RevenuesCategories

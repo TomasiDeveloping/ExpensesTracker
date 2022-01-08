@@ -16,6 +16,7 @@ namespace DataBase.Services
             _context = context;
             _mapper = mapper;
         }
+
         public async Task<List<RevenueDto>> GetRevenuesAsync()
         {
             var revenues = await _context.Revenues
