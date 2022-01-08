@@ -155,7 +155,7 @@ export class EditExpensesComponent implements OnInit {
         error: (error) => {
           Swal.fire('Hinzufügen', error.error, 'error').then();
         }
-      })
+      });
     }
   }
 }

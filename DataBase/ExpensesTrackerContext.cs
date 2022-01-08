@@ -27,6 +27,7 @@ namespace DataBase
             modelBuilder.Entity<User>().Property(u => u.Password).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.Salt).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.CreatedAt).IsRequired();
+            modelBuilder.Entity<User>().Property(u => u.WithRevenue).IsRequired().HasDefaultValue(true);
 
             // CATEGORY CONFIG
             modelBuilder.Entity<Category>().Property(c => c.Name).HasMaxLength(100).IsRequired();

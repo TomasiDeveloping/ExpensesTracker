@@ -1,0 +1,93 @@
+<h1 mat-dialog-title>Einnahme{{isUpdate ? ' bearbeiten' : ' hinzufügen'}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="revenueForm">
+    <div class="mb-3">
+      <label class="form-label" for="amount">Betrag</label>
+      <input
+        [ngClass]="{
+          'is-invalid': revenueForm.controls.amount.invalid &&
+          (revenueForm.controls.amount.dirty || revenueForm.controls.amount.touched),
+          'is-valid': revenueForm.controls.amount.valid
+          }"
+        class="form-control"
+        formControlName="amount"
+        id="amount"
+        type="number">
+      <div *ngIf="revenueForm.controls.amount.errors &&
+                 (revenueForm.controls.amount.dirty || revenueForm.controls.amount.touched)"
+           class="invalid-feedback">
+        <p *ngIf="revenueForm.controls.amount.errors.required">Betrag ist ein Pflichtfeld</p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="categoryId">Kategorie</label>
+      <select (change)="onCategoryChange($event)" [ngClass]="{
+          'is-invalid': revenueForm.controls.categoryId.invalid &&
+          (revenueForm.controls.categoryId.dirty || revenueForm.controls.categoryId.touched),
+          'is-valid': revenueForm.controls.categoryId.valid
+          }" class="form-select" formControlName="categoryId" id="categoryId">
+        <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
+        <option value="newCategory">Neue Kategorie</option>
+      </select>
+      <div *ngIf="revenueForm.controls.categoryId.errors &&
+                 (revenueForm.controls.categoryId.dirty || revenueForm.controls.categoryId.touched)"
+           class="invalid-feedback">
+        <p *ngIf="revenueForm.controls.categoryId.errors.required">Kategorie ist ein Pflichtfeld</p>
+      </div>
+    </div>
+    <div *ngIf="isNewCategory" class="mb-3">
+      <label class="form-label" for="categoryName">Neue Kategorie</label>
+      <input
+        [ngClass]="{
+          'is-invalid': revenueForm.controls.categoryName.invalid &&
+          (revenueForm.controls.categoryName.dirty || revenueForm.controls.categoryName.touched),
+          'is-valid': revenueForm.controls.categoryName.valid
+          }"
+        class="form-control"
+        formControlName="categoryName"
+        id="categoryName"
+        type="text">
+      <div *ngIf="revenueForm.controls.categoryName.errors &&
+                 (revenueForm.controls.categoryName.dirty || revenueForm.controls.categoryName.touched)"
+           class="invalid-feedback">
+        <p *ngIf="revenueForm.controls.categoryName.errors.required">Neue Kategorie ist ein Pflichtfeld</p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="description">Beschreibung</label>
+      <textarea [ngClass]="{
+          'is-invalid': revenueForm.controls.description.invalid &&
+          (revenueForm.controls.description.dirty || revenueForm.controls.description.touched),
+          'is-valid': revenueForm.controls.description.valid
+          }" class="form-control" formControlName="description" id="description" rows="2"></textarea>
+      <div *ngIf="revenueForm.controls.description.errors &&
+                 (revenueForm.controls.description.dirty || revenueForm.controls.description.touched)"
+           class="invalid-feedback">
+        <p *ngIf="revenueForm.controls.description.errors.maxlength">Maximum 255 Zeichen erlaubt</p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="createDate">Datum</label>
+      <input
+        [ngClass]="{
+          'is-invalid': revenueForm.controls.createDate.invalid &&
+          (revenueForm.controls.createDate.dirty || revenueForm.controls.createDate.touched),
+          'is-valid': revenueForm.controls.createDate.valid
+          }"
+        class="form-control"
+        formControlName="createDate"
+        id="createDate"
+        type="date">
+      <div *ngIf="revenueForm.controls.createDate.errors &&
+                 (revenueForm.controls.createDate.dirty || revenueForm.controls.createDate.touched)"
+           class="invalid-feedback">
+        <p *ngIf="revenueForm.controls.createDate.errors.required">Datum ist ein Pflichtfeld</p>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="button-container" mat-dialog-actions>
+  <button (click)="onClose()" class="btn bg-warning" type="button">Abbrechen</button>
+  <button (click)="onSubmit()" [disabled]="revenueForm.invalid" class="btn btn-success" type="submit">Speichern</button>
+</div>
+

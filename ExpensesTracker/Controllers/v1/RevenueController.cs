@@ -33,12 +33,34 @@ namespace ExpensesTracker.Controllers.v1
             return Ok(revenue);
         }
 
+
         [HttpGet("user/{userId:int}")]
-        public async Task<IActionResult> GetUserRevenues(int userId)
+        public async Task<IActionResult> GetRevenuesByUserId(int userId, [FromQuery] int? year = null, [FromQuery] int? month = null)
         {
-            var userRevenues = await _service.GetRevenuesByUserIdAsync(userId);
+            _ = new List<RevenueDto>();
+            List<RevenueDto>? userRevenues;
+            if (year != null && month != null)
+                userRevenues = await _service.GetUserRevenuesByParamsAsync(userId, year.Value, month.Value);
+            else
+                userRevenues = await _service.GetRevenuesByUserIdAsync(userId);
+
             if (!userRevenues.Any()) return NoContent();
             return Ok(userRevenues);
+        }
+
+        [HttpGet("{userId:int}/[action]")]
+        public async Task<IActionResult> GetUserYearlyRevenues(int userId, [FromQuery] int year)
+        {
+            try
+            {
+                var userRevenues = await _service.GetUserYearlyExpensesAsync(userId, year);
+                if (!userRevenues.Any()) return NoContent();
+                return Ok(userRevenues);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]

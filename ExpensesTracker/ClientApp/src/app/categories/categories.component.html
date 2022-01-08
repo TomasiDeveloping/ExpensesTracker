@@ -1,8 +1,9 @@
 <div class="container">
   <h2>Kategorien</h2>
   <hr>
+  <h3>Ausgaben Kategorien</h3>
   <div class="add-button">
-    <button class="btn bg-info" (click)="onAddCategory()">Kategorie hinzufügen</button>
+    <button class="btn bg-warning" (click)="onAddCategory()">Ausgaben Kategorie hinzufügen</button>
   </div>
   <div class="table-responsive">
   <table class="table table-secondary table-striped">
@@ -16,10 +17,36 @@
     <tbody>
     <tr *ngFor="let category of userCategories">
       <th scope="row">{{category.name}}</th>
-      <td><span class="material-icons" id="edit" (click)="onEdit(category)">edit</span></td>
-      <td><span class="material-icons" id="delete" (click)="onDelete(category)">delete</span></td>
+      <td><span class="material-icons edit" (click)="onEdit(category)">edit</span></td>
+      <td><span class="material-icons delete" (click)="onDelete(category)">delete</span></td>
     </tr>
     </tbody>
   </table>
   </div>
+  <ng-template [ngIf]="isUserWithRevenue">
+    <hr>
+    <h3>Einnahmen Kategorien</h3>
+    <div class="add-button">
+      <button class="btn bg-success" (click)="onAddRevenueCategory()">Einnahmen Kategorie hinzufügen</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-secondary table-striped revenue">
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Bearbeiten</th>
+          <th scope="col">Löschen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let revenueCategory of userRevenueCategories">
+          <th scope="row">{{revenueCategory.name}}</th>
+          <td><span class="material-icons edit"(click)="onEditRevenue(revenueCategory)">edit</span></td>
+          <td><span class="material-icons delete" (click)="onDeleteDeleteRevenue(revenueCategory)">delete</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+
 </div>

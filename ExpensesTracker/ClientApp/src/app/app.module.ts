@@ -26,6 +26,12 @@ import {ChangelogComponent} from './settings/changelog/changelog.component';
 import {ReportsComponent} from './reports/reports.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {MonthNamePipe} from './util/month-name.pipe';
+import { RevenuesComponent } from './revenues/revenues.component';
+import { EditRevenueComponent } from './revenues/edit-revenue/edit-revenue.component';
+import {
+  RevenueCategoryEditDialogComponent
+} from "./categories/revenue-category-edit-dialog/revenue-category-edit-dialog.component";
+
 
 @NgModule({
   declarations: [
@@ -44,6 +50,9 @@ import {MonthNamePipe} from './util/month-name.pipe';
     ChangelogComponent,
     ReportsComponent,
     MonthNamePipe,
+    RevenuesComponent,
+    EditRevenueComponent,
+    RevenueCategoryEditDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,12 @@
       <label for="email">E-Mail</label>
       <input class="form-control" formControlName="email" id="email" type="email">
     </div>
+    <div class="form-check mt-2">
+      <input class="form-check-input" type="checkbox" id="withRevenue" formControlName="withRevenue">
+      <label class="form-check-label" for="withRevenue">
+        Mit Einnahmen
+      </label>
+    </div>
     <div class="edit-user-btn">
       <button (click)="onEditUser()" *ngIf="!isUserUpdate" class="btn btn-secondary" type="button">Bearbeiten</button>
       <button (click)="onCancelEditUser()" *ngIf="isUserUpdate" class="btn btn-danger" id="cancel-user-change">

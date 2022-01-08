@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit {
   confirmFieldTextType = false;
   isUserUpdate = false;
   appVersion = environment.appVersion;
+  reload = false;
 
   constructor(private userService: UsersService,
               private toastr: ToastrService,
@@ -58,7 +59,8 @@ export class SettingsComponent implements OnInit {
       id: new FormControl(this.currentUser.id),
       firstName: new FormControl(this.currentUser.firstName),
       lastName: new FormControl(this.currentUser.lastName),
-      email: new FormControl(this.currentUser.email)
+      email: new FormControl(this.currentUser.email),
+      withRevenue: new FormControl(this.currentUser.withRevenue)
     });
     this.userForm.disable();
   }
@@ -99,6 +101,10 @@ export class SettingsComponent implements OnInit {
     this.currentUser.email = this.userForm.controls.email.value;
     this.currentUser.firstName = this.userForm.controls.firstName.value;
     this.currentUser.lastName = this.userForm.controls.lastName.value;
+    if (this.currentUser.withRevenue !== this.userForm.controls.withRevenue.value) {
+      this.reload = true;
+    }
+    this.currentUser.withRevenue = this.userForm.controls.withRevenue.value;
     this.updateUser(this.currentUser);
   }
 
@@ -107,6 +113,10 @@ export class SettingsComponent implements OnInit {
     this.userService.updateUser(user.id, user).subscribe({
       next: ((response) => {
         if (response) {
+          if (this.reload) {
+            this.showReloadMessage();
+            return;
+          }
           this.getCurrentUser();
           this.isUserUpdate = false;
           this.userForm.disable();
@@ -117,6 +127,16 @@ export class SettingsComponent implements OnInit {
         Swal.fire('Update', error.error, 'error').then();
       }
     });
+  }
+
+  showReloadMessage() {
+    let message: string;
+    if (this.currentUser.withRevenue) {
+      message = 'Um das Programm mit Einnahmen zu verwenden musst Du Dich neu einloggen, Du wirst automatisch ausgeloggt';
+    } else {
+      message = 'Um das Programm ohne Einnahmen zu verwenden musst Du Dich neu einloggen, Du wirst automatisch ausgeloggt';
+    }
+    Swal.fire('Logout', message, 'info').then(() => this.authService.logout());
   }
 
   onDeleteAccount() {

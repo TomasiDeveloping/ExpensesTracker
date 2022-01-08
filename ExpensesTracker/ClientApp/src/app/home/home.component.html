@@ -3,9 +3,14 @@
   <div class="beams">
     <span>{{currentMonth?.name}} {{currentMonth?.year}}</span>
   </div>
-  <div class="d-grid" id="add-button">
-    <button class="btn btn-primary" type="button" (click)="onAddExpense()">Ausgabe erfassen</button>
+  <div class="d-grid add-button">
+    <button class="btn btn-warning" type="button" (click)="onAddExpense()">Ausgabe erfassen</button>
   </div>
+  <ng-template [ngIf]="isUserWithRevenue">
+    <div class="d-grid add-button">
+      <button class="btn btn-success" type="button" (click)="onAddRevenue()">Einnahme erfassen</button>
+    </div>
+  </ng-template>
   <p>{{userBudget > 0 ? 'Ausgegebener Prozentsatz des geplanten Budgets' : 'Du hast kein Budget gesetzt.'}}</p>
   <div class="progress" style="height: 30px;" *ngIf="userBudget > 0">
     <div [attr.aria-valuenow]="monthlyConsumptionPercent"
@@ -19,6 +24,16 @@
     <p>Ausgaben: <span>{{totalAmount | currency: 'CHF '}}</span></p>
     <p>Budget: <span>{{userBudget | currency: 'CHF '}}</span></p>
   </div>
+  <ng-template [ngIf]="isUserWithRevenue">
+    <div class="month-budget">
+      <p>Einnahmen: <span>{{totalRevenueAmount | currency: 'CHF '}}</span></p>
+      <p>Differenz {{currentMonth?.name}} : CHF
+        <span [ngStyle]="{ 'color': totalRevenueAmount - totalAmount < 0 ? 'red' : 'green'}">
+        {{totalRevenueAmount - totalAmount | number: '1.2-2'}}
+      </span>
+      </p>
+    </div>
+  </ng-template>
   <div class="expenses-content">
     <app-expenses *ngFor="let category of categoryGroups" [categoryAmount]="category.amount" [categoryName]="category.name"
                   [totalAmount]="totalAmount"></app-expenses>

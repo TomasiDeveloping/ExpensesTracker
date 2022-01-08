@@ -9,6 +9,7 @@
         public string Email { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
+        public bool WithRevenue { get; set; }
         public decimal? MonthlyBudget { get; set; }
     }
 }

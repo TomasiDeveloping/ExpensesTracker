@@ -34,9 +34,29 @@
     </div>
     <hr>
   </div>
+  <div class="yearly-amount">
+    <div>Ausgaben: {{yearlyExpensesAmount | number: '1.2-2'}}</div>
+    <ng-template [ngIf]="isWithRevenue">
+      <div>Einnahmen: {{yearlyRevenuesAmount | number: '1.2-2'}}</div>
+      <div>Differenz:
+        <span [ngStyle]="{'color': yearlyRevenuesAmount -yearlyExpensesAmount < 0 ? 'red' : 'green'}">
+      {{yearlyRevenuesAmount - yearlyExpensesAmount | number: '1.2-2'}}
+    </span>
+      </div>
+    </ng-template>
+  </div>
+  <hr>
 </div>
+<h3>Ausgaben {{currentYear}}</h3>
+<ng-container *ngIf="yearlyExpenses.length <= 0">
+  <div class="noContent">
+    <p>Keine Ausgaben für das Jahr {{currentYear}}</p>
+  </div>
+</ng-container>
 <ng-container *ngIf="yearlyExpenses && yearlyExpenses.length > 0">
   <ngx-charts-advanced-pie-chart
+    (window:resize) = "onResize($event)"
+    [view]="view"
     [animations]="animations"
     [gradient]="false"
     [label]="'Total ' + currentYear.toString()"
@@ -45,4 +65,25 @@
     [valueFormatting]="setValueFormatting">
   </ngx-charts-advanced-pie-chart>
 </ng-container>
+<ng-template [ngIf]="isWithRevenue">
+  <h3>Einnahmen {{currentYear}}</h3>
+  <ng-container *ngIf="yearlyRevenues.length <= 0">
+    <div class="noContent">
+      <p>Keine Einnahmen für das Jahr {{currentYear}}</p>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="yearlyRevenues && yearlyRevenues.length > 0">
+    <ngx-charts-advanced-pie-chart
+      (window:resize) = "onResize($event)"
+      [view]="view"
+      [animations]="animations"
+      [gradient]="false"
+      [label]="'Total ' + currentYear.toString()"
+      [percentageFormatting]="setValueFormatting"
+      [results]="yearlyRevenues"
+      [valueFormatting]="setValueFormatting">
+    </ngx-charts-advanced-pie-chart>
+  </ng-container>
+</ng-template>
+
 

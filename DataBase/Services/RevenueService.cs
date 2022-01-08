@@ -44,6 +44,33 @@ namespace DataBase.Services
             return _mapper.Map<List<RevenueDto>>(userRevenues);
         }
 
+        public async Task<List<RevenueDto>> GetUserYearlyExpensesAsync(int userId, int year)
+        {
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = new DateTime(year, 12, 31);
+            var userRevenues = await _context.Revenues
+                .Include(r => r.RevenueCategory)
+                .Where(e => e.UserId == userId && e.CreateDate >= startDate && e.CreateDate <= endDate)
+                .OrderBy(e => e.RevenueCategoryId)
+                .AsNoTracking()
+                .ToListAsync();
+            return _mapper.Map<List<RevenueDto>>(userRevenues);
+        }
+
+        public async Task<List<RevenueDto>> GetUserRevenuesByParamsAsync(int userId, int year, int month)
+        {
+            var dateFrom = new DateTime(year, month, 1);
+            var dateTo = dateFrom.AddMonths(1).AddDays(-1);
+            var userRevenues = await _context.Revenues
+                .Include(e => e.RevenueCategory)
+                .Where(e => e.UserId == userId && e.CreateDate >= dateFrom && e.CreateDate <= dateTo)
+                .OrderBy(e => e.RevenueCategoryId)
+                .ThenByDescending(e => e.CreateDate)
+                .AsNoTracking()
+                .ToListAsync();
+            return _mapper.Map<List<RevenueDto>>(userRevenues);
+        }
+
         public async Task<RevenueDto> InsertRevenueAsync(RevenueDto revenueDto)
         {
             var revenue = _mapper.Map<Revenue>(revenueDto);

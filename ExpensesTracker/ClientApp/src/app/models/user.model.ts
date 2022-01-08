@@ -7,4 +7,5 @@ export interface UserModel {
   createdAt: Date;
   isActive: boolean;
   monthlyBudget: number;
+  withRevenue: boolean;
 }
