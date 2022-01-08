@@ -46,7 +46,6 @@ export class HomeComponent implements OnInit {
     if (this.currentUserId <= 0) {
       this.authService.logout();
     }
-    this.isUserWithRevenue = this.userService.getWithRevenue();
     this.getCurrentUser();
   }
 
@@ -60,6 +59,7 @@ export class HomeComponent implements OnInit {
       next: ((response) => {
         this.currentUser = response;
         this.userBudget = response.monthlyBudget;
+        this.isUserWithRevenue = response.withRevenue;
         this.getUserExpenses();
         this.getCurrentMonth();
         if (this.isUserWithRevenue) {
