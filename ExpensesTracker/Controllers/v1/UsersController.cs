@@ -3,6 +3,9 @@ using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Nodes;
+using Core.Helper.Classes;
+using Core.Helper.Services;
+using Microsoft.Extensions.Options;
 
 namespace ExpensesTracker.Controllers.v1
 {
@@ -13,10 +16,12 @@ namespace ExpensesTracker.Controllers.v1
     public class UsersController : ControllerBase
     {
         private readonly IUserService _service;
+        private readonly EmailService _emailService;
 
-        public UsersController(IUserService service)
+        public UsersController(IUserService service, IOptions<EmailSettings> options)
         {
             _service = service;
+            _emailService = new EmailService(options);
         }
 
         [HttpGet]
@@ -46,6 +51,23 @@ namespace ExpensesTracker.Controllers.v1
             catch (Exception e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SendSupportEmail(SupportContactMessage contactMessage)
+        {
+            try
+            {
+                var emailMessage = EmailMessagesService.CreateContactMessage(contactMessage);
+
+                var checkSendMail =
+                    await _emailService.SendEmailAsync("info@tomasi-developing.ch", emailMessage, "Kontaktformular");
+                return Ok(checkSendMail);
+            }
+            catch (Exception)
+            {
+                return BadRequest("E-Mail konnte nicht gesendet werden");
             }
         }
 

@@ -1,0 +1,121 @@
+<div class="container">
+  <h2 mat-dialog-title>Support Kontaktieren</h2>
+  <mat-dialog-content>
+    <form *ngIf="supportForm" [formGroup]="supportForm">
+      <div class="mb-3">
+        <label class="form-label" for="email">E-Mail</label>
+        <input
+          [ngClass]="{
+          'is-invalid': supportForm.controls.email.invalid &&
+          (supportForm.controls.email.dirty || supportForm.controls.email.touched),
+          'is-valid': supportForm.controls.email.valid
+          }"
+          class="form-control"
+          formControlName="email"
+          id="email"
+          type="email">
+        <div *ngIf="supportForm.controls.email.errors &&
+                 (supportForm.controls.email.dirty || supportForm.controls.email.touched)"
+             class="invalid-feedback">
+          <p *ngIf="supportForm.controls.email.errors.required">E-Mail ist ein Pflichtfeld</p>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="subject">Betreff</label>
+        <select (change)="onSelectChange($event)" [ngClass]="{
+          'is-invalid': supportForm.controls.subject.invalid &&
+          (supportForm.controls.subject.dirty || supportForm.controls.subject.touched),
+          'is-valid': supportForm.controls.subject.valid
+          }" class="form-select" formControlName="subject" id="subject">
+          <option *ngFor="let subject of subjects" [ngValue]="subject">{{subject}}</option>
+        </select>
+        <div *ngIf="supportForm.controls.subject.errors &&
+                 (supportForm.controls.subject.dirty || supportForm.controls.subject.touched)"
+             class="invalid-feedback">
+          <p *ngIf="supportForm.controls.subject.errors.required">Betreff ist ein Pflichtfeld</p>
+        </div>
+      </div>
+      <div class="mb-3" *ngIf="!isError">
+        <label class="form-label" for="message">Nachricht</label>
+        <textarea
+          [ngClass]="{
+          'is-invalid': supportForm.controls.message.invalid &&
+          (supportForm.controls.message.dirty || supportForm.controls.message.touched),
+          'is-valid': supportForm.controls.message.valid
+          }"
+          class="form-control"
+          formControlName="message"
+          id="message"
+          rows="5">
+        </textarea>
+        <div *ngIf="supportForm.controls.message.errors &&
+                 (supportForm.controls.message.dirty || supportForm.controls.message.touched)"
+             class="invalid-feedback">
+          <p *ngIf="supportForm.controls.message.errors.required">Nachricht ist ein Pflichtfeld</p>
+        </div>
+      </div>
+      <div class="mb-3" *ngIf="isError">
+        <label class="form-label" for="describeBug">Beschreiben Sie den Fehler</label>
+        <textarea
+          [ngClass]="{
+          'is-invalid': supportForm.controls.describeBug.invalid &&
+          (supportForm.controls.describeBug.dirty || supportForm.controls.describeBug.touched),
+          'is-valid': supportForm.controls.describeBug.valid
+          }"
+          rows="3"
+          class="form-control"
+          formControlName="describeBug"
+          id="describeBug"
+          type="text"></textarea>
+        <div *ngIf="supportForm.controls.describeBug.errors &&
+                 (supportForm.controls.describeBug.dirty || supportForm.controls.describeBug.touched)"
+             class="invalid-feedback">
+          <p *ngIf="supportForm.controls.describeBug.errors.required">Beschreibung ist ein Pflichtfeld</p>
+        </div>
+      </div>
+      <div class="mb-3" *ngIf="isError">
+        <label class="form-label" for="stepToReproduce">Schritte, um das Verhalten zu reproduzieren</label>
+        <textarea
+          [ngClass]="{
+          'is-invalid': supportForm.controls.stepToReproduce.invalid &&
+          (supportForm.controls.stepToReproduce.dirty || supportForm.controls.stepToReproduce.touched),
+          'is-valid': supportForm.controls.stepToReproduce.valid
+          }"
+          rows="3"
+          class="form-control"
+          formControlName="stepToReproduce"
+          id="stepToReproduce"
+          type="text"></textarea>
+        <div *ngIf="supportForm.controls.stepToReproduce.errors &&
+                 (supportForm.controls.stepToReproduce.dirty || supportForm.controls.stepToReproduce.touched)"
+             class="invalid-feedback">
+          <p *ngIf="supportForm.controls.stepToReproduce.errors.required">Reproduzieren ist ein Pflichtfeld</p>
+        </div>
+      </div>
+      <div class="mb-3" *ngIf="isError">
+        <label class="form-label" for="expectedBehavior">Erwartetes Verhalten</label>
+        <textarea
+          [ngClass]="{
+          'is-invalid': supportForm.controls.expectedBehavior.invalid &&
+          (supportForm.controls.expectedBehavior.dirty || supportForm.controls.expectedBehavior.touched),
+          'is-valid': supportForm.controls.expectedBehavior.valid
+          }"
+          rows="3"
+          class="form-control"
+          formControlName="expectedBehavior"
+          id="expectedBehavior"
+          type="text"></textarea>
+        <div *ngIf="supportForm.controls.expectedBehavior.errors &&
+                 (supportForm.controls.expectedBehavior.dirty || supportForm.controls.expectedBehavior.touched)"
+             class="invalid-feedback">
+          <p *ngIf="supportForm.controls.expectedBehavior.errors.required">Erwartetes Verhalten ist ein Pflichtfeld</p>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button [mat-dialog-close]="true" class="btn btn-danger">Schliessen</button>
+    <button (click)="submit()" class="btn btn-success" [disabled]="supportForm.invalid">Senden</button>
+  </mat-dialog-actions>
+</div>
+

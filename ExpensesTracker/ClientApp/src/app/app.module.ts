@@ -31,6 +31,7 @@ import { EditRevenueComponent } from './revenues/edit-revenue/edit-revenue.compo
 import {
   RevenueCategoryEditDialogComponent
 } from "./categories/revenue-category-edit-dialog/revenue-category-edit-dialog.component";
+import { ContactSupportComponent } from './settings/contact-support/contact-support.component';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import {
     RevenuesComponent,
     EditRevenueComponent,
     RevenueCategoryEditDialogComponent,
+    ContactSupportComponent,
   ],
   imports: [
     BrowserModule,

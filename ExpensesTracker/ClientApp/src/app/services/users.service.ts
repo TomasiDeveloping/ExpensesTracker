@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {UserModel} from "../models/user.model";
+import {SupportContactModel} from "../models/supportContact.model";
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,9 @@ export class UsersService {
 
   deleteUser(userId: number): Observable<boolean> {
     return this.http.delete<boolean>(this.serviceUrl + userId);
+  }
+
+  sendSupportMail(supportContact: SupportContactModel): Observable<boolean> {
+    return this.http.post<boolean>(this.serviceUrl + 'SendSupportEmail', supportContact);
   }
 }

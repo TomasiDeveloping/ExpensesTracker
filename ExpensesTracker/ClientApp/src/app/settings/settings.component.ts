@@ -8,6 +8,7 @@ import {AuthService} from "../services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ChangelogComponent} from "./changelog/changelog.component";
 import {environment} from "../../environments/environment";
+import {ContactSupportComponent} from "./contact-support/contact-support.component";
 
 @Component({
   selector: 'app-settings',
@@ -225,6 +226,11 @@ export class SettingsComponent implements OnInit {
   }
 
   onContactSupport() {
-
+    this.dialog.open(ContactSupportComponent, {
+      width: '80%',
+      height: 'auto',
+      autoFocus: false,
+      data: {email: this.currentUser.email}
+    });
   }
 }
