@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.Helper.Classes;
 
 namespace Core.Interfaces
 {
@@ -13,6 +14,10 @@ namespace Core.Interfaces
         Task<List<RevenueDto>> GetUserRevenuesByParamsAsync(int userId, int year, int month);
 
         Task<List<RevenueDto>> GetUserYearlyExpensesAsync(int userId, int year);
+
+        Task<List<RevenueDto>> GetRevenuesForYearlyReportAsync(Report report);
+
+        Task<List<RevenueDto>> GetRevenuesForMonthlyReportAsync(Report report);
 
         Task<RevenueDto> InsertRevenueAsync(RevenueDto revenueDto);
 

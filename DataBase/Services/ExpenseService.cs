@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using ClosedXML.Excel;
 using Core.DTOs;
 using Core.Helper.Classes;
-using Core.Helper.Services;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -87,36 +85,6 @@ namespace DataBase.Services
             return _mapper.Map<List<ExpenseDto>>(userExpensesByCategory);
         }
 
-        public async Task<XLWorkbook> CreateYearlyExcelReportAsync(Report report)
-        {
-            var startDate = new DateTime(report.Year, 1, 1);
-            var endDate = new DateTime(report.Year, 12, 31);
-            var userExpenses = await _context.Expenses
-                .Include(e => e.Category)
-                .Where(e => e.UserId == report.UserId && e.CreateDate >= startDate && e.CreateDate <= endDate)
-                .OrderBy(e => e.CreateDate)
-                .ThenBy(e => e.CategoryId)
-                .AsNoTracking()
-                .ToListAsync();
-            var workbook = ExcelService.CreateYearlyExcelReport(report.Year, _mapper.Map<List<ExpenseDto>>(userExpenses));
-            return workbook;
-        }
-
-        public async Task<XLWorkbook> CreateMonthlyExcelReportAsync(Report report)
-        {
-            var startDate = new DateTime(report.Year, report.Month, 1);
-            var endDate = startDate.AddMonths(1).AddDays(-1);
-            var userExpenses = await _context.Expenses
-                .Include(e => e.Category)
-                .Where(e => e.UserId == report.UserId && e.CreateDate >= startDate && e.CreateDate <= endDate)
-                .OrderBy(e => e.CreateDate)
-                .ThenBy(e => e.CategoryId)
-                .AsNoTracking()
-                .ToListAsync();
-            var workbook = ExcelService.CreateMonthlyExcelReport(report.Year, report.Month, _mapper.Map<List<ExpenseDto>>(userExpenses));
-            return workbook;
-        }
-
         public async Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto)
         {
             var newExpense = _mapper.Map<Expense>(expenseDto);
@@ -141,6 +109,34 @@ namespace DataBase.Services
             _context.Expenses.Remove(expenseToDelete);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<ExpenseDto>> GetExpensesForYearlyReportAsync(Report report)
+        {
+            var startDate = new DateTime(report.Year, 1, 1);
+            var endDate = new DateTime(report.Year, 12, 31);
+            var userExpenses = await _context.Expenses
+                .Include(e => e.Category)
+                .Where(e => e.UserId == report.UserId && e.CreateDate >= startDate && e.CreateDate <= endDate)
+                .OrderBy(e => e.CreateDate)
+                .ThenBy(e => e.CategoryId)
+                .AsNoTracking()
+                .ToListAsync();
+            return _mapper.Map<List<ExpenseDto>>(userExpenses);
+        }
+
+        public async Task<List<ExpenseDto>> GetExpensesForMonthlyReportAsync(Report report)
+        {
+            var startDate = new DateTime(report.Year, report.Month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+            var userExpenses = await _context.Expenses
+                .Include(e => e.Category)
+                .Where(e => e.UserId == report.UserId && e.CreateDate >= startDate && e.CreateDate <= endDate)
+                .OrderBy(e => e.CreateDate)
+                .ThenBy(e => e.CategoryId)
+                .AsNoTracking()
+                .ToListAsync();
+            return _mapper.Map<List<ExpenseDto>>(userExpenses);
         }
     }
 }

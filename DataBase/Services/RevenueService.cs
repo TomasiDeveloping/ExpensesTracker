@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.DTOs;
+using Core.Helper.Classes;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -96,6 +97,34 @@ namespace DataBase.Services
             _context.Revenues.Remove(revenueToDelete);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<RevenueDto>> GetRevenuesForYearlyReportAsync(Report report)
+        {
+            var startDate = new DateTime(report.Year, 1, 1);
+            var endDate = new DateTime(report.Year, 12, 31);
+            var userRevenues = await _context.Revenues
+                .Include(r => r.RevenueCategory)
+                .Where(r => r.UserId == report.UserId && r.CreateDate >= startDate && r.CreateDate <= endDate)
+                .OrderBy(r => r.CreateDate)
+                .ThenBy(r => r.RevenueCategoryId)
+                .AsNoTracking()
+                .ToListAsync();
+            return _mapper.Map<List<RevenueDto>>(userRevenues);
+        }
+
+        public async Task<List<RevenueDto>> GetRevenuesForMonthlyReportAsync(Report report)
+        {
+            var startDate = new DateTime(report.Year, report.Month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+            var userRevenues = await _context.Revenues
+                .Include(r => r.RevenueCategory)
+                .Where(r => r.UserId == report.UserId && r.CreateDate >= startDate && r.CreateDate <= endDate)
+                .OrderBy(r => r.CreateDate)
+                .ThenBy(r => r.RevenueCategoryId)
+                .AsNoTracking()
+                .ToListAsync();
+            return _mapper.Map<List<RevenueDto>>(userRevenues);
         }
     }
 }
