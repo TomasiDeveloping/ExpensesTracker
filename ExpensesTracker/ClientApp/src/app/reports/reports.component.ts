@@ -6,6 +6,7 @@ import {MonthNamePipe} from "../util/month-name.pipe";
 import {AuthService} from "../services/auth.service";
 import {RevenueService} from "../services/revenue.service";
 import {UsersService} from "../services/users.service";
+import {ReportService} from "../services/report.service";
 
 @Component({
   selector: 'app-reports',
@@ -36,6 +37,7 @@ export class ReportsComponent implements OnInit {
               private authService: AuthService,
               private userService: UsersService,
               private revenueService: RevenueService,
+              private reportService: ReportService,
               private monthPipe: MonthNamePipe) {
     this.view = [innerWidth / 1.1, 300];
   }
@@ -88,7 +90,7 @@ export class ReportsComponent implements OnInit {
             if (checkExpenseExists) {
               const currentCategory = this.yearlyRevenues.find(e => e.name === revenue.categoryName);
               // @ts-ignore
-              currentCategory.value += expense.amount;
+              currentCategory.value += revenue.amount;
             } else {
               this.yearlyRevenues.push({name: revenue.categoryName, value: revenue.amount})
             }
@@ -115,7 +117,7 @@ export class ReportsComponent implements OnInit {
     this.report.year = this.currentYear;
     this.report.month = this.currentMonth;
     this.report.userId = this.currentUserId;
-    this.expenseService.createYearlyExcelReport(this.report).subscribe({
+    this.reportService.createYearlyExcelReport(this.report).subscribe({
       next: (res) => {
         this.createDownload(res);
       },
@@ -129,7 +131,7 @@ export class ReportsComponent implements OnInit {
     this.report.year = this.currentYear;
     this.report.month = this.currentMonth;
     this.report.userId = this.currentUserId;
-    this.expenseService.createMonthlyExcelReport(this.report).subscribe({
+    this.reportService.createMonthlyExcelReport(this.report).subscribe({
       next: (res) => {
         this.createDownload(res);
       },
