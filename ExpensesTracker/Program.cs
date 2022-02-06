@@ -111,6 +111,8 @@ app.MapControllers();
 
 app.Run();
 
+public partial class Program { }
+
 //##############################################################################
 //################# Who GUI and API are hosted together ########################
 //##############################################################################
@@ -189,3 +191,5 @@ app.Run();
 //app.MapFallbackToFile("index.html");
 
 //app.Run();
+
+//public partial class Program { }
