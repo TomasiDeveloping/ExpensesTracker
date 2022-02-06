@@ -1,14 +1,14 @@
-﻿using DataBase;
+﻿using Core.Models;
+using DataBase;
 using ExpensesTrackerTests.IntegrationTests.Helper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using Core.Models;
-using Microsoft.Extensions.Logging;
 
 namespace ExpensesTrackerTests.IntegrationTests
 {
@@ -30,7 +30,7 @@ namespace ExpensesTrackerTests.IntegrationTests
                 services.AddAuthentication("Test")
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", _ => { });
                 var sp = services.BuildServiceProvider();
-       
+
                 using var scope = sp.CreateScope();
                 var logger = scope.ServiceProvider
                     .GetRequiredService<ILogger<WebApplicationFactory<Program>>>();

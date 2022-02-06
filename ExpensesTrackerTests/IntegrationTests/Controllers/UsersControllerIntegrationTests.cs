@@ -1,29 +1,26 @@
 ﻿using Core.DTOs;
+using ExpensesTrackerTests.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using ExpensesTrackerTests.Attributes;
 using Xunit;
 
 namespace ExpensesTrackerTests.IntegrationTests.Controllers
 {
     [TestCaseOrderer("ExpensesTrackerTests.Helper.PriorityOrderer", "ExpensesTrackerTests")]
     [Trait("UserController", "Integration")]
-
     public class UsersControllerIntegrationTests : IClassFixture<TestingWebAppFactory>
     {
         private readonly HttpClient _client;
-
 
         public UsersControllerIntegrationTests(TestingWebAppFactory factory)
         {
             _client = factory.CreateClient();
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
         }
-
 
         [Fact, TestPriority(1)]
         public async Task CreateUser()

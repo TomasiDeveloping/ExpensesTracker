@@ -1,13 +1,12 @@
-﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Interfaces;
 using ExpensesTracker.Controllers.v1;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
-
 
 namespace ExpensesTrackerTests.UnitTests.Controllers
 {
@@ -16,6 +15,7 @@ namespace ExpensesTrackerTests.UnitTests.Controllers
     {
         private readonly Mock<IExpenseService> _expenseServiceMock;
         private readonly ExpensesController _expensesController;
+
         public ExpensesControllerTests()
         {
             _expenseServiceMock = new Mock<IExpenseService>();

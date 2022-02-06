@@ -1,12 +1,11 @@
-﻿using System.Threading;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
+using System.Threading;
 
 namespace ExpensesTrackerTests.UITests.Helper
 {
     public class LoginPage
     {
-
         private readonly IWebDriver _driver;
         private readonly IConfigurationRoot _config;
 
