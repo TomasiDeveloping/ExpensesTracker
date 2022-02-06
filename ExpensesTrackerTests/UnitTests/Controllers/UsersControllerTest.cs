@@ -1,15 +1,16 @@
-﻿using System;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Helper.Classes;
 using Core.Interfaces;
 using ExpensesTracker.Controllers.v1;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Moq;
+using System;
 using Xunit;
 
-namespace ExpensesTrackerAPITest.Controllers
+namespace ExpensesTrackerTests.UnitTests.Controllers
 {
+    [Trait("UsersController", "Unit")]
     public class UsersControllerTest
     {
         private readonly Mock<IUserService> _mockRepo;
@@ -45,7 +46,7 @@ namespace ExpensesTrackerAPITest.Controllers
             var user = GetTestUser();
             UserDto? testUser = null;
             _mockRepo.Setup(x => x.InsertUserAsync(It.IsAny<UserDto>()))
-                .Callback<UserDto>(x => testUser = x );
+                .Callback<UserDto>(x => testUser = x);
 
             await _usersController.Post(user);
             _mockRepo.Verify(x => x.InsertUserAsync(It.IsAny<UserDto>()), Times.Once);
@@ -54,7 +55,6 @@ namespace ExpensesTrackerAPITest.Controllers
             Assert.Equal(user.FirstName, testUser?.FirstName);
             Assert.Equal(user.LastName, testUser?.LastName);
             _mockRepo.Verify();
-
         }
 
         [Fact]
@@ -71,7 +71,6 @@ namespace ExpensesTrackerAPITest.Controllers
             Assert.Equal(200, result?.StatusCode);
             Assert.IsType<UserDto>(updatedUser);
             Assert.Equal(testUser.LastName, updatedUser?.LastName);
-
         }
 
         [Fact]
