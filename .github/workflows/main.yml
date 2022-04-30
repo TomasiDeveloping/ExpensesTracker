@@ -44,9 +44,9 @@ jobs:
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Actions@master
       with:
-        server: www07.servertown.ch
-        username: ${{ secrets.FTP_USERNAME }}
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: dist/
-        server-dir: /kostenmanager.tomasi-developing.ch
+        server-dir: ${{ secrets.FTP_APP_DIR }}
         dangerous-clean-slate: true # optional
