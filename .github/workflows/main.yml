@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /ClientApp
+        working-directory: ./ExpensesTracker/ClientApp
 
     steps:
     - uses: actions/checkout@v2
@@ -21,14 +21,17 @@ jobs:
       with:
         node-version: 16.x
     - name: Install packages with NPM
+      working-directory: ./ExpensesTracker/ClientApp
       run: npm install
     - name: Build for production
+      working-directory: ./ExpensesTracker/ClientApp
       run: npm run build -- --prod
     - name: Upload artifacts to be used in next job
       if: success()
       uses: actions/upload-artifact@v1
       with:
         name: deploy_dist
+        working-directory: ./ExpensesTracker/ClientApp
         path: dist
 
   ftp-deploy:
@@ -42,6 +45,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: deploy_dist
+        working-directory: ./ExpensesTracker/ClientApp
         path: dist
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Actions@master
