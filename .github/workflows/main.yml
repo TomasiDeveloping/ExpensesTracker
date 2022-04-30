@@ -10,9 +10,12 @@ jobs:
 
     name: Deploy Angular App
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ExpensesTracker/ClientApp
 
     env:
-      SERVER: waws-prod-ln1-025.ftp.azurewebsites.windows.net
+      SERVER: www07.servertown.ch
 
     steps:
     - name: Get latest code
@@ -21,7 +24,7 @@ jobs:
     - name: Use Node.js 14 LTS
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '16'
       
     - name: Install NPM Modules
       run: npm install
@@ -33,8 +36,8 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
         server: ${{ env.SERVER }}
-        username: ${{ secrets.PROD_USER }}
-        password: ${{ secrets.PROD_PASSWORD }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./dist/
-        server-dir: ./site/wwwroot/
+        server-dir: ./kostenmanager.tomasi-developing.ch
         dangerous-clean-slate: true
