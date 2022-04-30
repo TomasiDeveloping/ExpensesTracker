@@ -1,5 +1,10 @@
 # ExpensesTracker
 Angular 13 with .NET 6 Rest API
+<br>
+<br>
+[![Deploy prod site on push](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/angular_main.yml/badge.svg)](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/angular_main.yml)
+<br>
+[![Build and deploy ASP.Net Core app to Azure Web App - tomasi-expense-tracker](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/master_tomasi-expense-tracker.yml/badge.svg?branch=master)](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/master_tomasi-expense-tracker.yml)
 <hr>
 <h3>Home</h3>
 <img src="https://github.com/TomasiDeveloping/ExpensesTracker/blob/master/Images/Home.png" width="70%">
