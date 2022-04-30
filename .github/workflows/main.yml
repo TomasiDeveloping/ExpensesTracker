@@ -3,15 +3,17 @@ name: Deploy to FTP On-Premise - Project ABC
 on:
   push:
     branches:
-      - main
+      - master
 
   # the follow line allow this script to be started manually.
   workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ExpensesTracker/ClientApp
 
     steps:
     - uses: actions/checkout@v2
@@ -44,9 +46,9 @@ jobs:
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Actions@master
       with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USER }}
+        server: www07.servertown.ch
+        username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: dist/
-        server-dir: ${{ secrets.FTP_APP_DIR }}
+        server-dir: /kostenmanager.tomasi-developing.ch
         dangerous-clean-slate: true # optional
