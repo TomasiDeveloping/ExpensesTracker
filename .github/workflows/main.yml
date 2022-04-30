@@ -38,6 +38,6 @@ jobs:
         server: ${{ env.SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: dist/
+        local-dir: ./ExpensesTracker/ClientApp/dist/
         server-dir: ./kostenmanager.tomasi-developing.ch/
         dangerous-clean-slate: true
