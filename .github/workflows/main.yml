@@ -1,40 +1,52 @@
-name: Deploy prod site on push
+name: Deploy to FTP On-Premise - Project ABC
 
-on: 
+on:
   push:
-    branches: 
-      - master
-      
-jobs:
-  web-deploy:
+    branches:
+      - main
 
-    name: Deploy Angular App
+  # the follow line allow this script to be started manually.
+  workflow_dispatch:
+
+jobs:
+  build:
+
     runs-on: ubuntu-latest
 
-    env:
-      SERVER: www07.servertown.ch
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10.16
+    - name: Install packages with NPM
+      run: npm install
+    - name: Build for production
+      run: npm run build -- --prod
+    - name: Upload artifacts to be used in next job
+      if: success()
+      uses: actions/upload-artifact@v1
+      with:
+        name: deploy_dist
+        path: dist
+
+  ftp-deploy:
+    needs: build
+    runs-on: self-hosted
 
     steps:
-    - name: Get latest code
-      uses: actions/checkout@v2.3.2
 
-    - name: Use Node.js 14 LTS
-      uses: actions/setup-node@v2
+    - name: Download artifacts created at previous job
+      if: success()
+      uses: actions/download-artifact@v1
       with:
-        node-version: '14'
-      
-    - name: Install NPM Modules
-      run: npm install
-
-    - name: Build Project
-      run: npm run build
-    
-    - name: Sync Files
-      uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        name: deploy_dist
+        path: dist
+    - name: Deploy to FTP
+      uses: SamKirkland/FTP-Deploy-Actions@master
       with:
-        server: ${{ env.SERVER }}
+        server: www07.servertown.ch
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./dist/
-        server-dir: /kostenmanager.tomasi-developing.ch/
-        dangerous-clean-slate: true
+        local-dir: dist/
+        server-dir: /kostenmanager.tomasi-developing.ch
+        dangerous-clean-slate: true # optional
