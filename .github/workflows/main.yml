@@ -1,58 +1,40 @@
-name: Deploy to FTP On-Premise - Project ABC
+name: Deploy prod site on push
 
-on:
+on: 
   push:
-    branches:
-      - master
-
-  # the follow line allow this script to be started manually.
-  workflow_dispatch:
-
+    branches: 
+      - main
+      
 jobs:
-  build:
+  web-deploy:
+
+    name: Deploy Angular App
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./ExpensesTracker/ClientApp
+
+    env:
+      SERVER: waws-prod-ln1-025.ftp.azurewebsites.windows.net
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
+    - name: Get latest code
+      uses: actions/checkout@v2.3.2
+
+    - name: Use Node.js 14 LTS
+      uses: actions/setup-node@v2
       with:
-        node-version: 16.x
-    - name: Install packages with NPM
-      working-directory: ./ExpensesTracker/ClientApp
+        node-version: '14'
+      
+    - name: Install NPM Modules
       run: npm install
-    - name: Build for production
-      working-directory: ./ExpensesTracker/ClientApp
-      run: npm run build -- --prod
-    - name: Upload artifacts to be used in next job
-      if: success()
-      uses: actions/upload-artifact@v1
-      with:
-        name: deploy_dist
-        working-directory: ./ExpensesTracker/ClientApp
-        path: dist
 
-  ftp-deploy:
-    needs: build
-    runs-on: self-hosted
-
-    steps:
-
-    - name: Download artifacts created at previous job
-      if: success()
-      uses: actions/download-artifact@v1
+    - name: Build Project
+      run: npm run build
+    
+    - name: Sync Files
+      uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        name: deploy_dist
-        working-directory: ./ExpensesTracker/ClientApp
-        path: dist
-    - name: Deploy to FTP
-      uses: SamKirkland/FTP-Deploy-Actions@master
-      with:
-        server: www07.servertown.ch
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: dist/
-        server-dir: /kostenmanager.tomasi-developing.ch
-        dangerous-clean-slate: true # optional
+        server: ${{ env.SERVER }}
+        username: ${{ secrets.PROD_USER }}
+        password: ${{ secrets.PROD_PASSWORD }}
+        local-dir: ./dist/
+        server-dir: ./site/wwwroot/
+        dangerous-clean-slate: true
