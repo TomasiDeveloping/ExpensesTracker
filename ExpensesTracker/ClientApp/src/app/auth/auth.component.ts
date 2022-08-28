@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
@@ -14,7 +14,7 @@ import {ForgotPasswordComponent} from "./forgot-password/forgot-password.compone
 export class AuthComponent implements OnInit {
 
   // @ts-ignore
-  loginForm: FormGroup
+  loginForm: UntypedFormGroup
   fieldTextType: Boolean = false;
   currentYear = new Date().getFullYear();
 
@@ -28,9 +28,9 @@ export class AuthComponent implements OnInit {
   }
 
   createLoginForm() {
-    this.loginForm = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [Validators.required]),
+    this.loginForm = new UntypedFormGroup({
+      email: new UntypedFormControl(null, [Validators.required, Validators.email]),
+      password: new UntypedFormControl(null, [Validators.required]),
     });
   }
 

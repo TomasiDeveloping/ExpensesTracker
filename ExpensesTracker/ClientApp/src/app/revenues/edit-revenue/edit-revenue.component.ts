@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {RevenueModel} from "../../models/revenue.model";
 import {RevenueCategoryModel} from "../../models/revenueCategory.model";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -18,7 +18,7 @@ export class EditRevenueComponent implements OnInit {
   isUpdate: boolean;
   currentRevenue: RevenueModel;
   // @ts-ignore
-  revenueForm: FormGroup;
+  revenueForm: UntypedFormGroup;
   categories: RevenueCategoryModel[] = [];
   isNewCategory = false;
 
@@ -38,14 +38,14 @@ export class EditRevenueComponent implements OnInit {
 
   createRevenueForm() {
     const date = new Date(this.currentRevenue.createDate);
-    this.revenueForm = new FormGroup({
-      id: new FormControl(this.currentRevenue.id),
-      userId: new FormControl(this.currentRevenue.userId),
-      categoryId: new FormControl(this.isUpdate ? this.currentRevenue.revenueCategoryId : '', [Validators.required]),
-      categoryName: new FormControl(''),
-      description: new FormControl(this.currentRevenue.description, [Validators.maxLength(255)]),
-      amount: new FormControl(this.currentRevenue.amount, [Validators.required]),
-      createDate: new FormControl(new Date(
+    this.revenueForm = new UntypedFormGroup({
+      id: new UntypedFormControl(this.currentRevenue.id),
+      userId: new UntypedFormControl(this.currentRevenue.userId),
+      categoryId: new UntypedFormControl(this.isUpdate ? this.currentRevenue.revenueCategoryId : '', [Validators.required]),
+      categoryName: new UntypedFormControl(''),
+      description: new UntypedFormControl(this.currentRevenue.description, [Validators.maxLength(255)]),
+      amount: new UntypedFormControl(this.currentRevenue.amount, [Validators.required]),
+      createDate: new UntypedFormControl(new Date(
         Date.UTC(date.getFullYear(),
           date.getMonth(),
           date.getDate()))

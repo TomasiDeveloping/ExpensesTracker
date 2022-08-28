@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ExpenseModel} from "../../models/expense.model";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {CategoryModel} from "../../models/category.model";
 import {CategoriesService} from "../../services/categories.service";
 import {ExpensesService} from "../../services/expenses.service";
@@ -18,7 +18,7 @@ export class EditExpensesComponent implements OnInit {
   isUpdate: Boolean;
   currentExpense: ExpenseModel;
   // @ts-ignore
-  expenseForm: FormGroup;
+  expenseForm: UntypedFormGroup;
   categories: CategoryModel[] = [];
   isNewCategory = false;
 
@@ -38,14 +38,14 @@ export class EditExpensesComponent implements OnInit {
 
   createExpenseForm() {
     const date = new Date(this.currentExpense.createDate);
-    this.expenseForm = new FormGroup({
-      id: new FormControl(this.currentExpense.id),
-      userId: new FormControl(this.currentExpense.userId),
-      categoryId: new FormControl(this.isUpdate ? this.currentExpense.categoryId : '', [Validators.required]),
-      categoryName: new FormControl(''),
-      description: new FormControl(this.currentExpense.description, [Validators.maxLength(255)]),
-      amount: new FormControl(this.currentExpense.amount, [Validators.required]),
-      createDate: new FormControl(new Date(
+    this.expenseForm = new UntypedFormGroup({
+      id: new UntypedFormControl(this.currentExpense.id),
+      userId: new UntypedFormControl(this.currentExpense.userId),
+      categoryId: new UntypedFormControl(this.isUpdate ? this.currentExpense.categoryId : '', [Validators.required]),
+      categoryName: new UntypedFormControl(''),
+      description: new UntypedFormControl(this.currentExpense.description, [Validators.maxLength(255)]),
+      amount: new UntypedFormControl(this.currentExpense.amount, [Validators.required]),
+      createDate: new UntypedFormControl(new Date(
         Date.UTC(date.getFullYear(),
           date.getMonth(),
           date.getDate()))

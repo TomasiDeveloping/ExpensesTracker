@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UsersService} from "../services/users.service";
 import {UserModel} from "../models/user.model";
-import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";
 import {AuthService} from "../services/auth.service";
@@ -22,10 +22,10 @@ export class SettingsComponent implements OnInit {
   currentUser: UserModel;
   userBudget = 0;
   // @ts-ignore
-  userForm: FormGroup;
-  passwordForm = new FormGroup({
-    password: new FormControl('', [Validators.required]),
-    confirmPassword: new FormControl('', [Validators.required, this.matchValues('password')])
+  userForm: UntypedFormGroup;
+  passwordForm = new UntypedFormGroup({
+    password: new UntypedFormControl('', [Validators.required]),
+    confirmPassword: new UntypedFormControl('', [Validators.required, this.matchValues('password')])
   });
   passwordFieldTextType = false;
   confirmFieldTextType = false;
@@ -56,12 +56,12 @@ export class SettingsComponent implements OnInit {
   }
 
   createUserForm() {
-    this.userForm = new FormGroup({
-      id: new FormControl(this.currentUser.id),
-      firstName: new FormControl(this.currentUser.firstName),
-      lastName: new FormControl(this.currentUser.lastName),
-      email: new FormControl(this.currentUser.email),
-      withRevenue: new FormControl(this.currentUser.withRevenue)
+    this.userForm = new UntypedFormGroup({
+      id: new UntypedFormControl(this.currentUser.id),
+      firstName: new UntypedFormControl(this.currentUser.firstName),
+      lastName: new UntypedFormControl(this.currentUser.lastName),
+      email: new UntypedFormControl(this.currentUser.email),
+      withRevenue: new UntypedFormControl(this.currentUser.withRevenue)
     });
     this.userForm.disable();
   }

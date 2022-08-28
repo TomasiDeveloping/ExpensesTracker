@@ -3,7 +3,7 @@ import {CategoryModel} from "../../models/category.model";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {CategoriesService} from "../../services/categories.service";
 import {ToastrService} from "ngx-toastr";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import Swal from "sweetalert2";
 
 @Component({
@@ -16,7 +16,7 @@ export class CategoryEditDialogComponent implements OnInit {
   currentCategory: CategoryModel;
   isUpdate: boolean;
   // @ts-ignore
-  categoryForm: FormGroup;
+  categoryForm: UntypedFormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private categoryService: CategoriesService,
@@ -27,10 +27,10 @@ export class CategoryEditDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.categoryForm = new FormGroup({
-      id: new FormControl(this.currentCategory.id),
-      name: new FormControl(this.currentCategory.name, [Validators.required]),
-      userId: new FormControl(this.currentCategory.userId)
+    this.categoryForm = new UntypedFormGroup({
+      id: new UntypedFormControl(this.currentCategory.id),
+      name: new UntypedFormControl(this.currentCategory.name, [Validators.required]),
+      userId: new UntypedFormControl(this.currentCategory.userId)
     });
   }
 
