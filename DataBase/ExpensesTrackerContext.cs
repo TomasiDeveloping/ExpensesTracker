@@ -14,6 +14,7 @@ namespace DataBase
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Revenue> Revenues { get; set; }
         public DbSet<RevenueCategory> RevenuesCategories { get; set; }
+        public DbSet<RecurringTask> RecurringTasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -69,6 +70,26 @@ namespace DataBase
                 .HasOne(r => r.RevenueCategory)
                 .WithMany()
                 .HasForeignKey(r => r.RevenueCategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // RECURRING_TASK CONFIG
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.ExecuteAll).IsRequired();
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.CategoryId).IsRequired(false);
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.RevenueCategoryId).IsRequired(false);
+            modelBuilder.Entity<RecurringTask>()
+                .HasOne(rt => rt.User)
+                .WithMany()
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<RecurringTask>()
+                .HasOne(rt => rt.Category)
+                .WithMany()
+                .HasForeignKey(rt => rt.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<RecurringTask>()
+                .HasOne(rt => rt.RevenueCategory)
+                .WithMany()
+                .HasForeignKey(rt => rt.RevenueCategoryId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

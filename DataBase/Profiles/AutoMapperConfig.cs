@@ -33,6 +33,16 @@ namespace DataBase.Profiles
             CreateMap<RevenueCategory, RevenueCategoryDto>();
             CreateMap<RevenueCategoryDto, RevenueCategory>()
                 .ForMember(src => src.User, o => o.Ignore());
+
+            CreateMap<RecurringTask, RecurringTaskDto>()
+                .ForMember(des => des.ExpenseCategoryName,
+                    opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : string.Empty))
+                .ForMember(des => des.RevenueCategoryName,
+                    opt => opt.MapFrom(src => src.RevenueCategory != null ? src.RevenueCategory.Name : string.Empty));
+            CreateMap<RecurringTaskDto, RecurringTask>()
+                .ForMember(des => des.Category, opt => opt.Ignore())
+                .ForMember(des => des.RevenueCategory, opt => opt.Ignore())
+                .ForMember(des => des.User, opt => opt.Ignore());
         }
     }
 }
