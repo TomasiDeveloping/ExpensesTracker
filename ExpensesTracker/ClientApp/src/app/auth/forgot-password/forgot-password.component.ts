@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {MatDialogRef} from "@angular/material/dialog";
 import {AuthService} from "../../services/auth.service";
 import Swal from "sweetalert2";
@@ -10,8 +10,8 @@ import Swal from "sweetalert2";
   styleUrls: ['./forgot-password.component.css']
 })
 export class ForgotPasswordComponent implements OnInit {
-  forgotPasswordForm: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email])
+  forgotPasswordForm: UntypedFormGroup = new UntypedFormGroup({
+    email: new UntypedFormControl('', [Validators.required, Validators.email])
   });
 
   constructor(private dialogRef: MatDialogRef<ForgotPasswordComponent>,

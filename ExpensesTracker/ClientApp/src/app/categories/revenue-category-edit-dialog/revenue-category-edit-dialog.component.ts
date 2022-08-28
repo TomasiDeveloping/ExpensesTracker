@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {RevenueCategoryModel} from "../../models/revenueCategory.model";
 import {RevenueCategoryService} from "../../services/revenue-category.service";
@@ -15,7 +15,7 @@ export class RevenueCategoryEditDialogComponent implements OnInit {
   isUpdate: boolean;
   currentRevenueCategory: RevenueCategoryModel;
   // @ts-ignore
-  revenueCategoryForm: FormGroup;
+  revenueCategoryForm: UntypedFormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private revenueCategoryService: RevenueCategoryService,
@@ -26,10 +26,10 @@ export class RevenueCategoryEditDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.revenueCategoryForm = new FormGroup({
-      id: new FormControl(this.currentRevenueCategory.id),
-      name: new FormControl(this.currentRevenueCategory.name, [Validators.required]),
-      userId: new FormControl(this.currentRevenueCategory.userId)
+    this.revenueCategoryForm = new UntypedFormGroup({
+      id: new UntypedFormControl(this.currentRevenueCategory.id),
+      name: new UntypedFormControl(this.currentRevenueCategory.name, [Validators.required]),
+      userId: new UntypedFormControl(this.currentRevenueCategory.userId)
     });
   }
 

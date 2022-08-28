@@ -1,7 +1,7 @@
 <div class="container">
   <h2>übersicht</h2>
   <div class="beams">
-    <span>{{currentMonth?.name}} {{currentMonth?.year}}</span>
+    <span>{{currentMonth.name}} {{currentMonth.year}}</span>
   </div>
   <div class="d-grid add-button">
     <button class="btn btn-warning" type="button" (click)="onAddExpense()">Ausgabe erfassen</button>
@@ -27,7 +27,7 @@
   <ng-template [ngIf]="isUserWithRevenue">
     <div class="month-budget">
       <p>Einnahmen: <span>{{totalRevenueAmount | currency: 'CHF '}}</span></p>
-      <p>Differenz {{currentMonth?.name}} : CHF
+      <p>Differenz {{currentMonth.name}} : CHF
         <span [ngStyle]="{ 'color': totalRevenueAmount - totalAmount < 0 ? 'red' : 'green'}">
         {{totalRevenueAmount - totalAmount | number: '1.2-2'}}
       </span>

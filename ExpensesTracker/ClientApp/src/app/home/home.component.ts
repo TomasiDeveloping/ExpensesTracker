@@ -24,12 +24,10 @@ export class HomeComponent implements OnInit {
   totalRevenueAmount = 0;
   monthlyConsumptionPercent = 0;
   userBudget = 0;
-  // @ts-ignore
   currentMonth = {value: 0, name: '', year: 0};
   categoryGroups: { category: number, name: string, amount: number } [] = [];
   currentUserId: number = 0;
-  // @ts-ignore
-  currentUser: UserModel;
+  currentUser!: UserModel;
   currentDate = new Date();
   isUserWithRevenue: boolean = false;
 

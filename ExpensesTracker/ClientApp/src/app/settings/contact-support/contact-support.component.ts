@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {SupportContactModel} from "../../models/supportContact.model";
 import {UsersService} from "../../services/users.service";
@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 export class ContactSupportComponent implements OnInit {
 
   // @ts-ignore
-  supportForm: FormGroup;
+  supportForm: UntypedFormGroup;
   isError = false;
   userEmail: string;
   subjects: string[] = ['Fehlermeldung', 'Wunsch', 'Allgemeine Anfrage'];
@@ -31,13 +31,13 @@ export class ContactSupportComponent implements OnInit {
   }
 
   createForm() {
-    this.supportForm =  new FormGroup({
-      email: new FormControl(this.userEmail, [Validators.required, Validators.email]),
-      subject: new FormControl(null, [Validators.required]),
-      message: new FormControl(null, [Validators.required]),
-      describeBug: new FormControl(null),
-      stepToReproduce: new FormControl(null),
-      expectedBehavior: new FormControl(null)
+    this.supportForm =  new UntypedFormGroup({
+      email: new UntypedFormControl(this.userEmail, [Validators.required, Validators.email]),
+      subject: new UntypedFormControl(null, [Validators.required]),
+      message: new UntypedFormControl(null, [Validators.required]),
+      describeBug: new UntypedFormControl(null),
+      stepToReproduce: new UntypedFormControl(null),
+      expectedBehavior: new UntypedFormControl(null)
     });
   }
 
