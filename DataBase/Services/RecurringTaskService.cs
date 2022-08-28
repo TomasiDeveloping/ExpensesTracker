@@ -17,6 +17,15 @@ public class RecurringTaskService : IRecurringTaskService
         _mapper = mapper;
     }
 
+    public async Task<List<RecurringTaskDto>> GetAllActiveRecurringTasks()
+    {
+        var activeRecurringTasks = await _context.RecurringTasks
+            .AsNoTracking()
+            .Where(rt => rt.IsActive)
+            .ToListAsync();
+        return _mapper.Map<List<RecurringTaskDto>>(activeRecurringTasks);
+    }
+
     public async Task<List<RecurringTaskDto>> GetRecurringTasksByUserIdAsync(int userId)
     {
         var recurringTasks = await _context.RecurringTasks

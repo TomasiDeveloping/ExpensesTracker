@@ -4,6 +4,7 @@ namespace Core.Interfaces;
 
 public interface IRecurringTaskService
 {
+    public Task<List<RecurringTaskDto>> GetAllActiveRecurringTasks();
     public Task<List<RecurringTaskDto>> GetRecurringTasksByUserIdAsync(int userId);
     public Task<RecurringTaskDto> InsertRecurringTaskAsync(RecurringTaskDto recurringTaskDto);
     public Task<RecurringTaskDto> UpdateRecurringTaskAsync(RecurringTaskDto recurringTaskDto);
