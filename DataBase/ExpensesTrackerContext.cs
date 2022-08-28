@@ -73,9 +73,11 @@ namespace DataBase
                 .OnDelete(DeleteBehavior.NoAction);
 
             // RECURRING_TASK CONFIG
-            modelBuilder.Entity<RecurringTask>().Property(rt => rt.ExecuteAll).IsRequired();
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.ExecuteInMonths).IsRequired();
             modelBuilder.Entity<RecurringTask>().Property(rt => rt.CategoryId).IsRequired(false);
             modelBuilder.Entity<RecurringTask>().Property(rt => rt.RevenueCategoryId).IsRequired(false);
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.Description).HasMaxLength(200).IsRequired(false);
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.Amount).HasPrecision(18, 2);
             modelBuilder.Entity<RecurringTask>()
                 .HasOne(rt => rt.User)
                 .WithMany()

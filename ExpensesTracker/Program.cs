@@ -71,6 +71,7 @@ builder.Services.AddScoped<IRevenueService, RevenueService>();
 builder.Services.AddScoped<IRevenueCategoryService, RevenueCategoryService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IRecurringTaskService, RecurringTaskService>();
+builder.Services.AddScoped<ICronService, CronService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

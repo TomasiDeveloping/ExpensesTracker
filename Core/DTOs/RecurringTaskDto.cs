@@ -20,6 +20,8 @@ namespace Core.DTOs
         public string? RevenueCategoryName { get; set; }
         public DateTime LastExecution { get; set; }
         public DateTime NextExecution { get; set; }
-        public int ExecuteAll { get; set; }
+        public int ExecuteInMonths { get; set; }
+        public decimal Amount { get; set; }
+        public string? Description { get; set; }
     }
 }
