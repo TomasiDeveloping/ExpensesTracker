@@ -32,6 +32,9 @@ import {
   RevenueCategoryEditDialogComponent
 } from "./categories/revenue-category-edit-dialog/revenue-category-edit-dialog.component";
 import { ContactSupportComponent } from './settings/contact-support/contact-support.component';
+import { ChangeLogInfoBoxComponent } from './home/change-log-info-box/change-log-info-box.component';
+import { RecurringTaskComponent } from './recurring-task/recurring-task.component';
+import { EditRecurringTaskComponent } from './recurring-task/edit-recurring-task/edit-recurring-task.component';
 
 
 @NgModule({
@@ -55,6 +58,9 @@ import { ContactSupportComponent } from './settings/contact-support/contact-supp
     EditRevenueComponent,
     RevenueCategoryEditDialogComponent,
     ContactSupportComponent,
+    ChangeLogInfoBoxComponent,
+    RecurringTaskComponent,
+    EditRecurringTaskComponent,
   ],
   imports: [
     BrowserModule,

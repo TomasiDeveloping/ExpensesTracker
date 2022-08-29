@@ -1,0 +1,75 @@
+<div class="container">
+  <h2>Daueraufträge</h2>
+  <hr>
+  <h3>Ausgaben</h3>
+  <div class="table-responsive">
+    <table class="table table-secondary table-striped">
+      <thead>
+      <tr>
+        <th scope="col">Beschreibung</th>
+        <th scope="col">Betrag</th>
+        <th scope="col">Intervall</th>
+        <th scope="col">Letzte Ausführung</th>
+        <th scope="col">Nächste Ausführung</th>
+        <th scope="col">Kategorie</th>
+        <th scope="col">Aktiv</th>
+        <th scope="col">Bearbeiten</th>
+        <th scope="col">Löschen</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let recurringTask of expenseRecurringTasks">
+        <th scope="row">{{recurringTask.description}}</th>
+        <th scope="row">{{recurringTask.amount | currency: 'CHF '}}</th>
+        <th scope="row">{{getIntervalName(recurringTask.executeInMonths)}}</th>
+        <th scope="row">{{recurringTask.lastExecution | date: 'dd.MM.yyyy'}}</th>
+        <th scope="row">{{recurringTask.nextExecution | date: 'dd.MM.yyyy'}}</th>
+        <th scope="row">{{recurringTask.expenseCategoryName}}</th>
+        <th scope="row"><span *ngIf="recurringTask.isActive" class="material-icons no-action"
+                              style="color: green">done</span><span *ngIf="!recurringTask.isActive"
+                                                                                class="material-icons no-action"
+                                                                                style="color: red">close</span>
+        </th>
+        <td><span (click)="onEditTask(recurringTask)" class="material-icons edit">edit</span></td>
+        <td><span (click)="onDeleteTask(recurringTask)" class="material-icons delete">delete</span></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template [ngIf]="isUserWithRevenue">
+    <hr>
+    <h3>Einnahmen</h3>
+    <div class="table-responsive">
+      <table class="table table-secondary table-striped revenue">
+        <thead>
+        <tr>
+          <th scope="col">Beschreibung</th>
+          <th scope="col">Betrag</th>
+          <th scope="col">Intervall</th>
+          <th scope="col">Letzte Ausführung</th>
+          <th scope="col">Nächste Ausführung</th>
+          <th scope="col">Kategorie</th>
+          <th scope="col">Aktiv</th>
+          <th scope="col">Bearbeiten</th>
+          <th scope="col">Löschen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let recurringTask of revenueRecurringTasks">
+          <th scope="row">{{recurringTask.description}}</th>
+          <th scope="row">{{recurringTask.amount | currency: 'CHF '}}</th>
+          <th scope="row">{{getIntervalName(recurringTask.executeInMonths)}}</th>
+          <th scope="row">{{recurringTask.lastExecution | date: 'dd.MM.yyyy'}}</th>
+          <th scope="row">{{recurringTask.nextExecution | date: 'dd.MM.yyyy'}}</th>
+          <th scope="row">{{recurringTask.revenueCategoryName}}</th>
+          <th scope="row"><span *ngIf="recurringTask.isActive" class="material-icons no-action" style="color: green">done</span><span
+            *ngIf="!recurringTask.isActive" class="material-icons no-action" style="color: red">close</span></th>
+          <td><span (click)="onEditTask(recurringTask)" class="material-icons edit">edit</span></td>
+          <td><span (click)="onDeleteTask(recurringTask)" class="material-icons delete">delete</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+</div>
+

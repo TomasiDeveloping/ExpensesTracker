@@ -8,6 +8,8 @@ import {ExpensesService} from "../../services/expenses.service";
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";
 import {concatMap, tap} from "rxjs";
+import {RecurringTaskService} from "../../services/recurring-task.service";
+import {RecurringTask} from "../../models/recurringTask.model";
 
 @Component({
   selector: 'app-edit-expenses',
@@ -21,11 +23,19 @@ export class EditExpensesComponent implements OnInit {
   expenseForm: UntypedFormGroup;
   categories: CategoryModel[] = [];
   isNewCategory = false;
+  isRecurringTask = false;
+  recurringIntervals: {value: number, description: string}[] = [
+    {value: 1, description: 'Monatlich'},
+    {value: 3, description: 'Vierteljährlich'},
+    {value: 6, description: 'Halbjährlich'},
+    {value: 12, description: 'Jährlich'}
+  ];
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private dialogRef: MatDialogRef<EditExpensesComponent>,
               private categoryService: CategoriesService,
               private expenseService: ExpensesService,
+              private recurringTaskService: RecurringTaskService,
               private toastr: ToastrService) {
     this.isUpdate = data.isUpdate;
     this.currentExpense = data.expense;
@@ -45,6 +55,7 @@ export class EditExpensesComponent implements OnInit {
       categoryName: new UntypedFormControl(''),
       description: new UntypedFormControl(this.currentExpense.description, [Validators.maxLength(255)]),
       amount: new UntypedFormControl(this.currentExpense.amount, [Validators.required]),
+      recurringTaskInterval: new UntypedFormControl(1),
       createDate: new UntypedFormControl(new Date(
         Date.UTC(date.getFullYear(),
           date.getMonth(),
@@ -136,6 +147,9 @@ export class EditExpensesComponent implements OnInit {
           concatMap(() => this.expenseService.insertExpense(expense))).subscribe({
         next: ((response) => {
           if (response) {
+            if (this.isRecurringTask) {
+              this.insertRecurringTask(response);
+            }
             this.dialogRef.close('update');
             this.toastr.success('Ausgabe erfolgreich hinzugefügt', 'Hinzufügen');
           }
@@ -148,6 +162,9 @@ export class EditExpensesComponent implements OnInit {
       this.expenseService.insertExpense(expense).subscribe({
         next: ((response) => {
           if (response) {
+            if (this.isRecurringTask) {
+              this.insertRecurringTask(response);
+            }
             this.toastr.success('Ausgabe erfolgreich hinzugefügt', 'Hinzugefügt');
             this.dialogRef.close('update');
           }
@@ -157,5 +174,33 @@ export class EditExpensesComponent implements OnInit {
         }
       });
     }
+  }
+  insertRecurringTask(expense: ExpenseModel) {
+    const recurringTask: RecurringTask = {
+      isRevenue: false,
+      isExpense: true,
+      isActive: true,
+      categoryId: expense.categoryId,
+      revenueCategoryId: undefined,
+      userId: expense.userId,
+      executeInMonths: this.expenseForm.controls.recurringTaskInterval.value,
+      amount: +this.expenseForm.controls.amount.value,
+      description: this.expenseForm.controls.description.value,
+      lastExecution: expense.createDate,
+      nextExecution: expense.createDate,
+      revenueCategoryName: '',
+      expenseCategoryName: '',
+      id: 0
+    };
+    this.recurringTaskService.insertRecurringTask(recurringTask).subscribe({
+      error: (error) => {
+        this.toastr.error('Dauerauftrag konnte nicht erstellt werden', 'Dauerauftrag');
+        console.log(error);
+      }
+    });
+  }
+
+  onRecurringTaskChange() {
+    this.isRecurringTask = !this.isRecurringTask;
   }
 }

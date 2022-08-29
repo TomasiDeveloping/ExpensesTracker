@@ -10,6 +10,9 @@ import {MonthNamePipe} from "../util/month-name.pipe";
 import {RevenueModel} from "../models/revenue.model";
 import {EditRevenueComponent} from "../revenues/edit-revenue/edit-revenue.component";
 import {RevenueService} from "../services/revenue.service";
+import {environment} from "../../environments/environment";
+import {ChangeLogInfoBoxComponent} from "./change-log-info-box/change-log-info-box.component";
+import {ApplicationVersionConfirmationService} from "../services/application-version-confirmation.service";
 
 @Component({
   selector: 'app-home',
@@ -30,12 +33,15 @@ export class HomeComponent implements OnInit {
   currentUser!: UserModel;
   currentDate = new Date();
   isUserWithRevenue: boolean = false;
+  showChangeLogBox = environment.showVersionInfo;
+  version = environment.appVersion;
 
   constructor(private expenseService: ExpensesService,
               private userService: UsersService,
               private monthPipe: MonthNamePipe,
               private authService: AuthService,
               private revenueService: RevenueService,
+              private applicationVersionConfirmationService: ApplicationVersionConfirmationService,
               private dialog: MatDialog) {
   }
 
@@ -60,6 +66,7 @@ export class HomeComponent implements OnInit {
         this.isUserWithRevenue = response.withRevenue;
         this.getUserExpenses();
         this.getCurrentMonth();
+        this.checkChangeLogBox();
         if (this.isUserWithRevenue) {
           this.getUserRevenues();
         }
@@ -167,5 +174,23 @@ export class HomeComponent implements OnInit {
         this.getCurrentUser();
       }
     });
+  }
+
+  checkChangeLogBox() {
+    if (this.showChangeLogBox) {
+      if (this.currentUserId <= 0) return;
+      this.applicationVersionConfirmationService.checkUserHasConfirmed(this.currentUserId, this.version).subscribe({
+        next: ((confirmed) => {
+          if (!confirmed) {
+            this.dialog.open(ChangeLogInfoBoxComponent, {
+              width: '80%',
+              height: 'auto',
+              disableClose: true,
+              data: {userId: this.currentUserId, version: this.version}
+            })
+          }
+        })
+      });
+    }
   }
 }

@@ -14,6 +14,8 @@ namespace DataBase
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Revenue> Revenues { get; set; }
         public DbSet<RevenueCategory> RevenuesCategories { get; set; }
+        public DbSet<RecurringTask> RecurringTasks { get; set; }
+        public DbSet<ApplicationVersionConfirmation> ApplicationVersionConfirmations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +30,7 @@ namespace DataBase
             modelBuilder.Entity<User>().Property(u => u.Salt).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.CreatedAt).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.WithRevenue).IsRequired().HasDefaultValue(true);
+            modelBuilder.Entity<User>().Property(u => u.MonthlyBudget).HasPrecision(18, 2);
 
             // CATEGORY CONFIG
             modelBuilder.Entity<Category>().Property(c => c.Name).HasMaxLength(100).IsRequired();
@@ -47,6 +50,7 @@ namespace DataBase
 
             // EXPENSE CONFIG
             modelBuilder.Entity<Expense>().Property(e => e.Description).HasMaxLength(255).IsRequired(false);
+            modelBuilder.Entity<Expense>().Property(e => e.Amount).HasPrecision(18, 2);
             modelBuilder.Entity<Expense>()
                 .HasOne(e => e.User)
                 .WithMany()
@@ -60,6 +64,7 @@ namespace DataBase
 
             // REVENUE CONFIG
             modelBuilder.Entity<Revenue>().Property(r => r.Description).HasMaxLength(255).IsRequired(false);
+            modelBuilder.Entity<Revenue>().Property(r => r.Amount).HasPrecision(18, 2);
             modelBuilder.Entity<Revenue>()
                 .HasOne(r => r.User)
                 .WithMany()
@@ -69,6 +74,36 @@ namespace DataBase
                 .HasOne(r => r.RevenueCategory)
                 .WithMany()
                 .HasForeignKey(r => r.RevenueCategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // RECURRING_TASK CONFIG
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.ExecuteInMonths).IsRequired();
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.CategoryId).IsRequired(false);
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.RevenueCategoryId).IsRequired(false);
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.Description).HasMaxLength(200).IsRequired(false);
+            modelBuilder.Entity<RecurringTask>().Property(rt => rt.Amount).HasPrecision(18, 2);
+            modelBuilder.Entity<RecurringTask>()
+                .HasOne(rt => rt.User)
+                .WithMany()
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<RecurringTask>()
+                .HasOne(rt => rt.Category)
+                .WithMany()
+                .HasForeignKey(rt => rt.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<RecurringTask>()
+                .HasOne(rt => rt.RevenueCategory)
+                .WithMany()
+                .HasForeignKey(rt => rt.RevenueCategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ApplicationVersionConfirmation>().Property(avc => avc.Version).HasMaxLength(50)
+                .IsRequired();
+            modelBuilder.Entity<ApplicationVersionConfirmation>()
+                .HasOne(avc => avc.User)
+                .WithMany()
+                .HasForeignKey(avc => avc.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

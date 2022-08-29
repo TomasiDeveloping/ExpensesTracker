@@ -102,7 +102,7 @@ export class CategoriesComponent implements OnInit {
   onDelete(category: CategoryModel) {
     Swal.fire({
       title: 'Bist Du sicher ?',
-      html: '<p>Kategorie <b>' + category.name + '</b> wirklich löschen ?</p><p>Alle Ausgaben für die Kategorie werden ebenfalls gelöscht!</p>',
+      html: '<p>Kategorie <b>' + category.name + '</b> wirklich löschen ?</p><p>Alle Ausgaben und Daueraufträge für die Kategorie werden ebenfalls gelöscht!</p>',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -138,7 +138,7 @@ export class CategoriesComponent implements OnInit {
   onDeleteDeleteRevenue(category: RevenueCategoryModel) {
     Swal.fire({
       title: 'Bist Du sicher ?',
-      html: '<p>Kategorie <b>' + category.name + '</b> wirklich löschen ?</p><p>Alle Einnahmen für die Kategorie werden ebenfalls gelöscht!</p>',
+      html: '<p>Kategorie <b>' + category.name + '</b> wirklich löschen ?</p><p>Alle Einnahmen und Daueraufträge für die Kategorie werden ebenfalls gelöscht!</p>',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
