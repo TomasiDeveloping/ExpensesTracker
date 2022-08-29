@@ -6,6 +6,7 @@ import {CategoriesComponent} from "./categories/categories.component";
 import {SettingsComponent} from "./settings/settings.component";
 import {ReportsComponent} from "./reports/reports.component";
 import {RevenuesComponent} from "./revenues/revenues.component";
+import {RecurringTaskComponent} from "./recurring-task/recurring-task.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: 'einnahmen', component: RevenuesComponent},
   {path: 'kategorien', component: CategoriesComponent},
   {path: 'statistiken', component: ReportsComponent},
+  {path: 'dauerauftraege', component: RecurringTaskComponent},
   {path: 'einstellungen', component: SettingsComponent},
   {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];

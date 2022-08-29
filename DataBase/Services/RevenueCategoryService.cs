@@ -67,6 +67,8 @@ namespace DataBase.Services
             if (revenueCategoryToDelete == null) return false;
             var revenues = await _context.Revenues.Where(r => r.RevenueCategoryId == revenueCategoryId).ToListAsync();
             if (revenues.Any()) _context.Revenues.RemoveRange(revenues);
+            var recurringTasks = await _context.RecurringTasks.Where(rt => rt.RevenueCategoryId.Equals(revenueCategoryId)).ToListAsync();
+            if (recurringTasks.Any()) _context.RecurringTasks.RemoveRange(recurringTasks);
             _context.RevenuesCategories.Remove(revenueCategoryToDelete);
             await _context.SaveChangesAsync();
             return true;

@@ -40,6 +40,7 @@ public class RecurringTaskService : IRecurringTaskService
     public async Task<RecurringTaskDto> InsertRecurringTaskAsync(RecurringTaskDto recurringTaskDto)
     {
         var newRecurringTask = _mapper.Map<RecurringTask>(recurringTaskDto);
+        newRecurringTask.NextExecution = newRecurringTask.LastExecution.AddMonths(newRecurringTask.ExecuteInMonths);
         await _context.RecurringTasks.AddAsync(newRecurringTask);
         await _context.SaveChangesAsync();
         return _mapper.Map<RecurringTaskDto>(newRecurringTask);
@@ -51,6 +52,9 @@ public class RecurringTaskService : IRecurringTaskService
             await _context.RecurringTasks.FirstOrDefaultAsync(rt => rt.Id.Equals(recurringTaskDto.Id));
         if (recurringTaskToUpdate == null)
             throw new ArgumentException($"No RecurringTask found with id: {recurringTaskDto.Id}");
+        if (recurringTaskToUpdate.ExecuteInMonths != recurringTaskDto.ExecuteInMonths)
+            recurringTaskDto.NextExecution =
+                recurringTaskToUpdate.LastExecution.AddMonths(recurringTaskDto.ExecuteInMonths);
         _mapper.Map(recurringTaskDto, recurringTaskToUpdate);
         await _context.SaveChangesAsync();
         return _mapper.Map<RecurringTaskDto>(recurringTaskToUpdate);

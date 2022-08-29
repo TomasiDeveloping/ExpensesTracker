@@ -48,10 +48,8 @@ public class CronService : ICronService
 
     private bool CheckIfJobMustRun(RecurringTaskDto recurringTaskDto)
     {
-        var dateToCheck = recurringTaskDto.LastExecution.AddMonths(recurringTaskDto.ExecuteInMonths);
-
-        return dateToCheck.Day.Equals(_today.Day) && dateToCheck.Month.Equals(_today.Month) &&
-               dateToCheck.Year.Equals(_today.Year);
+        return recurringTaskDto.NextExecution.Day.Equals(_today.Day) && recurringTaskDto.NextExecution.Month.Equals(_today.Month) &&
+               recurringTaskDto.NextExecution.Year.Equals(_today.Year);
     }
 
     private async Task<bool> InsertExpense(RecurringTaskDto recurringTaskDto)

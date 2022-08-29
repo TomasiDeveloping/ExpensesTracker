@@ -68,6 +68,8 @@ namespace DataBase.Services
             {
                 _context.Expenses.RemoveRange(expenses);
             }
+            var recurringTasks = await _context.RecurringTasks.Where(rt => rt.CategoryId.Equals(categoryId)).ToListAsync();
+            if (recurringTasks.Any()) _context.RecurringTasks.RemoveRange(recurringTasks);
             _context.Categories.Remove(categoryToDelete);
             await _context.SaveChangesAsync();
             return true;

@@ -66,6 +66,21 @@
         <p *ngIf="revenueForm.controls.description.errors.maxlength">Maximum 255 Zeichen erlaubt</p>
       </div>
     </div>
+    <div class="form-check form-switch mb-3" *ngIf="!isUpdate">
+      <input class="form-check-input" type="checkbox" id="isRecurringTask" [checked]="isRecurringTask" (change)="onRecurringTaskChange()">
+      <label class="form-check-label" for="isRecurringTask">Dauerauftrag</label>
+    </div>
+    <div class="mb-3" *ngIf="isRecurringTask && !isUpdate">
+      <label class="form-label" for="recurringTaskInterval">Intervall</label>
+      <select class="form-select" formControlName="recurringTaskInterval" id="recurringTaskInterval">
+        <option *ngFor="let interval of recurringIntervals" [ngValue]="interval.value">{{interval.description}}</option>
+      </select>
+      <div *ngIf="revenueForm.controls.categoryId.errors &&
+                 (revenueForm.controls.categoryId.dirty || revenueForm.controls.categoryId.touched)"
+           class="invalid-feedback">
+        <p *ngIf="revenueForm.controls.categoryId.errors.required">Kategorie ist ein Pflichtfeld</p>
+      </div>
+    </div>
     <div class="mb-3">
       <label class="form-label" for="createDate">Datum</label>
       <input

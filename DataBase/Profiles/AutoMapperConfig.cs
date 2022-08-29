@@ -43,6 +43,12 @@ namespace DataBase.Profiles
                 .ForMember(des => des.Category, opt => opt.Ignore())
                 .ForMember(des => des.RevenueCategory, opt => opt.Ignore())
                 .ForMember(des => des.User, opt => opt.Ignore());
+
+            CreateMap<ApplicationVersionConfirmation, ApplicationVersionConfirmationDto>();
+            CreateMap<ApplicationVersionConfirmationDto, ApplicationVersionConfirmation>()
+                .ForMember(des => des.User, opt => opt.Ignore())
+                .ForMember(des => des.Id, opt => opt.Ignore())
+                .ForMember(des => des.ConfirmedAt, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
 }

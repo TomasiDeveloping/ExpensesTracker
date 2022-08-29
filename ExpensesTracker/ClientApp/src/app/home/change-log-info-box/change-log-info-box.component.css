@@ -1,0 +1,10 @@
+.button-container {
+  display: flex;
+  justify-content: end;
+  margin-right: 2rem;
+}
+
+h1 {
+  text-align: center;
+  color: #142d52;
+}
