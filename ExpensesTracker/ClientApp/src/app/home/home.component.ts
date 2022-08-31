@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   currentDate = new Date();
   isUserWithRevenue: boolean = false;
   showChangeLogBox = environment.showVersionInfo;
-  version = environment.appVersion;
+  version = environment.versionToCheck;
 
   constructor(private expenseService: ExpensesService,
               private userService: UsersService,

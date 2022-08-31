@@ -42,13 +42,15 @@ export class RecurringTaskComponent implements OnInit {
     this.expenseRecurringTasks = [];
     this.recurringTaskService.getRecurringTasksByUserId(this.currentUserId).subscribe({
       next: ((recurringTasks) => {
-        recurringTasks.forEach((task) => {
-          if (task.isExpense) {
-            this.expenseRecurringTasks.push(task);
-          } else {
-            this.revenueRecurringTasks.push(task);
-          }
-        })
+        if(recurringTasks) {
+          recurringTasks.forEach((task) => {
+            if (task.isExpense) {
+              this.expenseRecurringTasks.push(task);
+            } else {
+              this.revenueRecurringTasks.push(task);
+            }
+          })
+        }
       }),
       error: (error) => {
         console.log(error);
