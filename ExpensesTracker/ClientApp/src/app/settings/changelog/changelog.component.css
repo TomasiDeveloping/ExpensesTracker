@@ -5,3 +5,8 @@ mat-dialog-actions {
 .version {
   font-weight: bold;
 }
+
+.version-date {
+  font-weight: normal;
+  font-size: small;
+}

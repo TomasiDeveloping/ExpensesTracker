@@ -3,7 +3,6 @@ import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
 import {UserModel} from "../models/user.model";
 import {UsersService} from "../services/users.service";
-import {MatDialog} from "@angular/material/dialog";
 import {EditExpensesComponent} from "./edit-expenses/edit-expenses.component";
 import {AuthService} from "../services/auth.service";
 import {MonthNamePipe} from "../util/month-name.pipe";
@@ -13,6 +12,7 @@ import {RevenueService} from "../services/revenue.service";
 import {environment} from "../../environments/environment";
 import {ChangeLogInfoBoxComponent} from "./change-log-info-box/change-log-info-box.component";
 import {ApplicationVersionConfirmationService} from "../services/application-version-confirmation.service";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-home',
