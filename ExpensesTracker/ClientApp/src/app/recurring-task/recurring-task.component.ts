@@ -3,7 +3,7 @@ import {RecurringTask} from "../models/recurringTask.model";
 import {AuthService} from "../services/auth.service";
 import {UsersService} from "../services/users.service";
 import {RecurringTaskService} from "../services/recurring-task.service";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {EditRecurringTaskComponent} from "./edit-recurring-task/edit-recurring-task.component";
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";

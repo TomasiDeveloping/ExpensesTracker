@@ -13,7 +13,7 @@ import {ExpensesComponent} from './home/expenses/expenses.component';
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CategoryEditDialogComponent} from './categories/category-edit-dialog/category-edit-dialog.component';
-import {MatDialogModule} from "@angular/material/dialog";
+import {MatLegacyDialogModule as MatDialogModule} from "@angular/material/legacy-dialog";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {SpinnerInterceptor} from "./interceptors/spinner.interceptor";
 import {SettingsComponent} from './settings/settings.component';

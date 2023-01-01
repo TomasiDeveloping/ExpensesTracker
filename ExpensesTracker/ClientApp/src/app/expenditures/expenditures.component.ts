@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {EditExpensesComponent} from "../home/edit-expenses/edit-expenses.component";
 import Swal from "sweetalert2";
 import {ToastrService} from "ngx-toastr";

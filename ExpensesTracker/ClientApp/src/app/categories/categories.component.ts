@@ -3,7 +3,7 @@ import {CategoriesService} from "../services/categories.service";
 import {CategoryModel} from "../models/category.model";
 import Swal from 'sweetalert2';
 import {ToastrService} from "ngx-toastr";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {CategoryEditDialogComponent} from "./category-edit-dialog/category-edit-dialog.component";
 import {AuthService} from "../services/auth.service";
 import {RevenueCategoryModel} from "../models/revenueCategory.model";

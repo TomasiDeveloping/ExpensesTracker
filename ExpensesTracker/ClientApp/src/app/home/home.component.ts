@@ -3,7 +3,7 @@ import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
 import {UserModel} from "../models/user.model";
 import {UsersService} from "../services/users.service";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {EditExpensesComponent} from "./edit-expenses/edit-expenses.component";
 import {AuthService} from "../services/auth.service";
 import {MonthNamePipe} from "../util/month-name.pipe";

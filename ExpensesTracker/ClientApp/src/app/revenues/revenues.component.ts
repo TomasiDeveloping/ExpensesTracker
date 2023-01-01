@@ -5,7 +5,7 @@ import {AuthService} from "../services/auth.service";
 import {RevenueService} from "../services/revenue.service";
 import Swal from "sweetalert2";
 import {ToastrService} from "ngx-toastr";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {EditRevenueComponent} from "./edit-revenue/edit-revenue.component";
 
 
