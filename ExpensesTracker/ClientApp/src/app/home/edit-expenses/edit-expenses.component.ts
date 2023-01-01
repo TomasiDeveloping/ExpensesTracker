@@ -1,5 +1,4 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {ExpenseModel} from "../../models/expense.model";
 import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {CategoryModel} from "../../models/category.model";
@@ -10,6 +9,7 @@ import Swal from "sweetalert2";
 import {concatMap, tap} from "rxjs";
 import {RecurringTaskService} from "../../services/recurring-task.service";
 import {RecurringTask} from "../../models/recurringTask.model";
+import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-edit-expenses',

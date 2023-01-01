@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {CategoryModel} from "../../models/category.model";
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {CategoriesService} from "../../services/categories.service";
 import {ToastrService} from "ngx-toastr";
 import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import Swal from "sweetalert2";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-category-edit-dialog',

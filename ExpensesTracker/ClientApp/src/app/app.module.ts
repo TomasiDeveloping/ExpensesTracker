@@ -13,7 +13,6 @@ import {ExpensesComponent} from './home/expenses/expenses.component';
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CategoryEditDialogComponent} from './categories/category-edit-dialog/category-edit-dialog.component';
-import {MatLegacyDialogModule as MatDialogModule} from "@angular/material/legacy-dialog";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {SpinnerInterceptor} from "./interceptors/spinner.interceptor";
 import {SettingsComponent} from './settings/settings.component';
@@ -35,6 +34,7 @@ import { ContactSupportComponent } from './settings/contact-support/contact-supp
 import { ChangeLogInfoBoxComponent } from './home/change-log-info-box/change-log-info-box.component';
 import { RecurringTaskComponent } from './recurring-task/recurring-task.component';
 import { EditRecurringTaskComponent } from './recurring-task/edit-recurring-task/edit-recurring-task.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 @NgModule({
@@ -73,9 +73,9 @@ import { EditRecurringTaskComponent } from './recurring-task/edit-recurring-task
       positionClass: 'toast-bottom-right'
     }),
     BrowserAnimationsModule,
-    MatDialogModule,
     NgxSpinnerModule,
     NgxChartsModule,
+    MatDialogModule,
   ],
   providers: [
     MonthNamePipe,

@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {RevenueModel} from "../../models/revenue.model";
 import {RevenueCategoryModel} from "../../models/revenueCategory.model";
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {RevenueCategoryService} from "../../services/revenue-category.service";
 import {RevenueService} from "../../services/revenue.service";
 import {ToastrService} from "ngx-toastr";
@@ -10,6 +9,7 @@ import {concatMap, tap} from "rxjs";
 import Swal from "sweetalert2";
 import {RecurringTask} from "../../models/recurringTask.model";
 import {RecurringTaskService} from "../../services/recurring-task.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 
 @Component({

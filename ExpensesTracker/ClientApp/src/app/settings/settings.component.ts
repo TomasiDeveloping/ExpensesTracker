@@ -5,10 +5,10 @@ import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidatorFn, Vali
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";
 import {AuthService} from "../services/auth.service";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {ChangelogComponent} from "./changelog/changelog.component";
 import {environment} from "../../environments/environment";
 import {ContactSupportComponent} from "./contact-support/contact-support.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-settings',

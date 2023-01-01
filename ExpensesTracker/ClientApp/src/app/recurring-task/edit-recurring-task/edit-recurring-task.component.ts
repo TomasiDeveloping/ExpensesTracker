@@ -1,11 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {RecurringTask} from "../../models/recurringTask.model";
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {RevenueCategoryService} from "../../services/revenue-category.service";
 import {CategoriesService} from "../../services/categories.service";
 import {RecurringTaskService} from "../../services/recurring-task.service";
 import {ToastrService} from "ngx-toastr";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-edit-recurring-task',

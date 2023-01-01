@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {SupportContactModel} from "../../models/supportContact.model";
 import {UsersService} from "../../services/users.service";
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";
+import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-contact-support',
@@ -19,6 +19,7 @@ export class ContactSupportComponent implements OnInit {
   userEmail: string;
   subjects: string[] = ['Fehlermeldung', 'Wunsch', 'Allgemeine Anfrage'];
 
+  // @ts-ignore
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private userService: UsersService,
               private dialogRef: MatDialogRef<ContactSupportComponent>,
