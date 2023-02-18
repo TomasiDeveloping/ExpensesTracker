@@ -16,11 +16,13 @@ namespace ExpensesTracker.Controllers.v1
     public class UsersController : ControllerBase
     {
         private readonly IUserService _service;
+        private readonly ILogger<UsersController> _logger;
         private readonly EmailService _emailService;
 
-        public UsersController(IUserService service, IOptions<EmailSettings> options)
+        public UsersController(IUserService service, IOptions<EmailSettings> options, ILogger<UsersController> logger)
         {
             _service = service;
+            _logger = logger;
             _emailService = new EmailService(options);
         }
 
@@ -36,12 +38,12 @@ namespace ExpensesTracker.Controllers.v1
         public async Task<IActionResult> Get(int userId)
         {
             var user = await _service.GetUserByIdAsync(userId);
-            if (user == null) return BadRequest($"No user found with Id: {userId}");
+            if (user == null) return NotFound($"No user found with Id: {userId}");
             return Ok(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UserDto userDto)
+        public async Task<IActionResult> CreateUser(UserDto userDto)
         {
             try
             {
@@ -50,6 +52,7 @@ namespace ExpensesTracker.Controllers.v1
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"Something Went Wrong in {nameof(CreateUser)}");
                 return BadRequest(e.Message);
             }
         }
@@ -65,8 +68,9 @@ namespace ExpensesTracker.Controllers.v1
                     await _emailService.SendEmailAsync("info@tomasi-developing.ch", emailMessage, "Kontaktformular");
                 return Ok(checkSendMail);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, $"Something Went Wrong in {nameof(SendSupportEmail)}");
                 return BadRequest("E-Mail konnte nicht gesendet werden");
             }
         }
@@ -83,12 +87,13 @@ namespace ExpensesTracker.Controllers.v1
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"Something Went Wrong in {nameof(ChangeUserPassword)}");
                 return BadRequest(e.Message);
             }
         }
 
         [HttpPut("{userId:int}")]
-        public async Task<IActionResult> Put(int userId, UserDto userDto)
+        public async Task<IActionResult> UpdateUser(int userId, UserDto userDto)
         {
             try
             {
@@ -98,12 +103,13 @@ namespace ExpensesTracker.Controllers.v1
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"Something Went Wrong in {nameof(UpdateUser)}");
                 return BadRequest(e.Message);
             }
         }
 
         [HttpDelete("{userId:int}")]
-        public async Task<IActionResult> Delete(int userId)
+        public async Task<IActionResult> DeleteUser(int userId)
         {
             try
             {
@@ -113,6 +119,7 @@ namespace ExpensesTracker.Controllers.v1
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"Something Went Wrong in {nameof(DeleteUser)}");
                 return BadRequest(e.Message);
             }
         }

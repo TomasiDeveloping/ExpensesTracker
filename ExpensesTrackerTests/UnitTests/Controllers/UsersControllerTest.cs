@@ -20,7 +20,7 @@ namespace ExpensesTrackerTests.UnitTests.Controllers
         {
             var settings = Options.Create(new EmailSettings());
             _mockRepo = new Mock<IUserService>();
-            _usersController = new UsersController(_mockRepo.Object, settings);
+            _usersController = new UsersController(_mockRepo.Object, settings, null);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace ExpensesTrackerTests.UnitTests.Controllers
             _mockRepo.Setup(x => x.InsertUserAsync(It.IsAny<UserDto>()))
                 .Callback<UserDto>(x => testUser = x);
 
-            await _usersController.Post(user);
+            await _usersController.CreateUser(user);
             _mockRepo.Verify(x => x.InsertUserAsync(It.IsAny<UserDto>()), Times.Once);
 
             Assert.NotNull(testUser);
@@ -65,7 +65,7 @@ namespace ExpensesTrackerTests.UnitTests.Controllers
                 .ReturnsAsync(testUser);
             testUser.LastName = "Update";
 
-            var result = await _usersController.Put(testUser.Id, testUser) as ObjectResult;
+            var result = await _usersController.UpdateUser(testUser.Id, testUser) as ObjectResult;
 
             var updatedUser = result?.Value as UserDto;
             Assert.Equal(200, result?.StatusCode);
@@ -80,7 +80,7 @@ namespace ExpensesTrackerTests.UnitTests.Controllers
             _mockRepo.Setup(x => x.DeleteUserAsync(1))
                 .ReturnsAsync(true);
 
-            var result = await _usersController.Delete(testUser.Id) as ObjectResult;
+            var result = await _usersController.DeleteUser(testUser.Id) as ObjectResult;
             Assert.NotNull(result);
             Assert.Equal(200, result?.StatusCode);
             Assert.True((bool)(result?.Value ?? false));

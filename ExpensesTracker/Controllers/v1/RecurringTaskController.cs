@@ -9,11 +9,13 @@ namespace ExpensesTracker.Controllers.v1;
 [ApiController]
 public class RecurringTaskController : ControllerBase
 {
+    private readonly ILogger<RecurringTaskController> _logger;
     private readonly IRecurringTaskService _recurringTaskService;
 
-    public RecurringTaskController(IRecurringTaskService recurringTaskService)
+    public RecurringTaskController(IRecurringTaskService recurringTaskService, ILogger<RecurringTaskController> logger)
     {
         _recurringTaskService = recurringTaskService;
+        _logger = logger;
     }
 
     [HttpGet("{userId:int}")]
@@ -27,6 +29,7 @@ public class RecurringTaskController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e, $"Something Went Wrong in {nameof(GetRecurringTasks)}");
             return BadRequest(e.Message);
         }
     }
@@ -41,6 +44,7 @@ public class RecurringTaskController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e, $"Something Went Wrong in {nameof(InsertRecurringTask)}");
             return BadRequest(e.Message);
         }
     }
@@ -56,6 +60,7 @@ public class RecurringTaskController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e, $"Something Went Wrong in {nameof(UpdateRecurringTask)}");
             return BadRequest(e.Message);
         }
     }
@@ -70,6 +75,7 @@ public class RecurringTaskController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e, $"Something Went Wrong in {nameof(DeleteRecurringTask)}");
             return BadRequest(e.Message);
         }
     }

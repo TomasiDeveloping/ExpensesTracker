@@ -9,10 +9,12 @@ namespace ExpensesTracker.Controllers.v1;
 public class CronController : ControllerBase
 {
     private readonly ICronService _cronService;
+    private readonly ILogger<CronController> _logger;
 
-    public CronController(ICronService cronService)
+    public CronController(ICronService cronService, ILogger<CronController> logger)
     {
         _cronService = cronService;
+        _logger = logger;
     }
 
     [HttpGet("[action]")]
@@ -25,6 +27,7 @@ public class CronController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e, $"Something Went Wrong in {nameof(RunRecurringTasks)}");
             return BadRequest(e.Message);
         }
     }
