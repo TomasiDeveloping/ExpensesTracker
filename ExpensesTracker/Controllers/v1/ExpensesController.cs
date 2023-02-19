@@ -3,117 +3,123 @@ using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpensesTracker.Controllers.v1
+namespace ExpensesTracker.Controllers.v1;
+
+[Authorize]
+[ApiVersion("1.0")]
+[Route("api/v{v:apiVersion}/[controller]")]
+[ApiController]
+public class ExpensesController : ControllerBase
 {
-    [Authorize]
-    [ApiVersion("1.0")]
-    [Route("api/v{v:apiVersion}/[controller]")]
-    [ApiController]
-    public class ExpensesController : ControllerBase
+    private readonly ILogger<ExpensesController> _logger;
+    private readonly IExpenseService _service;
+
+    public ExpensesController(IExpenseService service, ILogger<ExpensesController> logger)
     {
-        private readonly IExpenseService _service;
+        _service = service;
+        _logger = logger;
+    }
 
-        public ExpensesController(IExpenseService service)
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        var expenses = await _service.GetExpensesAsync();
+        if (!expenses.Any()) return NoContent();
+        return Ok(expenses);
+    }
+
+    [HttpGet("user/{userId:int}")]
+    public async Task<IActionResult> GetExpensesByUserId(int userId, [FromQuery] int? year = null,
+        [FromQuery] int? month = null)
+    {
+        _ = new List<ExpenseDto>();
+        List<ExpenseDto>? userExpenses;
+        if (year != null && month != null)
+            userExpenses = await _service.GetUserExpensesByParamsAsync(userId, year.Value, month.Value);
+        else
+            userExpenses = await _service.GetExpensesByUserId(userId);
+
+        if (!userExpenses.Any()) return NoContent();
+        return Ok(userExpenses);
+    }
+
+    [HttpGet("user/{userId:int}/category/{categoryId:int}")]
+    public async Task<IActionResult> GetUserExpensesByCategory(int userId, int categoryId)
+    {
+        var userExpensesByCategory = await _service.GetExpensesByUserIdAndCategoryId(userId, categoryId);
+        if (!userExpensesByCategory.Any()) return NoContent();
+        return Ok(userExpensesByCategory);
+    }
+
+    [HttpGet("{expenseId:int}")]
+    public async Task<IActionResult> Get(int expenseId)
+    {
+        var expense = await _service.GetExpenseByIdAsync(expenseId);
+        if (expense == null) return NotFound($"No expense found with id: {expenseId} !");
+        return Ok(expense);
+    }
+
+    [HttpGet("{userId:int}/[action]")]
+    public async Task<IActionResult> GetUserYearlyExpenses(int userId, [FromQuery] int year)
+    {
+        try
         {
-            _service = service;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var expenses = await _service.GetExpensesAsync();
-            if (!expenses.Any()) return NoContent();
-            return Ok(expenses);
-        }
-
-        [HttpGet("user/{userId:int}")]
-        public async Task<IActionResult> GetExpensesByUserId(int userId, [FromQuery] int? year = null, [FromQuery] int? month = null)
-        {
-            _ = new List<ExpenseDto>();
-            List<ExpenseDto>? userExpenses;
-            if (year != null && month != null)
-                userExpenses = await _service.GetUserExpensesByParamsAsync(userId, year.Value, month.Value);
-            else
-                userExpenses = await _service.GetExpensesByUserId(userId);
-
+            var userExpenses = await _service.GetUserYearlyExpensesAsync(userId, year);
             if (!userExpenses.Any()) return NoContent();
             return Ok(userExpenses);
         }
-
-        [HttpGet("user/{userId:int}/category/{categoryId:int}")]
-        public async Task<IActionResult> GetUserExpensesByCategory(int userId, int categoryId)
+        catch (Exception e)
         {
-            var userExpensesByCategory = await _service.GetExpensesByUserIdAndCategoryId(userId, categoryId);
-            if (!userExpensesByCategory.Any()) return NoContent();
-            return Ok(userExpensesByCategory);
+            _logger.LogError(e, $"Something Went Wrong in {nameof(GetUserYearlyExpenses)}");
+            return BadRequest(e.Message);
         }
+    }
 
-        [HttpGet("{expenseId:int}")]
-        public async Task<IActionResult> Get(int expenseId)
+    [HttpPost]
+    public async Task<IActionResult> CreateExpense(ExpenseDto expenseDto)
+    {
+        try
         {
-            var expense = await _service.GetExpenseByIdAsync(expenseId);
-            if (expense == null) return BadRequest($"No expense found with id: {expenseId} !");
-            return Ok(expense);
+            var newExpense = await _service.InsertExpenseAsync(expenseDto);
+            return Ok(newExpense);
         }
-
-        [HttpGet("{userId:int}/[action]")]
-        public async Task<IActionResult> GetUserYearlyExpenses(int userId, [FromQuery] int year)
+        catch (Exception e)
         {
-            try
-            {
-                var userExpenses = await _service.GetUserYearlyExpensesAsync(userId, year);
-                if (!userExpenses.Any()) return NoContent();
-                return Ok(userExpenses);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            _logger.LogError(e, $"Something Went Wrong in {nameof(CreateExpense)}");
+            return BadRequest(e.Message);
         }
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(ExpenseDto expenseDto)
+    [HttpPut("{expenseId:int}")]
+    public async Task<IActionResult> UpdateExpense(int expenseId, ExpenseDto expenseDto)
+    {
+        try
         {
-            try
-            {
-                var newExpense = await _service.InsertExpenseAsync(expenseDto);
-                return Ok(newExpense);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            if (expenseId != expenseDto.Id) return BadRequest("Error with Id!");
+            var expenseToUpdate = await _service.UpdateExpenseAsync(expenseId, expenseDto);
+            if (expenseToUpdate == null) return BadRequest("Expense could not be updated!");
+            return Ok(expenseToUpdate);
         }
-
-        [HttpPut("{expenseId:int}")]
-        public async Task<IActionResult> Put(int expenseId, ExpenseDto expenseDto)
+        catch (Exception e)
         {
-            try
-            {
-                if (expenseId != expenseDto.Id) return BadRequest("Error with Id!");
-                var expenseToUpdate = await _service.UpdateExpenseAsync(expenseId, expenseDto);
-                if (expenseToUpdate == null) return BadRequest("Expense could not be updated!");
-                return Ok(expenseToUpdate);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            _logger.LogError(e, $"Something Went Wrong in {nameof(UpdateExpense)}");
+            return BadRequest(e.Message);
         }
+    }
 
-        [HttpDelete("{expenseId:int}")]
-        public async Task<IActionResult> Delete(int expenseId)
+    [HttpDelete("{expenseId:int}")]
+    public async Task<IActionResult> DeleteExpense(int expenseId)
+    {
+        try
         {
-            try
-            {
-                var checkDelete = await _service.DeleteExpenseByIdAsync(expenseId);
-                if (!checkDelete) return BadRequest($"Expense with id: {expenseId} could not be deleted!");
-                return Ok(checkDelete);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            var checkDelete = await _service.DeleteExpenseByIdAsync(expenseId);
+            if (!checkDelete) return BadRequest($"Expense with id: {expenseId} could not be deleted!");
+            return Ok(checkDelete);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Something Went Wrong in {nameof(DeleteExpense)}");
+            return BadRequest(e.Message);
         }
     }
 }

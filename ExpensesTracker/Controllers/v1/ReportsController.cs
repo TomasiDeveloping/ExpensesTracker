@@ -13,10 +13,12 @@ namespace ExpensesTracker.Controllers.v1
     public class ReportsController : ControllerBase
     {
         private readonly IReportService _reportService;
+        private readonly ILogger<ReportsController> _logger;
 
-        public ReportsController(IReportService reportService)
+        public ReportsController(IReportService reportService, ILogger<ReportsController> logger)
         {
             _reportService = reportService;
+            _logger = logger;
         }
 
         [HttpPost("[action]")]
@@ -38,6 +40,7 @@ namespace ExpensesTracker.Controllers.v1
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"Something Went Wrong in {nameof(CreateYearlyExcelReport)}");
                 return BadRequest(e.Message);
             }
         }
@@ -62,6 +65,7 @@ namespace ExpensesTracker.Controllers.v1
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"Something Went Wrong in {nameof(CreateMonthlyExcelReport)}");
                 return BadRequest(e.Message);
             }
         }

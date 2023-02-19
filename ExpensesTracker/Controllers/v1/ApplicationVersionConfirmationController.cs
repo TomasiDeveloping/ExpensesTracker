@@ -10,11 +10,13 @@ namespace ExpensesTracker.Controllers.v1;
 public class ApplicationVersionConfirmationController : ControllerBase
 {
     private readonly IApplicationVersionConfirmationService _applicationVersionConfirmationService;
+    private readonly ILogger<ApplicationVersionConfirmationController> _logger;
 
     public ApplicationVersionConfirmationController(
-        IApplicationVersionConfirmationService applicationVersionConfirmationService)
+        IApplicationVersionConfirmationService applicationVersionConfirmationService, ILogger<ApplicationVersionConfirmationController> logger)
     {
         _applicationVersionConfirmationService = applicationVersionConfirmationService;
+        _logger = logger;
     }
 
     [HttpPost("[action]")]
@@ -28,6 +30,7 @@ public class ApplicationVersionConfirmationController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e, $"Something Went Wrong in {nameof(UserHasVersionConfirmed)}");
             return BadRequest(e.Message);
         }
     }
@@ -45,6 +48,7 @@ public class ApplicationVersionConfirmationController : ControllerBase
         }
         catch (Exception e)
         {
+            _logger.LogError(e, $"Something Went Wrong in {nameof(InsertApplicationVersionConfirmation)}");
             return BadRequest(e.Message);
         }
     }

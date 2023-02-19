@@ -19,7 +19,7 @@ namespace ExpensesTrackerTests.UnitTests.Controllers
         public ExpensesControllerTests()
         {
             _expenseServiceMock = new Mock<IExpenseService>();
-            _expensesController = new ExpensesController(_expenseServiceMock.Object);
+            _expensesController = new ExpensesController(_expenseServiceMock.Object, null);
         }
 
         [Fact]
