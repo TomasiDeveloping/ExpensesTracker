@@ -1,5 +1,5 @@
 # ExpensesTracker
-Angular 13 with .NET 6 Rest API
+Angular 15 with .NET 7 Rest API
 <br>
 <br>
 [![Build status](https://dev.azure.com/TomasiDeveloping/Expenses%20Tracker/_apis/build/status/Expenses%20Tracker-ASP.NET%20Core-CI)](https://dev.azure.com/TomasiDeveloping/Expenses%20Tracker/_build/latest?definitionId=13)
