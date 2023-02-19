@@ -103,4 +103,11 @@ public static class ServiceExtensions
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
     }
+
+    public static void ConfigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHealthChecks()
+            .AddSqlServer(configuration.GetConnectionString("DefaultConnection")!)
+            .AddDbContextCheck<ExpensesTrackerContext>();
+    }
 }

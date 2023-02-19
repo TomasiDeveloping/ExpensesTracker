@@ -4,6 +4,8 @@ using Core.Interfaces;
 using DataBase.Profiles;
 using DataBase.Services;
 using ExpensesTracker.Configurations;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +16,6 @@ builder.Host.UseSerilog((context, configuration) =>
         .ReadFrom.Configuration(context.Configuration);
 });
 
-
 builder.Services.ConfigureCors();
 var jwtSettings = builder.Configuration.GetSection("Token");
 builder.Services.ConfigureAuthentication(jwtSettings);
@@ -22,6 +23,7 @@ builder.Services.ConfigureSwagger();
 builder.Services.ConfigureApiVersioning();
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 builder.Services.ConfigureDbContext(builder.Configuration);
+builder.Services.ConfigureHealthChecks(builder.Configuration);
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -57,6 +59,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
 
