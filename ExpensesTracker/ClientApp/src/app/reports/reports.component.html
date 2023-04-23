@@ -55,14 +55,14 @@
 </ng-container>
 <ng-container *ngIf="yearlyExpenses && yearlyExpenses.length > 0">
   <ngx-charts-advanced-pie-chart
-    (window:resize) = "onResize($event)"
-    [view]="view"
+    (window:resize)="onResize($event)"
     [animations]="animations"
     [gradient]="false"
     [label]="'Total ' + currentYear.toString()"
     [percentageFormatting]="setValueFormatting"
     [results]="yearlyExpenses"
-    [valueFormatting]="setValueFormatting">
+    [valueFormatting]="setValueFormatting"
+    [view]="view">
   </ngx-charts-advanced-pie-chart>
 </ng-container>
 <ng-template [ngIf]="isWithRevenue">
@@ -74,14 +74,14 @@
   </ng-container>
   <ng-container *ngIf="yearlyRevenues && yearlyRevenues.length > 0">
     <ngx-charts-advanced-pie-chart
-      (window:resize) = "onResize($event)"
-      [view]="view"
+      (window:resize)="onResize($event)"
       [animations]="animations"
       [gradient]="false"
       [label]="'Total ' + currentYear.toString()"
       [percentageFormatting]="setValueFormatting"
       [results]="yearlyRevenues"
-      [valueFormatting]="setValueFormatting">
+      [valueFormatting]="setValueFormatting"
+      [view]="view">
     </ngx-charts-advanced-pie-chart>
   </ng-container>
 </ng-template>
