@@ -5,94 +5,82 @@
       <label class="form-label" for="amount">Betrag</label>
       <input
         [ngClass]="{
-          'is-invalid': recurringTaskForm.controls.amount.invalid &&
-          (recurringTaskForm.controls.amount.dirty || recurringTaskForm.controls.amount.touched),
-          'is-valid': recurringTaskForm.controls.amount.valid
+          'is-invalid': amount.invalid && (amount.dirty || amount.touched),
+          'is-valid': amount.valid
           }"
         class="form-control"
         formControlName="amount"
         id="amount"
         type="number">
-      <div *ngIf="recurringTaskForm.controls.amount.errors &&
-                 (recurringTaskForm.controls.amount.dirty || recurringTaskForm.controls.amount.touched)"
+      <div *ngIf="amount.errors && (amount.dirty || amount.touched)"
            class="invalid-feedback">
-        <p *ngIf="recurringTaskForm.controls.amount.errors.required">Betrag ist ein Pflichtfeld</p>
+        <p *ngIf="amount.errors['required']">Betrag ist ein Pflichtfeld</p>
       </div>
     </div>
     <div *ngIf="currentRecurringTask.isExpense" class="mb-3">
       <label class="form-label" for="categoryId">Kategorie</label>
       <select [ngClass]="{
-          'is-invalid':  recurringTaskForm.controls.categoryId.invalid &&
-          (recurringTaskForm.controls.categoryId.dirty || recurringTaskForm.controls.categoryId.touched),
-          'is-valid': recurringTaskForm.controls.categoryId.valid
+          'is-invalid': categoryId.invalid && (categoryId.dirty ||  categoryId.touched),
+          'is-valid': categoryId.valid
           }" class="form-select" formControlName="categoryId" id="categoryId">
         <option *ngFor="let category of categoryGroups" [ngValue]="category.id">{{category.name}}</option>
       </select>
-      <div *ngIf="recurringTaskForm.controls.categoryId.errors &&
-                 (recurringTaskForm.controls.categoryId.dirty || recurringTaskForm.controls.categoryId.touched)"
+      <div *ngIf="categoryId.errors && (categoryId.dirty || categoryId.touched)"
            class="invalid-feedback">
-        <p *ngIf="recurringTaskForm.controls.categoryId.errors.required">Kategorie ist ein Pflichtfeld</p>
+        <p *ngIf="categoryId.errors['required']">Kategorie ist ein Pflichtfeld</p>
       </div>
     </div>
     <div *ngIf="currentRecurringTask.isRevenue" class="mb-3">
       <label class="form-label" for="categoryId">Kategorie</label>
       <select [ngClass]="{
-          'is-invalid':  recurringTaskForm.controls.revenueCategoryId.invalid &&
-          (recurringTaskForm.controls.revenueCategoryId.dirty || recurringTaskForm.controls.revenueCategoryId.touched),
-          'is-valid': recurringTaskForm.controls.revenueCategoryId.valid
+          'is-invalid':  revenueCategoryId.invalid && (revenueCategoryId.dirty || revenueCategoryId.touched),
+          'is-valid': revenueCategoryId.valid
           }" class="form-select" formControlName="revenueCategoryId" id="revenueCategoryId">
         <option *ngFor="let category of categoryGroups" [ngValue]="category.id">{{category.name}}</option>
       </select>
-      <div *ngIf="recurringTaskForm.controls.revenueCategoryId.errors &&
-                 (recurringTaskForm.controls.revenueCategoryId.dirty || recurringTaskForm.controls.revenueCategoryId.touched)"
+      <div *ngIf="revenueCategoryId.errors && (revenueCategoryId.dirty || revenueCategoryId.touched)"
            class="invalid-feedback">
-        <p *ngIf="recurringTaskForm.controls.revenueCategoryId.errors.required">Kategorie ist ein Pflichtfeld</p>
+        <p *ngIf="revenueCategoryId.errors['required']">Kategorie ist ein Pflichtfeld</p>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label" for="description">Beschreibung</label>
       <textarea [ngClass]="{
-          'is-invalid': recurringTaskForm.controls.description.invalid &&
-          (recurringTaskForm.controls.description.dirty || recurringTaskForm.controls.description.touched),
-          'is-valid': recurringTaskForm.controls.description.valid
+          'is-invalid': description.invalid && (description.dirty || description.touched),
+          'is-valid': description.valid
           }" class="form-control" formControlName="description" id="description" rows="2"></textarea>
-      <div *ngIf="recurringTaskForm.controls.description.errors &&
-                 (recurringTaskForm.controls.description.dirty || recurringTaskForm.controls.description.touched)"
+      <div *ngIf="description.errors && (description.dirty || description.touched)"
            class="invalid-feedback">
-        <p *ngIf="recurringTaskForm.controls.description.errors.maxlength">Maximum 255 Zeichen erlaubt</p>
+        <p *ngIf="description.errors['maxlength']">Maximum 255 Zeichen erlaubt</p>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label" for="categoryId">Kategorie</label>
       <select [ngClass]="{
-          'is-invalid':  recurringTaskForm.controls.executeInMonths.invalid &&
-          (recurringTaskForm.controls.executeInMonths.dirty || recurringTaskForm.controls.executeInMonths.touched),
-          'is-valid': recurringTaskForm.controls.executeInMonths.valid
+          'is-invalid':  executeInMonths.invalid && (executeInMonths.dirty || executeInMonths.touched),
+          'is-valid': executeInMonths.valid
           }" class="form-select" formControlName="executeInMonths" id="executeInMonths">
         <option *ngFor="let month of executeMonths" [ngValue]="month.value">{{month.description}}</option>
       </select>
-      <div *ngIf="recurringTaskForm.controls.executeInMonths.errors &&
-                 (recurringTaskForm.controls.executeInMonths.dirty || recurringTaskForm.controls.executeInMonths.touched)"
+      <div *ngIf="executeInMonths.errors && (executeInMonths.dirty || executeInMonths.touched)"
            class="invalid-feedback">
-        <p *ngIf="recurringTaskForm.controls.executeInMonths.errors.required">Monate ist ein Pflichtfeld</p>
+        <p *ngIf="executeInMonths.errors['required']">Monate ist ein Pflichtfeld</p>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label" for="nextExecution">Nächste Ausführung</label>
       <input
         [ngClass]="{
-          'is-invalid': recurringTaskForm.controls.nextExecution.invalid &&
-          (recurringTaskForm.controls.nextExecution.dirty || recurringTaskForm.controls.nextExecution.touched),
-          'is-valid': recurringTaskForm.controls.nextExecution.valid
+          'is-invalid': nextExecution.invalid && (nextExecution.dirty || nextExecution.touched),
+          'is-valid': nextExecution.valid
           }"
         class="form-control"
         formControlName="nextExecution"
         id="nextExecution"
         type="date">
-      <div *ngIf="recurringTaskForm.controls.nextExecution.errors &&
-                 (recurringTaskForm.controls.nextExecution.dirty || recurringTaskForm.controls.nextExecution.touched)"
+      <div *ngIf="nextExecution.errors && (nextExecution.dirty || nextExecution.touched)"
            class="invalid-feedback">
-        <p *ngIf="recurringTaskForm.controls.nextExecution.errors.required">Nächste Ausführung ist ein Pflichtfeld</p>
+        <p *ngIf="nextExecution.errors['required']">Nächste Ausführung ist ein Pflichtfeld</p>
       </div>
     </div>
     <div class="form-check mt-2">
