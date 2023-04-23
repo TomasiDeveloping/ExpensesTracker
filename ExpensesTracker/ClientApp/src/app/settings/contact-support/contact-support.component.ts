@@ -1,10 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {Component, inject, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {SupportContactModel} from "../../models/supportContact.model";
 import {UsersService} from "../../services/users.service";
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";
-import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-contact-support',
@@ -13,18 +13,42 @@ import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
 })
 export class ContactSupportComponent implements OnInit {
 
-  // @ts-ignore
-  supportForm: UntypedFormGroup;
-  isError = false;
-  userEmail: string;
-  subjects: string[] = ['Fehlermeldung', 'Wunsch', 'Allgemeine Anfrage'];
+  public supportForm!: FormGroup;
+  public isError = false;
+  public subjects: string[] = ['Fehlermeldung', 'Wunsch', 'Allgemeine Anfrage'];
 
-  // @ts-ignore
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private userService: UsersService,
-              private dialogRef: MatDialogRef<ContactSupportComponent>,
-              private toastr: ToastrService) {
-    this.userEmail = data.email;
+  private readonly _userEmail: string;
+  private readonly _userService = inject(UsersService);
+  private readonly _dialogRef = inject(MatDialogRef<ContactSupportComponent>);
+  private readonly _toastr = inject(ToastrService);
+
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    this._userEmail = data.email;
+  }
+
+  get email() {
+    return this.supportForm.get('email')!;
+  }
+
+  get subject() {
+    return this.supportForm.get('subject')!;
+  }
+
+  get message() {
+    return this.supportForm.get('message')!;
+  }
+
+  get describeBug() {
+    return this.supportForm.get('describeBug')!;
+  }
+
+  get stepToReproduce() {
+    return this.supportForm.get('stepToReproduce')!;
+  }
+
+  get expectedBehavior() {
+    return this.supportForm.get('expectedBehavior')!;
   }
 
   ngOnInit(): void {
@@ -32,13 +56,13 @@ export class ContactSupportComponent implements OnInit {
   }
 
   createForm() {
-    this.supportForm =  new UntypedFormGroup({
-      email: new UntypedFormControl(this.userEmail, [Validators.required, Validators.email]),
-      subject: new UntypedFormControl(null, [Validators.required]),
-      message: new UntypedFormControl(null, [Validators.required]),
-      describeBug: new UntypedFormControl(null),
-      stepToReproduce: new UntypedFormControl(null),
-      expectedBehavior: new UntypedFormControl(null)
+    this.supportForm = new FormGroup({
+      email: new FormControl<string>(this._userEmail, [Validators.required, Validators.email]),
+      subject: new FormControl<string>('', [Validators.required]),
+      message: new FormControl<string>('', [Validators.required]),
+      describeBug: new FormControl<string>(''),
+      stepToReproduce: new FormControl<string>(''),
+      expectedBehavior: new FormControl<string>('')
     });
   }
 
@@ -51,19 +75,19 @@ export class ContactSupportComponent implements OnInit {
       supportMessage = this.supportForm.value as SupportContactModel;
       supportMessage.message = message;
     }
-    this.userService.sendSupportMail(supportMessage).subscribe({
+    this._userService.sendSupportMail(supportMessage).subscribe({
       next: ((response) => {
         if (response) {
-          this.toastr.success('Deine Nachricht wurde an den Support gesendet', 'Support');
-          this.dialogRef.close();
+          this._toastr.success('Deine Nachricht wurde an den Support gesendet', 'Support');
+          this._dialogRef.close();
         } else {
           Swal.fire('Support', 'Deine E-Mail konnte nicht versendet werden', 'error').then(() => {
-            this.dialogRef.close();
+            this._dialogRef.close();
           })
         }
       }),
       error: (error) => {
-        Swal.fire('Support', error.error, 'error').then(() => this.dialogRef.close());
+        Swal.fire('Support', error.error, 'error').then(() => this._dialogRef.close());
       }
     });
   }

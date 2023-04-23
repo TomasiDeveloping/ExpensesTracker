@@ -18,7 +18,7 @@
       <input class="form-control" formControlName="email" id="email" type="email">
     </div>
     <div class="form-check mt-2">
-      <input class="form-check-input" type="checkbox" id="withRevenue" formControlName="withRevenue">
+      <input class="form-check-input" formControlName="withRevenue" id="withRevenue" type="checkbox">
       <label class="form-check-label" for="withRevenue">
         Mit Einnahmen
       </label>
@@ -47,8 +47,8 @@
         <div class="input-group">
           <input
             [ngClass]="{
-                        'is-invalid': passwordForm.controls.password.invalid && (passwordForm.controls.password.dirty || passwordForm.controls.password.touched),
-                        'is-valid': passwordForm.controls.password.valid
+                        'is-invalid': password.invalid && (password.dirty || password.touched),
+                        'is-valid': password.valid
                       }"
             [type]="passwordFieldTextType ? 'text' : 'password'"
             class="form-control"
@@ -63,10 +63,9 @@
                 class="fa"
               ></i>
         </span>
-          <div *ngIf="passwordForm.controls.password.errors &&
-                 (passwordForm.controls.password.dirty || passwordForm.controls.password.touched)"
+          <div *ngIf="password.errors && (password.dirty || password.touched)"
                class="invalid-feedback">
-            <p *ngIf="passwordForm.controls.password.errors.required">Passwort ist ein Pflichtfeld</p>
+            <p *ngIf="password.errors['required']">Passwort ist ein Pflichtfeld</p>
           </div>
         </div>
       </div>
@@ -75,8 +74,8 @@
         <div class="input-group">
           <input
             [ngClass]="{
-                        'is-invalid': passwordForm.controls.confirmPassword.invalid && (passwordForm.controls.confirmPassword.dirty || passwordForm.controls.confirmPassword.touched),
-                        'is-valid': passwordForm.controls.confirmPassword.valid
+                        'is-invalid': confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched),
+                        'is-valid': confirmPassword.valid
                       }"
             [type]="confirmFieldTextType ? 'text' : 'password'"
             class="form-control"
@@ -91,11 +90,10 @@
                 class="fa"
               ></i>
         </span>
-          <div *ngIf="passwordForm.controls.confirmPassword.errors &&
-                 (passwordForm.controls.confirmPassword.dirty || passwordForm.controls.confirmPassword.touched)"
+          <div *ngIf="confirmPassword.errors && (confirmPassword.dirty || confirmPassword.touched)"
                class="invalid-feedback">
-            <p *ngIf="passwordForm.controls.confirmPassword.errors.required">Passwort bestätigen ist ein Pflichtfeld</p>
-            <p *ngIf="passwordForm.controls.confirmPassword.errors.isMatching">Passwort nicht identisch</p>
+            <p *ngIf="confirmPassword.errors['required']">Passwort bestätigen ist ein Pflichtfeld</p>
+            <p *ngIf="confirmPassword.errors['isMatching']">Passwort nicht identisch</p>
           </div>
         </div>
       </div>
