@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CategoriesService} from "../services/categories.service";
 import {CategoryModel} from "../models/category.model";
 import Swal from 'sweetalert2';
@@ -20,25 +20,24 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class CategoriesComponent implements OnInit {
 
-  userCategories: CategoryModel[] = [];
-  userRevenueCategories: RevenueCategoryModel[] = [];
-  currentUserId = 0;
-  isUserWithRevenue: boolean = false;
+  public userCategories: CategoryModel[] = [];
+  public userRevenueCategories: RevenueCategoryModel[] = [];
+  public isUserWithRevenue: boolean = false;
+  private currentUserId = 0;
+  private readonly _categoryService = inject(CategoriesService);
+  private readonly _revenueCategoryService = inject(RevenueCategoryService);
+  private readonly _authService = inject(AuthService);
+  private readonly _userService = inject(UsersService);
+  private readonly _toastr = inject(ToastrService);
+  private readonly _dialog = inject(MatDialog);
 
-  constructor(private categoryService: CategoriesService,
-              private authService: AuthService,
-              private userService: UsersService,
-              private revenueCategoryService: RevenueCategoryService,
-              private toastr: ToastrService,
-              public dialog: MatDialog) {
-  }
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserIdFromToken();
+    this.currentUserId = this._authService.getUserIdFromToken();
     if (this.currentUserId <= 0) {
-      this.authService.logout();
+      this._authService.logout();
     }
-    this.isUserWithRevenue = this.userService.getWithRevenue();
+    this.isUserWithRevenue = this._userService.getWithRevenue();
     this.getUserCategories();
     if (this.isUserWithRevenue) {
       this.getUserRevenueCategories();
@@ -46,16 +45,16 @@ export class CategoriesComponent implements OnInit {
   }
 
   getUserCategories() {
-    this.categoryService.getUserCategories(this.currentUserId).subscribe((response) => {
+    this._categoryService.getUserCategories(this.currentUserId).subscribe((response) => {
       this.userCategories = response;
     });
   }
 
   getUserRevenueCategories() {
-    this.revenueCategoryService.getUserRevenueCategories(this.currentUserId).subscribe({
+    this._revenueCategoryService.getUserRevenueCategories(this.currentUserId).subscribe({
       next: ((response) => {
         this.userRevenueCategories = response;
-    })
+      })
     });
   }
 
@@ -74,7 +73,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   openDialog(category: CategoryModel, isUpdate: boolean) {
-    const dialogRef = this.dialog.open(CategoryEditDialogComponent, {
+    const dialogRef = this._dialog.open(CategoryEditDialogComponent, {
       width: '80%',
       height: 'auto',
       data: {category: category, isUpdate: isUpdate}
@@ -87,7 +86,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   openRevenueDialog(revenueCategory: RevenueCategoryModel, isUpdate: boolean) {
-    const dialogRef = this.dialog.open(RevenueCategoryEditDialogComponent, {
+    const dialogRef = this._dialog.open(RevenueCategoryEditDialogComponent, {
       width: '80%',
       height: 'auto',
       data: {revenueCategory: revenueCategory, isUpdate: isUpdate}
@@ -114,21 +113,6 @@ export class CategoriesComponent implements OnInit {
         this.deleteCategory(category);
       }
     })
-  }
-
-  private deleteCategory(category: CategoryModel) {
-    this.categoryService.deleteCategory(category.id).subscribe({
-      next: ((response) => {
-        if (response) {
-          this.getUserCategories();
-          this.toastr.success(category.name + ' gelöscht', 'Löschen');
-        } else {
-        }
-      }),
-      error: (error) => {
-        Swal.fire('Löschen', 'Error ' + error.error, 'error').then();
-      }
-    });
   }
 
   onEditRevenue(category: RevenueCategoryModel) {
@@ -162,12 +146,27 @@ export class CategoriesComponent implements OnInit {
     this.openRevenueDialog(revenueCategory, false);
   }
 
+  private deleteCategory(category: CategoryModel) {
+    this._categoryService.deleteCategory(category.id).subscribe({
+      next: ((response) => {
+        if (response) {
+          this.getUserCategories();
+          this._toastr.success(category.name + ' gelöscht', 'Löschen');
+        } else {
+        }
+      }),
+      error: (error) => {
+        Swal.fire('Löschen', 'Error ' + error.error, 'error').then();
+      }
+    });
+  }
+
   private deleteRevenueCategory(category: RevenueCategoryModel) {
-    this.revenueCategoryService.deleteRevenueCategory(category.id).subscribe({
+    this._revenueCategoryService.deleteRevenueCategory(category.id).subscribe({
       next: ((response) => {
         if (response) {
           this.getUserRevenueCategories();
-          this.toastr.success(category.name + ' wurde gelöscht', 'Löschen');
+          this._toastr.success(category.name + ' wurde gelöscht', 'Löschen');
         } else {
           Swal.fire('Löschen', category.name + ' konnte nicht gelöscht werden', 'error').then();
         }
