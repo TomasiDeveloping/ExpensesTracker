@@ -1,5 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {Component, inject, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {RevenueModel} from "../../models/revenue.model";
 import {RevenueCategoryModel} from "../../models/revenueCategory.model";
 import {RevenueCategoryService} from "../../services/revenue-category.service";
@@ -18,29 +18,50 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./edit-revenue.component.css']
 })
 export class EditRevenueComponent implements OnInit {
-  isUpdate: boolean;
-  currentRevenue: RevenueModel;
-  // @ts-ignore
-  revenueForm: UntypedFormGroup;
-  categories: RevenueCategoryModel[] = [];
-  isNewCategory = false;
-  isRecurringTask = false;
-  recurringIntervals: {value: number, description: string}[] = [
+  public isUpdate: boolean;
+  public revenueForm!: FormGroup;
+  public categories: RevenueCategoryModel[] = [];
+  public isNewCategory = false;
+  public isRecurringTask = false;
+  public recurringIntervals: { value: number, description: string }[] = [
     {value: 1, description: 'Monatlich'},
     {value: 3, description: 'Vierteljährlich'},
     {value: 6, description: 'Halbjährlich'},
     {value: 12, description: 'Jährlich'}
   ];
 
+  private currentRevenue: RevenueModel;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private dialogRef: MatDialogRef<EditRevenueComponent>,
-              private revenueCategoryService: RevenueCategoryService,
-              private revenueService: RevenueService,
-              private recurringTaskService: RecurringTaskService,
-              private toastr: ToastrService) {
+  private readonly _dialogRef = inject(MatDialogRef<EditRevenueComponent>);
+  private readonly _revenueCategoryService = inject(RevenueCategoryService);
+  private readonly _revenueService = inject(RevenueService);
+  private readonly _recurringTaskService = inject(RecurringTaskService);
+  private readonly _toastr = inject(ToastrService);
+
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.isUpdate = data.isUpdate;
     this.currentRevenue = data.revenue;
+  }
+
+  get amount() {
+    return this.revenueForm.get('amount')!;
+  }
+
+  get categoryId() {
+    return this.revenueForm.get('categoryId')!;
+  }
+
+  get categoryName() {
+    return this.revenueForm.get('categoryName')!;
+  }
+
+  get description() {
+    return this.revenueForm.get('description')!;
+  }
+
+  get createDate() {
+    return this.revenueForm.get('createDate')!;
   }
 
   ngOnInit(): void {
@@ -50,15 +71,15 @@ export class EditRevenueComponent implements OnInit {
 
   createRevenueForm() {
     const date = new Date(this.currentRevenue.createDate);
-    this.revenueForm = new UntypedFormGroup({
-      id: new UntypedFormControl(this.currentRevenue.id),
-      userId: new UntypedFormControl(this.currentRevenue.userId),
-      categoryId: new UntypedFormControl(this.isUpdate ? this.currentRevenue.revenueCategoryId : '', [Validators.required]),
-      categoryName: new UntypedFormControl(''),
-      description: new UntypedFormControl(this.currentRevenue.description, [Validators.maxLength(255)]),
-      amount: new UntypedFormControl(this.currentRevenue.amount, [Validators.required]),
-      recurringTaskInterval: new UntypedFormControl(1),
-      createDate: new UntypedFormControl(new Date(
+    this.revenueForm = new FormGroup({
+      id: new FormControl<number>(this.currentRevenue.id),
+      userId: new FormControl<number>(this.currentRevenue.userId),
+      categoryId: new FormControl<number>(this.isUpdate ? this.currentRevenue.revenueCategoryId : 0, [Validators.required]),
+      categoryName: new FormControl<string>(''),
+      description: new FormControl<string>(this.currentRevenue.description, [Validators.maxLength(255)]),
+      amount: new FormControl<number>(this.currentRevenue.amount, [Validators.required]),
+      recurringTaskInterval: new FormControl<number>(1),
+      createDate: new FormControl<string>(new Date(
         Date.UTC(date.getFullYear(),
           date.getMonth(),
           date.getDate()))
@@ -68,7 +89,7 @@ export class EditRevenueComponent implements OnInit {
   }
 
   getUserRevenueCategories() {
-    this.revenueCategoryService.getUserRevenueCategories(this.currentRevenue.userId).subscribe({
+    this._revenueCategoryService.getUserRevenueCategories(this.currentRevenue.userId).subscribe({
       next: ((response) => {
         this.categories = response;
       })
@@ -88,7 +109,7 @@ export class EditRevenueComponent implements OnInit {
   }
 
   onClose() {
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 
   onSubmit() {
@@ -101,83 +122,6 @@ export class EditRevenueComponent implements OnInit {
       this.updateRevenue(revenue);
     } else {
       this.insertRevenue(revenue);
-    }
-  }
-
-  private updateRevenue(revenue: RevenueModel) {
-    if (this.isNewCategory) {
-      const category: RevenueCategoryModel = new class implements RevenueCategoryModel {
-        id = 0;
-        name = revenue.categoryName;
-        userId = revenue.userId;
-      }
-      this.revenueCategoryService.insertRevenueCategory(category)
-        .pipe(tap(res => revenue.revenueCategoryId = res.id),
-          concatMap(() => this.revenueService.updateRevenue(revenue.id, revenue)
-          )).subscribe({
-        next: ((response) => {
-          if (response) {
-            this.dialogRef.close('update');
-            this.toastr.success('Einnahme erfolgreich geändert', 'Update');
-          }
-        }),
-        error: (error) => {
-          Swal.fire('Update', error.error, 'error').then();
-        }
-      });
-    } else {
-      this.revenueService.updateRevenue(revenue.id, revenue).subscribe({
-        next: ((response) => {
-          if (response) {
-            this.toastr.success('Einnahme erfolgreich geändert', 'Update');
-            this.dialogRef.close('update');
-          }
-        }),
-        error: (error) => {
-          Swal.fire('Update', error.error, 'error').then()
-        }
-      });
-    }
-  }
-
-  private insertRevenue(revenue: RevenueModel) {
-    if (this.isNewCategory) {
-      const category: RevenueCategoryModel = new class implements RevenueCategoryModel {
-        id = 0;
-        name = revenue.categoryName;
-        userId = revenue.userId;
-      }
-      this.revenueCategoryService.insertRevenueCategory(category)
-        .pipe(tap(res => revenue.revenueCategoryId = res.id),
-          concatMap(() => this.revenueService.insertRevenue(revenue))).subscribe({
-        next: ((response) => {
-          if (response) {
-            if (this.isRecurringTask) {
-              this.insertRecurringTask(response);
-            }
-            this.dialogRef.close('update');
-            this.toastr.success('Einnahme erfolgreich hinzugefügt' ,'Hinzufügen');
-          }
-        }),
-        error: (error) => {
-          Swal.fire('Hinzufügen', error.error, 'error').then();
-        }
-      });
-    } else {
-      this.revenueService.insertRevenue(revenue).subscribe({
-        next: ((response) => {
-          if (response) {
-            if (this.isRecurringTask) {
-              this.insertRecurringTask(response);
-            }
-            this.toastr.success('Einnahme erfolgreich hinzugefügt', 'Hinzugefügt');
-            this.dialogRef.close('update');
-          }
-        }),
-        error: (error) => {
-          Swal.fire('Hinzufügen', error.error, 'error').then();
-        }
-      });
     }
   }
 
@@ -198,9 +142,9 @@ export class EditRevenueComponent implements OnInit {
       expenseCategoryName: '',
       id: 0
     };
-    this.recurringTaskService.insertRecurringTask(recurringTask).subscribe({
+    this._recurringTaskService.insertRecurringTask(recurringTask).subscribe({
       error: (error) => {
-        this.toastr.error('Dauerauftrag konnte nicht erstellt werden', 'Dauerauftrag');
+        this._toastr.error('Dauerauftrag konnte nicht erstellt werden', 'Dauerauftrag');
         console.log(error);
       }
     });
@@ -208,5 +152,82 @@ export class EditRevenueComponent implements OnInit {
 
   onRecurringTaskChange() {
     this.isRecurringTask = !this.isRecurringTask;
+  }
+
+  private updateRevenue(revenue: RevenueModel) {
+    if (this.isNewCategory) {
+      const category: RevenueCategoryModel = new class implements RevenueCategoryModel {
+        id = 0;
+        name = revenue.categoryName;
+        userId = revenue.userId;
+      }
+      this._revenueCategoryService.insertRevenueCategory(category)
+        .pipe(tap(res => revenue.revenueCategoryId = res.id),
+          concatMap(() => this._revenueService.updateRevenue(revenue.id, revenue)
+          )).subscribe({
+        next: ((response) => {
+          if (response) {
+            this._dialogRef.close('update');
+            this._toastr.success('Einnahme erfolgreich geändert', 'Update');
+          }
+        }),
+        error: (error) => {
+          Swal.fire('Update', error.error, 'error').then();
+        }
+      });
+    } else {
+      this._revenueService.updateRevenue(revenue.id, revenue).subscribe({
+        next: ((response) => {
+          if (response) {
+            this._toastr.success('Einnahme erfolgreich geändert', 'Update');
+            this._dialogRef.close('update');
+          }
+        }),
+        error: (error) => {
+          Swal.fire('Update', error.error, 'error').then()
+        }
+      });
+    }
+  }
+
+  private insertRevenue(revenue: RevenueModel) {
+    if (this.isNewCategory) {
+      const category: RevenueCategoryModel = new class implements RevenueCategoryModel {
+        id = 0;
+        name = revenue.categoryName;
+        userId = revenue.userId;
+      }
+      this._revenueCategoryService.insertRevenueCategory(category)
+        .pipe(tap(res => revenue.revenueCategoryId = res.id),
+          concatMap(() => this._revenueService.insertRevenue(revenue))).subscribe({
+        next: ((response) => {
+          if (response) {
+            if (this.isRecurringTask) {
+              this.insertRecurringTask(response);
+            }
+            this._dialogRef.close('update');
+            this._toastr.success('Einnahme erfolgreich hinzugefügt', 'Hinzufügen');
+          }
+        }),
+        error: (error) => {
+          Swal.fire('Hinzufügen', error.error, 'error').then();
+        }
+      });
+    } else {
+      this._revenueService.insertRevenue(revenue).subscribe({
+        next: ((response) => {
+          if (response) {
+            if (this.isRecurringTask) {
+              this.insertRecurringTask(response);
+            }
+            this._toastr.success('Einnahme erfolgreich hinzugefügt', 'Hinzugefügt');
+            this._dialogRef.close('update');
+          }
+        }),
+        error: (error) => {
+          Swal.fire('Hinzufügen', error.error, 'error').then();
+        }
+      });
+    }
   }
 }
