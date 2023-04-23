@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
 import {UserModel} from "../models/user.model";
@@ -21,34 +21,35 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class HomeComponent implements OnInit {
 
-  userExpenses: ExpenseModel[] = [];
-  userRevenues: RevenueModel[] = [];
-  totalAmount = 0;
-  totalRevenueAmount = 0;
-  monthlyConsumptionPercent = 0;
-  userBudget = 0;
-  currentMonth = {value: 0, name: '', year: 0};
-  categoryGroups: { category: number, name: string, amount: number } [] = [];
-  currentUserId: number = 0;
-  currentUser!: UserModel;
-  currentDate = new Date();
-  isUserWithRevenue: boolean = false;
-  showChangeLogBox = environment.showVersionInfo;
-  version = environment.versionToCheck;
+  public userExpenses: ExpenseModel[] = [];
+  public userRevenues: RevenueModel[] = [];
+  public totalAmount = 0;
+  public totalRevenueAmount = 0;
+  public monthlyConsumptionPercent = 0;
+  public userBudget = 0;
+  public currentMonth = {value: 0, name: '', year: 0};
+  public categoryGroups: { category: number, name: string, amount: number } [] = [];
+  public isUserWithRevenue: boolean = false;
 
-  constructor(private expenseService: ExpensesService,
-              private userService: UsersService,
-              private monthPipe: MonthNamePipe,
-              private authService: AuthService,
-              private revenueService: RevenueService,
-              private applicationVersionConfirmationService: ApplicationVersionConfirmationService,
-              private dialog: MatDialog) {
-  }
+  private currentUserId: number = 0;
+  private currentUser!: UserModel;
+  private currentDate = new Date();
+  private showChangeLogBox = environment.showVersionInfo;
+  private version = environment.versionToCheck;
+
+  private readonly _expenseService = inject(ExpensesService);
+  private readonly _userService = inject(UsersService);
+  private readonly _monthPipe = inject(MonthNamePipe);
+  private readonly _authService = inject(AuthService);
+  private readonly _revenueService = inject(RevenueService);
+  private readonly _applicationVersionConfirmationService = inject(ApplicationVersionConfirmationService);
+  private readonly _dialog = inject(MatDialog);
+
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserIdFromToken();
+    this.currentUserId = this._authService.getUserIdFromToken();
     if (this.currentUserId <= 0) {
-      this.authService.logout();
+      this._authService.logout();
     }
     this.getCurrentUser();
   }
@@ -59,7 +60,7 @@ export class HomeComponent implements OnInit {
     this.userExpenses = [];
     this.userRevenues = [];
     this.categoryGroups = [];
-    this.userService.getUserById(this.currentUserId).subscribe({
+    this._userService.getUserById(this.currentUserId).subscribe({
       next: ((response) => {
         this.currentUser = response;
         this.userBudget = response.monthlyBudget;
@@ -75,7 +76,7 @@ export class HomeComponent implements OnInit {
   }
 
   getUserExpenses() {
-    this.expenseService.getUserExpensesByQueryParams(this.currentUserId, this.currentDate.getFullYear(),
+    this._expenseService.getUserExpensesByQueryParams(this.currentUserId, this.currentDate.getFullYear(),
       this.currentDate.getMonth() + 1)
       .subscribe({
         next: ((response) => {
@@ -103,7 +104,7 @@ export class HomeComponent implements OnInit {
   }
 
   getUserRevenues() {
-    this.revenueService.getUserRevenuesByQueryParams(this.currentUserId, this.currentDate.getFullYear(),
+    this._revenueService.getUserRevenuesByQueryParams(this.currentUserId, this.currentDate.getFullYear(),
       this.currentDate.getMonth() + 1).subscribe({
       next: ((response) => {
         this.userRevenues = response;
@@ -127,7 +128,7 @@ export class HomeComponent implements OnInit {
       userId = 0;
     }
     expense.userId = this.currentUserId;
-    const dialogRef = this.dialog.open(EditExpensesComponent, {
+    const dialogRef = this._dialog.open(EditExpensesComponent, {
       width: '80%',
       height: 'auto',
       data: {isUpdate: false, expense: expense}
@@ -137,20 +138,6 @@ export class HomeComponent implements OnInit {
         this.getCurrentUser();
       }
     });
-  }
-
-  private CalculateExpensesInPercent(totalAmount: number) {
-    if (this.userBudget > 0) {
-      this.monthlyConsumptionPercent = (100 / this.userBudget) * totalAmount;
-      this.monthlyConsumptionPercent = Math.round(this.monthlyConsumptionPercent * 100) / 100;
-    }
-  }
-
-  private getCurrentMonth() {
-    const currentMonth = new Date().getMonth() + 1;
-    this.currentMonth.year = new Date().getFullYear();
-    this.currentMonth.value = currentMonth;
-    this.currentMonth.name = this.monthPipe.transform(currentMonth);
   }
 
   onAddRevenue() {
@@ -164,7 +151,7 @@ export class HomeComponent implements OnInit {
       userId = 0;
     };
     revenue.userId = this.currentUserId;
-    const dialogRef = this.dialog.open(EditRevenueComponent, {
+    const dialogRef = this._dialog.open(EditRevenueComponent, {
       width: '80%',
       height: 'auto',
       data: {isUpdate: false, revenue: revenue}
@@ -179,10 +166,10 @@ export class HomeComponent implements OnInit {
   checkChangeLogBox() {
     if (this.showChangeLogBox) {
       if (this.currentUserId <= 0) return;
-      this.applicationVersionConfirmationService.checkUserHasConfirmed(this.currentUserId, this.version).subscribe({
+      this._applicationVersionConfirmationService.checkUserHasConfirmed(this.currentUserId, this.version).subscribe({
         next: ((confirmed) => {
           if (!confirmed) {
-            this.dialog.open(ChangeLogInfoBoxComponent, {
+            this._dialog.open(ChangeLogInfoBoxComponent, {
               width: '80%',
               height: 'auto',
               disableClose: true,
@@ -192,5 +179,19 @@ export class HomeComponent implements OnInit {
         })
       });
     }
+  }
+
+  private CalculateExpensesInPercent(totalAmount: number) {
+    if (this.userBudget > 0) {
+      this.monthlyConsumptionPercent = (100 / this.userBudget) * totalAmount;
+      this.monthlyConsumptionPercent = Math.round(this.monthlyConsumptionPercent * 100) / 100;
+    }
+  }
+
+  private getCurrentMonth() {
+    const currentMonth = new Date().getMonth() + 1;
+    this.currentMonth.year = new Date().getFullYear();
+    this.currentMonth.value = currentMonth;
+    this.currentMonth.name = this._monthPipe.transform(currentMonth);
   }
 }

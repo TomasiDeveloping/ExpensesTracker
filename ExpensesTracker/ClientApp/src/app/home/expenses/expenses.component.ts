@@ -7,13 +7,10 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class ExpensesComponent implements OnInit {
 
-  // @ts-ignore
-  @Input() categoryName: string;
-  // @ts-ignore
-  @Input() totalAmount: number;
-  // @ts-ignore
-  @Input() categoryAmount: number;
-  consumptionPercent = 0;
+  @Input() categoryName!: string;
+  @Input() totalAmount!: number;
+  @Input() categoryAmount!: number;
+  public consumptionPercent = 0;
 
   constructor() { }
 

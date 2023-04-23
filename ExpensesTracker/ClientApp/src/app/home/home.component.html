@@ -4,19 +4,19 @@
     <span>{{currentMonth.name}} {{currentMonth.year}}</span>
   </div>
   <div class="d-grid add-button">
-    <button class="btn btn-warning" type="button" (click)="onAddExpense()">Ausgabe erfassen</button>
+    <button (click)="onAddExpense()" class="btn btn-warning" type="button">Ausgabe erfassen</button>
   </div>
   <ng-template [ngIf]="isUserWithRevenue">
     <div class="d-grid add-button">
-      <button class="btn btn-success" type="button" (click)="onAddRevenue()">Einnahme erfassen</button>
+      <button (click)="onAddRevenue()" class="btn btn-success" type="button">Einnahme erfassen</button>
     </div>
   </ng-template>
   <p>{{userBudget > 0 ? 'Ausgegebener Prozentsatz des geplanten Budgets' : 'Du hast kein Budget gesetzt.'}}</p>
-  <div class="progress" style="height: 30px;" *ngIf="userBudget > 0">
+  <div *ngIf="userBudget > 0" class="progress" style="height: 30px;">
     <div [attr.aria-valuenow]="monthlyConsumptionPercent"
-         [ngStyle]="{'width': monthlyConsumptionPercent + '%'}"
-         aria-valuemax="100" aria-valuemin="0"
          [ngClass]="{'bg-warning': monthlyConsumptionPercent > 70, 'bg-danger': monthlyConsumptionPercent > 95}"
+         [ngStyle]="{'width': monthlyConsumptionPercent + '%'}" aria-valuemax="100"
+         aria-valuemin="0"
          class="progress-bar bg-success" role="progressbar">{{monthlyConsumptionPercent}}%
     </div>
   </div>
@@ -35,7 +35,8 @@
     </div>
   </ng-template>
   <div class="expenses-content">
-    <app-expenses *ngFor="let category of categoryGroups" [categoryAmount]="category.amount" [categoryName]="category.name"
+    <app-expenses *ngFor="let category of categoryGroups" [categoryAmount]="category.amount"
+                  [categoryName]="category.name"
                   [totalAmount]="totalAmount"></app-expenses>
   </div>
 </div>

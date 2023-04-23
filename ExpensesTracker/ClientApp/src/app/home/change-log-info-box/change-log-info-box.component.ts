@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, inject, Inject, OnInit} from '@angular/core';
 import {ApplicationVersionConfirmationService} from "../../services/application-version-confirmation.service";
 import {ApplicationVersionConfirmation} from "../../models/applicationVersionConfirmation.model";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -10,13 +10,13 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class ChangeLogInfoBoxComponent implements OnInit {
 
-  version: string;
-  currentUserId: number;
+  public version: string;
+  private readonly _currentUserId: number;
+  private readonly _matDialogRef = inject(MatDialogRef<ChangeLogInfoBoxComponent>);
+  private readonly _applicationVersionConfirmationService = inject(ApplicationVersionConfirmationService);
 
-  constructor(private matDialogRef: MatDialogRef<ChangeLogInfoBoxComponent>,
-              private applicationVersionConfirmationService: ApplicationVersionConfirmationService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.currentUserId = data.userId;
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    this._currentUserId = data.userId;
     this.version = data.version;
   }
 
@@ -25,10 +25,10 @@ export class ChangeLogInfoBoxComponent implements OnInit {
 
   onOk() {
     const applicationVersionConfirmation: ApplicationVersionConfirmation = {
-      userId: this.currentUserId,
+      userId: this._currentUserId,
       version: this.version
     }
-    this.applicationVersionConfirmationService.insertApplicationVersionConfirmation(applicationVersionConfirmation).subscribe();
-    this.matDialogRef.close();
+    this._applicationVersionConfirmationService.insertApplicationVersionConfirmation(applicationVersionConfirmation).subscribe();
+    this._matDialogRef.close();
   }
 }
