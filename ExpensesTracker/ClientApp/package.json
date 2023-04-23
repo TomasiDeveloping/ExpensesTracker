@@ -1,6 +1,6 @@
 {
   "name": "expensestracker",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "scripts": {
     "ng": "ng",
     "prestart": "node aspnetcore-https",
@@ -51,7 +51,7 @@
     "@types/jasmine": "~4.3.1",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "^18.16.0",
-    "jasmine-core": "~4.5.0",
+    "jasmine-core": "~4.6.0",
     "karma": "~6.4.1",
     "karma-chrome-launcher": "~3.1.1",
     "karma-coverage": "~2.2.0",
