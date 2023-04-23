@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {ToastrService} from "ngx-toastr";
 import {RegisterComponent} from "./register/register.component";
@@ -13,14 +13,21 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class AuthComponent implements OnInit {
 
-  // @ts-ignore
-  loginForm: UntypedFormGroup
-  fieldTextType: Boolean = false;
-  currentYear = new Date().getFullYear();
+  public loginForm!: FormGroup;
+  public fieldTextType: Boolean = false;
+  public currentYear = new Date().getFullYear();
 
-  constructor(private authService: AuthService,
-              private toastr: ToastrService,
-              private dialog: MatDialog) {
+  private readonly _authService = inject(AuthService);
+  private readonly _toastr = inject(ToastrService);
+  private readonly _dialog = inject(MatDialog);
+
+
+  get email() {
+    return this.loginForm.get('email')!;
+  }
+
+  get password() {
+    return this.loginForm.get('password')!;
   }
 
   ngOnInit(): void {
@@ -28,22 +35,22 @@ export class AuthComponent implements OnInit {
   }
 
   createLoginForm() {
-    this.loginForm = new UntypedFormGroup({
-      email: new UntypedFormControl(null, [Validators.required, Validators.email]),
-      password: new UntypedFormControl(null, [Validators.required]),
+    this.loginForm = new FormGroup({
+      email: new FormControl<string>('', [Validators.required, Validators.email]),
+      password: new FormControl<string>('', [Validators.required]),
     });
   }
 
   onLogin() {
     if (this.loginForm.invalid) {
-      this.toastr.error('Fehler im Eingabefeld', 'Login');
+      this._toastr.error('Fehler im Eingabefeld', 'Login');
       return;
     }
-    this.authService.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value);
+    this._authService.login(this.email.value, this.password.value);
   }
 
   onForgotPassword() {
-    this.dialog.open(ForgotPasswordComponent, {
+    this._dialog.open(ForgotPasswordComponent, {
       width: '100%',
       height: 'auto',
       autoFocus: false
@@ -55,7 +62,7 @@ export class AuthComponent implements OnInit {
   }
 
   onRegister() {
-    this.dialog.open(RegisterComponent, {
+    this._dialog.open(RegisterComponent, {
       width: '100%',
       height: 'auto',
       autoFocus: false

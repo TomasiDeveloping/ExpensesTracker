@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {RegisterModel} from "../../models/register.model";
 import {MatDialogRef} from "@angular/material/dialog";
@@ -11,24 +11,43 @@ import {MatDialogRef} from "@angular/material/dialog";
 })
 export class RegisterComponent implements OnInit {
 
-  // @ts-ignore
-  registerForm: UntypedFormGroup;
+  public registerForm!: FormGroup;
 
-  constructor(private dialogRef: MatDialogRef<RegisterComponent>,
-              private authService: AuthService) { }
+  private _dialogRef = inject(MatDialogRef<RegisterComponent>);
+  private readonly _authService = inject(AuthService);
+
+
+  get email() {
+    return this.registerForm.get('email')!;
+  }
+
+  get firstName() {
+    return this.registerForm.get('firstName')!;
+  }
+
+  get lastName() {
+    return this.registerForm.get('lastName')!;
+  }
+
+  get password() {
+    return this.registerForm.get('password')!;
+  }
+
+  get confirmPassword() {
+    return this.registerForm.get('confirmPassword');
+  }
 
   ngOnInit(): void {
     this.createRegisterForm();
   }
 
   createRegisterForm() {
-    this.registerForm = new UntypedFormGroup({
-     // email: new FormControl(null, [Validators.required, Validators.email, Validators.maxLength(100)], this.validateEmailNotTaken()),
-      email: new UntypedFormControl(null, [Validators.required, Validators.email, Validators.maxLength(100)]),
-      password: new UntypedFormControl(null, [Validators.required]),
-      confirmPassword: new UntypedFormControl(null, [Validators.required, this.matchValues('password')]),
-      firstName: new UntypedFormControl(null, [Validators.required, Validators.maxLength(100)]),
-      lastName: new UntypedFormControl(null, [Validators.required, Validators.maxLength(100)])
+    this.registerForm = new FormGroup({
+      email: new FormControl<string>('', [Validators.required, Validators.email, Validators.maxLength(100)]),
+      password: new FormControl<string>('', [Validators.required]),
+      confirmPassword: new FormControl<string>('', [Validators.required, this.matchValues('password')]),
+      firstName: new FormControl<string>('', [Validators.required, Validators.maxLength(100)]),
+      lastName: new FormControl<string>('', [Validators.required, Validators.maxLength(100)])
     });
   }
 
@@ -36,9 +55,9 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    this.dialogRef.close();
+    this._dialogRef.close();
     const register: RegisterModel = this.registerForm.value as RegisterModel;
-    this.authService.register(register);
+    this._authService.register(register);
   }
 
   matchValues(matchTo: string): ValidatorFn {
@@ -49,23 +68,8 @@ export class RegisterComponent implements OnInit {
     };
   }
 
-  // validateEmailNotTaken(): AsyncValidatorFn {
-  //   return control => {
-  //     return timer(500).pipe(
-  //       switchMap(() => {
-  //         if (!control.value) {
-  //           return of(null);
-  //         }
-  //         return this.authService.checkEmailIfExists(control.value).pipe(
-  //           map(res => {
-  //             return res ? {emailExists: true} : null;
-  //           })
-  //         );
-  //       })
-  //     );
-  //   };
-  // }
+
   onClose() {
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 }
