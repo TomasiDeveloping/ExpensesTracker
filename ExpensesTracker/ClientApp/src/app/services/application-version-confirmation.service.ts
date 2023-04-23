@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -9,19 +9,18 @@ import {ApplicationVersionConfirmation} from "../models/applicationVersionConfir
 })
 export class ApplicationVersionConfirmationService {
 
-  serviceUrl = environment.apiUrl + 'applicationVersionConfirmation/';
-
-  constructor(private readonly http: HttpClient) { }
+  private readonly _serviceUrl = environment.apiUrl + 'applicationVersionConfirmation/';
+  private readonly _httpClient = inject(HttpClient);
 
   checkUserHasConfirmed(userId: number, version: string): Observable<boolean> {
     const applicationVersionConfirmation: ApplicationVersionConfirmation = {
       userId: userId,
       version: version
     };
-    return this.http.post<boolean>(this.serviceUrl + 'UserHasVersionConfirmed', applicationVersionConfirmation);
+    return this._httpClient.post<boolean>(this._serviceUrl + 'UserHasVersionConfirmed', applicationVersionConfirmation);
   }
 
   insertApplicationVersionConfirmation(applicationVersionConfirmation: ApplicationVersionConfirmation): Observable<ApplicationVersionConfirmation> {
-    return this.http.post<ApplicationVersionConfirmation>(this.serviceUrl, applicationVersionConfirmation);
+    return this._httpClient.post<ApplicationVersionConfirmation>(this._serviceUrl, applicationVersionConfirmation);
   }
 }

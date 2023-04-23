@@ -1,18 +1,17 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {NgxSpinnerService} from "ngx-spinner";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpinnerService {
-  busyRequestCount = 0;
+  private busyRequestCount = 0;
 
-  constructor(private spinnerService: NgxSpinnerService) {
-  }
+  private readonly _ngxSpinnerService = inject(NgxSpinnerService);
 
   busy(): void {
     this.busyRequestCount++;
-    this.spinnerService.show(undefined, {
+    this._ngxSpinnerService.show(undefined, {
       type: 'line-scale',
       bdColor: 'rgba(0, 0, 0, 0.8)',
       color: '#f47c3c'
@@ -23,7 +22,7 @@ export class SpinnerService {
     this.busyRequestCount--;
     if (this.busyRequestCount <= 0) {
       this.busyRequestCount = 0;
-      this.spinnerService.hide().then();
+      this._ngxSpinnerService.hide().then();
     }
   }
 }

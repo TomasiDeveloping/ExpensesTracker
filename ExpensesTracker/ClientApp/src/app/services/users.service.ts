@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
@@ -10,36 +10,34 @@ import {SupportContactModel} from "../models/supportContact.model";
 })
 export class UsersService {
 
-  serviceUrl = environment.apiUrl + 'users/';
-  userWithRevenue = false;
-
-  constructor(private http: HttpClient) {
-  }
+  private readonly _serviceUrl = environment.apiUrl + 'users/';
+  private readonly _httpClient = inject(HttpClient);
+  private userWithRevenue = false;
 
   getWithRevenue(): boolean {
     return this.userWithRevenue;
   }
 
   getUserById(userId: number): Observable<UserModel> {
-    return this.http.get<UserModel>(this.serviceUrl + userId)
+    return this._httpClient.get<UserModel>(this._serviceUrl + userId)
       .pipe(tap(response => {
         this.userWithRevenue = response.withRevenue;
       }));
   }
 
   updateUser(userId: number, user: UserModel): Observable<UserModel> {
-    return this.http.put<UserModel>(this.serviceUrl + userId, user);
+    return this._httpClient.put<UserModel>(this._serviceUrl + userId, user);
   }
 
   changeUserPassword(userId: number, newPassword: string): Observable<boolean> {
-    return this.http.put<boolean>(this.serviceUrl + userId + '/changeUserPassword', {newPassword});
+    return this._httpClient.put<boolean>(this._serviceUrl + userId + '/changeUserPassword', {newPassword});
   }
 
   deleteUser(userId: number): Observable<boolean> {
-    return this.http.delete<boolean>(this.serviceUrl + userId);
+    return this._httpClient.delete<boolean>(this._serviceUrl + userId);
   }
 
   sendSupportMail(supportContact: SupportContactModel): Observable<boolean> {
-    return this.http.post<boolean>(this.serviceUrl + 'SendSupportEmail', supportContact);
+    return this._httpClient.post<boolean>(this._serviceUrl + 'SendSupportEmail', supportContact);
   }
 }
