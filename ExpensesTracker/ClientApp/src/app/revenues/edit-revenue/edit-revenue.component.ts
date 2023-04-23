@@ -74,7 +74,7 @@ export class EditRevenueComponent implements OnInit {
     this.revenueForm = new FormGroup({
       id: new FormControl<number>(this.currentRevenue.id),
       userId: new FormControl<number>(this.currentRevenue.userId),
-      categoryId: new FormControl<number>(this.isUpdate ? this.currentRevenue.revenueCategoryId : 0, [Validators.required]),
+      categoryId: new FormControl<number | null>(this.isUpdate ? this.currentRevenue.revenueCategoryId : null, [Validators.required]),
       categoryName: new FormControl<string>(''),
       description: new FormControl<string>(this.currentRevenue.description, [Validators.maxLength(255)]),
       amount: new FormControl<number>(this.currentRevenue.amount, [Validators.required]),

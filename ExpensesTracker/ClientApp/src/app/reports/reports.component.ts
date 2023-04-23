@@ -15,7 +15,7 @@ import {ReportService} from "../services/report.service";
 })
 export class ReportsComponent implements OnInit {
 
-  public view = [innerWidth / 1.1, 300];
+  public view: any = [innerWidth / 1.1, 300];
   public animations: boolean = false;
   public currentYear = new Date().getFullYear();
   public currentMonth = new Date().getMonth() + 1;

@@ -46,6 +46,18 @@ export class SettingsComponent implements OnInit {
     return this.passwordForm.get('confirmPassword')!;
   }
 
+  get email() {
+    return this.userForm.get('email')!;
+  }
+
+  get firstName() {
+    return this.userForm.get('firstName')!;
+  }
+
+  get lastName() {
+    return this.userForm.get('lastName')!;
+  }
+
   ngOnInit(): void {
     this.currentUserId = this._authService.getUserIdFromToken();
     if (this.currentUserId <= 0) {
@@ -65,9 +77,9 @@ export class SettingsComponent implements OnInit {
   createUserForm() {
     this.userForm = new FormGroup({
       id: new FormControl<number>(this.currentUser.id),
-      firstName: new FormControl<string>(this.currentUser.firstName),
-      lastName: new FormControl<string>(this.currentUser.lastName),
-      email: new FormControl<string>(this.currentUser.email),
+      firstName: new FormControl<string>(this.currentUser.firstName, [Validators.required]),
+      lastName: new FormControl<string>(this.currentUser.lastName, [Validators.required]),
+      email: new FormControl<string>(this.currentUser.email, [Validators.required, Validators.email]),
       withRevenue: new FormControl<boolean>(this.currentUser.withRevenue)
     });
     this.userForm.disable();

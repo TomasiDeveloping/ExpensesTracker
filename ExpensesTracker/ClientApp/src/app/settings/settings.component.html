@@ -5,17 +5,36 @@
   <form *ngIf="currentUser" [formGroup]="userForm">
     <div class="row">
       <div class="col-6">
-        <label for="lastName">Vorname</label>
-        <input class="form-control" formControlName="lastName" id="lastName" type="text">
+        <label for="lastName">Nachname</label>
+        <input [ngClass]="{
+        'is-invalid': lastName.invalid && (lastName.dirty || lastName.touched),
+        'is-valid': lastName.valid
+        }" class="form-control" formControlName="lastName" id="lastName" type="text">
+        <div *ngIf="lastName.errors && (lastName.dirty || lastName.touched)" class="invalid-feedback">
+          <p *ngIf="lastName.errors['required']">Nachname ist ein Pflichtfeld</p>
+        </div>
       </div>
       <div class="col-6">
-        <label for="firstName">Nachname</label>
-        <input class="form-control" formControlName="firstName" id="firstName" type="text">
+        <label for="firstName">Vorname</label>
+        <input [ngClass]="{
+        'is-invalid': firstName.invalid && (firstName.dirty || firstName.touched),
+        'is-valid': firstName.valid
+        }" class="form-control" formControlName="firstName" id="firstName" type="text">
+        <div *ngIf="firstName.errors && (firstName.dirty || firstName.touched)" class="invalid-feedback">
+          <p *ngIf="firstName.errors['required']">Vorname ist ein Pflichtfeld</p>
+        </div>
       </div>
     </div>
     <div>
       <label for="email">E-Mail</label>
-      <input class="form-control" formControlName="email" id="email" type="email">
+      <input [ngClass]="{
+      'is-invalid': email.invalid && (email.dirty || email.touched),
+      'is-valid': email.valid
+      }" class="form-control" formControlName="email" id="email" type="email">
+      <div *ngIf="email.errors && (email.dirty || email.touched)" class="invalid-feedback">
+        <p *ngIf="email.errors['required']">E-Mail ist ein Pflichtfeld</p>
+        <p *ngIf="email.errors['email']">Ungültige E-Mail</p>
+      </div>
     </div>
     <div class="form-check mt-2">
       <input class="form-check-input" formControlName="withRevenue" id="withRevenue" type="checkbox">
@@ -28,7 +47,7 @@
       <button (click)="onCancelEditUser()" *ngIf="isUserUpdate" class="btn btn-danger" id="cancel-user-change">
         Abbrechen
       </button>
-      <button (click)="onSubmit()" *ngIf="isUserUpdate" class="btn btn-success">Speichern</button>
+      <button [disabled]="userForm.invalid" (click)="onSubmit()" *ngIf="isUserUpdate" class="btn btn-success">Speichern</button>
     </div>
   </form>
   <hr>

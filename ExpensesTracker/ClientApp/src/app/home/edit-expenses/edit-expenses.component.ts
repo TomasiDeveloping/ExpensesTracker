@@ -71,7 +71,7 @@ export class EditExpensesComponent implements OnInit {
     this.expenseForm = new FormGroup({
       id: new FormControl<number>(this.currentExpense.id),
       userId: new FormControl<number>(this.currentExpense.userId),
-      categoryId: new FormControl<number>(this.isUpdate ? this.currentExpense.categoryId : 0, [Validators.required]),
+      categoryId: new FormControl<number | null>(this.isUpdate ? this.currentExpense.categoryId : null, [Validators.required]),
       categoryName: new FormControl<string>(''),
       description: new FormControl<string>(this.currentExpense.description, [Validators.maxLength(255)]),
       amount: new FormControl<number>(this.currentExpense.amount, [Validators.required]),
