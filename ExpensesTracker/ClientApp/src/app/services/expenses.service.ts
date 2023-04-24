@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -9,45 +9,32 @@ import {ExpenseModel} from "../models/expense.model";
 })
 export class ExpensesService {
 
-  serviceUrl = environment.apiUrl + 'expenses/';
+  private readonly _serviceUrl = environment.apiUrl + 'expenses/';
+  private readonly _httpClient = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {
-  }
-
-  getExpenses(): Observable<ExpenseModel[]> {
-    return this.http.get<ExpenseModel[]>(this.serviceUrl);
-  }
-
-  getExpense(expenseId: number): Observable<ExpenseModel> {
-    return this.http.get<ExpenseModel>(this.serviceUrl + expenseId);
-  }
-
-  getUserExpenses(userId: number): Observable<ExpenseModel[]> {
-    return this.http.get<ExpenseModel[]>(this.serviceUrl + 'user/' + userId);
-  }
 
   getUserExpensesByQueryParams(userId: number, year: number, month: number): Observable<ExpenseModel[]> {
     let params = new HttpParams();
     params = params.set('year', year);
     params = params.set('month', month);
-    return this.http.get<ExpenseModel[]>(this.serviceUrl + 'user/' + userId, {params});
+    return this._httpClient.get<ExpenseModel[]>(this._serviceUrl + 'user/' + userId, {params});
   }
 
   getUserYearlyExpenses(userId: number, year: number): Observable<ExpenseModel[]> {
     let params = new HttpParams();
     params = params.append('year', year);
-    return this.http.get<ExpenseModel[]>(this.serviceUrl + userId + '/GetUserYearlyExpenses', {params});
+    return this._httpClient.get<ExpenseModel[]>(this._serviceUrl + userId + '/GetUserYearlyExpenses', {params});
   }
 
   insertExpense(expense: ExpenseModel): Observable<ExpenseModel> {
-    return this.http.post<ExpenseModel>(this.serviceUrl, expense);
+    return this._httpClient.post<ExpenseModel>(this._serviceUrl, expense);
   }
 
   updateExpense(expenseId: number, expense: ExpenseModel): Observable<ExpenseModel> {
-    return this.http.put<ExpenseModel>(this.serviceUrl + expenseId, expense);
+    return this._httpClient.put<ExpenseModel>(this._serviceUrl + expenseId, expense);
   }
 
   deleteExpense(expenseId: number): Observable<boolean> {
-    return this.http.delete<boolean>(this.serviceUrl + expenseId);
+    return this._httpClient.delete<boolean>(this._serviceUrl + expenseId);
   }
 }

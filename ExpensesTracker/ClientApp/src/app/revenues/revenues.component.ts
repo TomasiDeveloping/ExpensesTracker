@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {RevenueModel} from "../models/revenue.model";
 import {MonthNamePipe} from "../util/month-name.pipe";
 import {AuthService} from "../services/auth.service";
@@ -9,32 +9,31 @@ import {EditRevenueComponent} from "./edit-revenue/edit-revenue.component";
 import {MatDialog} from "@angular/material/dialog";
 
 
-
 @Component({
   selector: 'app-revenues',
   templateUrl: './revenues.component.html',
   styleUrls: ['./revenues.component.css']
 })
 export class RevenuesComponent implements OnInit {
-  date = new Date();
-  months: { name: string, value: number }[] = [];
-  years: number[] = [];
-  groupedRevenues: { categoryName: string, groupAmount: number, revenue: RevenueModel[] }[] = [];
-  revenues: RevenueModel[] = [];
-  currentUserId: number = 0;
-  currentYear = new Date().getFullYear();
-  currentMonth = new Date().getMonth() + 1;
+  public date = new Date();
+  public months: { name: string, value: number }[] = [];
+  public years: number[] = [];
+  public groupedRevenues: { categoryName: string, groupAmount: number, revenue: RevenueModel[] }[] = [];
+  public currentYear = new Date().getFullYear();
+  public currentMonth = new Date().getMonth() + 1;
 
-  constructor(private monthPipe: MonthNamePipe,
-              private authService: AuthService,
-              private revenueService: RevenueService,
-              private dialog: MatDialog,
-              private toastr: ToastrService) { }
+  private currentUserId: number = 0;
+
+  private readonly _monthPipe = inject(MonthNamePipe);
+  private readonly _authService = inject(AuthService);
+  private readonly _revenueService = inject(RevenueService);
+  private readonly _dialog = inject(MatDialog);
+  private readonly _toastr = inject(ToastrService);
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserIdFromToken();
+    this.currentUserId = this._authService.getUserIdFromToken();
     if (this.currentUserId <= 0) {
-      this.authService.logout();
+      this._authService.logout();
     }
     this.getUserRevenues(this.currentYear, this.currentMonth);
     this.createMonths();
@@ -43,7 +42,7 @@ export class RevenuesComponent implements OnInit {
 
   getUserRevenues(year: number, month: number) {
     this.groupedRevenues = [];
-    this.revenueService.getUserRevenuesByQueryParams(this.currentUserId, year, month).subscribe({
+    this._revenueService.getUserRevenuesByQueryParams(this.currentUserId, year, month).subscribe({
       next: ((response) => {
         if (response) {
           response.forEach((revenue) => {
@@ -55,7 +54,7 @@ export class RevenuesComponent implements OnInit {
               // @ts-ignore
               category.revenue.push(revenue);
             } else {
-              const groupRevenue: {categoryName: string, groupAmount: number, revenue: RevenueModel[] } = {
+              const groupRevenue: { categoryName: string, groupAmount: number, revenue: RevenueModel[] } = {
                 categoryName: revenue.categoryName,
                 groupAmount: revenue.amount,
                 revenue: []
@@ -81,7 +80,7 @@ export class RevenuesComponent implements OnInit {
 
   createMonths() {
     for (let i = 1; i <= 12; i++) {
-      this.months.push({name: this.monthPipe.transform(i), value: i});
+      this.months.push({name: this._monthPipe.transform(i), value: i});
     }
   }
 
@@ -96,7 +95,7 @@ export class RevenuesComponent implements OnInit {
   }
 
   onEditRevenue(revenue: RevenueModel) {
-    const dialogRef = this.dialog.open(EditRevenueComponent, {
+    const dialogRef = this._dialog.open(EditRevenueComponent, {
       width: '80%',
       height: 'auto',
       data: {revenue: revenue, isUpdate: true}
@@ -127,12 +126,12 @@ export class RevenuesComponent implements OnInit {
   }
 
   private deleteRevenue(revenue: RevenueModel) {
-    this.revenueService.deleteRevenue(revenue.id).subscribe({
+    this._revenueService.deleteRevenue(revenue.id).subscribe({
       next: ((response) => {
         if (response) {
           this.groupedRevenues = [];
           this.getUserRevenues(this.currentYear, this.currentMonth);
-          this.toastr.success('Einnahme wurde gelöscht', 'Löschen');
+          this._toastr.success('Einnahme wurde gelöscht', 'Löschen');
         }
       }),
       error: (error) => {

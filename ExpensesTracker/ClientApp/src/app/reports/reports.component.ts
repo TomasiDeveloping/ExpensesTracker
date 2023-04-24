@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
 import {ReportModel} from "../models/report.model";
 import Swal from "sweetalert2";
@@ -15,41 +15,41 @@ import {ReportService} from "../services/report.service";
 })
 export class ReportsComponent implements OnInit {
 
-  view: any;
-  animations: boolean = false;
-  currentYear = new Date().getFullYear();
-  currentMonth = new Date().getMonth() + 1;
-  currentUserId = 0;
-  report: ReportModel = new class implements ReportModel {
+  public view: any = [innerWidth / 1.1, 300];
+  public animations: boolean = false;
+  public currentYear = new Date().getFullYear();
+  public currentMonth = new Date().getMonth() + 1;
+  public yearlyExpenses: { name: string, value: number }[] = [];
+  public months: { name: string; value: number }[] = [];
+  public years: number[] = [];
+  public yearlyRevenues: { name: string, value: number }[] = [];
+  public isWithRevenue: boolean = false;
+  public yearlyExpensesAmount = 0;
+  public yearlyRevenuesAmount = 0;
+
+  private report: ReportModel = new class implements ReportModel {
     month = 0;
     userId = 0;
     year = 0;
   };
-  yearlyExpenses: { name: string, value: number }[] = [];
-  months: { name: string; value: number }[] = [];
-  years: number[] = [];
-  yearlyRevenues: { name: string, value: number }[] = [];
-  isWithRevenue: boolean = false;
-  yearlyExpensesAmount = 0;
-  yearlyRevenuesAmount = 0;
+  private currentUserId = 0;
 
-  constructor(private expenseService: ExpensesService,
-              private authService: AuthService,
-              private userService: UsersService,
-              private revenueService: RevenueService,
-              private reportService: ReportService,
-              private monthPipe: MonthNamePipe) {
-    this.view = [innerWidth / 1.1, 300];
-  }
+  private readonly _expenseService = inject(ExpensesService);
+  private readonly _authService = inject(AuthService);
+  private readonly _userService = inject(UsersService);
+  private readonly _revenueService = inject(RevenueService);
+  private readonly _reportService = inject(ReportService);
+  private readonly _monthPipe = inject(MonthNamePipe);
+
 
   ngOnInit(): void {
     this.createYears();
     this.createMonths();
-    this.currentUserId = this.authService.getUserIdFromToken();
+    this.currentUserId = this._authService.getUserIdFromToken();
     if (this.currentUserId <= 0) {
-      this.authService.logout();
+      this._authService.logout();
     }
-    this.isWithRevenue = this.userService.getWithRevenue();
+    this.isWithRevenue = this._userService.getWithRevenue();
     this.getUserYearExpenses();
     if (this.isWithRevenue) {
       this.getUserYearRevenues();
@@ -60,7 +60,7 @@ export class ReportsComponent implements OnInit {
     this.disableAnimations(); //Workaround for ngx charts when animation is set to true the values can not be adjusted with custom methods
     this.yearlyExpenses = [];
     this.yearlyExpensesAmount = 0;
-    this.expenseService.getUserYearlyExpenses(this.currentUserId, this.currentYear).subscribe({
+    this._expenseService.getUserYearlyExpenses(this.currentUserId, this.currentYear).subscribe({
       next: ((response) => {
         if (response && response.length > 0) {
           response.forEach((expense) => {
@@ -82,7 +82,7 @@ export class ReportsComponent implements OnInit {
   getUserYearRevenues() {
     this.yearlyRevenues = [];
     this.yearlyRevenuesAmount = 0;
-    this.revenueService.getUserYearlyExpenses(this.currentUserId, this.currentYear).subscribe({
+    this._revenueService.getUserYearlyExpenses(this.currentUserId, this.currentYear).subscribe({
       next: ((response) => {
         if (response && response.length > 0) {
           response.forEach((revenue) => {
@@ -109,7 +109,7 @@ export class ReportsComponent implements OnInit {
 
   createMonths() {
     for (let i = 1; i <= 12; i++) {
-      this.months.push({name: this.monthPipe.transform(i), value: i});
+      this.months.push({name: this._monthPipe.transform(i), value: i});
     }
   }
 
@@ -117,7 +117,7 @@ export class ReportsComponent implements OnInit {
     this.report.year = this.currentYear;
     this.report.month = this.currentMonth;
     this.report.userId = this.currentUserId;
-    this.reportService.createYearlyExcelReport(this.report).subscribe({
+    this._reportService.createYearlyExcelReport(this.report).subscribe({
       next: (res) => {
         this.createDownload(res);
       },
@@ -131,7 +131,7 @@ export class ReportsComponent implements OnInit {
     this.report.year = this.currentYear;
     this.report.month = this.currentMonth;
     this.report.userId = this.currentUserId;
-    this.reportService.createMonthlyExcelReport(this.report).subscribe({
+    this._reportService.createMonthlyExcelReport(this.report).subscribe({
       next: (res) => {
         this.createDownload(res);
       },
@@ -163,10 +163,6 @@ export class ReportsComponent implements OnInit {
 
   setValueFormatting(c: any): any {
     return c.toFixed(2);
-  }
-
-  setLabelFormatting(c: any): any {
-    return `CHF ${c}`;
   }
 
   //Workaround for ngx charts when animation is set to true the values can not be adjusted with custom methods

@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import Swal from "sweetalert2";
 import {MatDialogRef} from "@angular/material/dialog";
@@ -10,12 +10,17 @@ import {MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./forgot-password.component.css']
 })
 export class ForgotPasswordComponent implements OnInit {
-  forgotPasswordForm: UntypedFormGroup = new UntypedFormGroup({
-    email: new UntypedFormControl('', [Validators.required, Validators.email])
+
+  public forgotPasswordForm: FormGroup = new FormGroup({
+    email: new FormControl<string>('', [Validators.required, Validators.email])
   });
 
-  constructor(private dialogRef: MatDialogRef<ForgotPasswordComponent>,
-              private authService: AuthService) {
+  private readonly _authService = inject(AuthService);
+  private _dialogRef = inject(MatDialogRef<ForgotPasswordComponent>);
+
+
+  get email() {
+    return this.forgotPasswordForm.get('email')!;
   }
 
   ngOnInit(): void {
@@ -25,7 +30,7 @@ export class ForgotPasswordComponent implements OnInit {
     if (this.forgotPasswordForm.invalid) {
       Swal.fire('Passwort vergessen', 'Bitte prüfe deine Eingaben', 'error').then();
     }
-    this.authService.forgotPassword(this.forgotPasswordForm.controls.email.value).subscribe({
+    this._authService.forgotPassword(this.forgotPasswordForm.controls.email.value).subscribe({
       next: ((response) => {
         if (response) {
           Swal.fire('Passwort vergessen',
@@ -44,6 +49,6 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   onClose() {
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 }

@@ -5,98 +5,88 @@
       <label class="form-label" for="amount">Betrag</label>
       <input
         [ngClass]="{
-          'is-invalid': expenseForm.controls.amount.invalid &&
-          (expenseForm.controls.amount.dirty || expenseForm.controls.amount.touched),
-          'is-valid': expenseForm.controls.amount.valid
+          'is-invalid': amount.invalid && (amount.dirty || amount.touched),
+          'is-valid': amount.valid
           }"
         class="form-control"
         formControlName="amount"
         id="amount"
         type="number">
-      <div *ngIf="expenseForm.controls.amount.errors &&
-                 (expenseForm.controls.amount.dirty || expenseForm.controls.amount.touched)"
+      <div *ngIf="amount.errors && (amount.dirty || amount.touched)"
            class="invalid-feedback">
-        <p *ngIf="expenseForm.controls.amount.errors.required">Betrag ist ein Pflichtfeld</p>
+        <p *ngIf="amount.errors['required']">Betrag ist ein Pflichtfeld</p>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label" for="categoryId">Kategorie</label>
       <select (change)="onCategoryChange($event)" [ngClass]="{
-          'is-invalid': expenseForm.controls.categoryId.invalid &&
-          (expenseForm.controls.categoryId.dirty || expenseForm.controls.categoryId.touched),
-          'is-valid': expenseForm.controls.categoryId.valid
+          'is-invalid': categoryId.invalid && (categoryId.dirty || categoryId.touched),
+          'is-valid': categoryId.valid
           }" class="form-select" formControlName="categoryId" id="categoryId">
         <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
         <option value="newCategory">Neue Kategorie</option>
       </select>
-      <div *ngIf="expenseForm.controls.categoryId.errors &&
-                 (expenseForm.controls.categoryId.dirty || expenseForm.controls.categoryId.touched)"
+      <div *ngIf="categoryId.errors && (categoryId.dirty || categoryId.touched)"
            class="invalid-feedback">
-        <p *ngIf="expenseForm.controls.categoryId.errors.required">Kategorie ist ein Pflichtfeld</p>
+        <p *ngIf="categoryId.errors['required']">Kategorie ist ein Pflichtfeld</p>
       </div>
     </div>
     <div *ngIf="isNewCategory" class="mb-3">
       <label class="form-label" for="categoryName">Neue Kategorie</label>
       <input
         [ngClass]="{
-          'is-invalid': expenseForm.controls.categoryName.invalid &&
-          (expenseForm.controls.categoryName.dirty || expenseForm.controls.categoryName.touched),
-          'is-valid': expenseForm.controls.categoryName.valid
+          'is-invalid': categoryName.invalid && (categoryName.dirty || categoryName.touched),
+          'is-valid': categoryName.valid
           }"
         class="form-control"
         formControlName="categoryName"
         id="categoryName"
         type="text">
-      <div *ngIf="expenseForm.controls.categoryName.errors &&
-                 (expenseForm.controls.categoryName.dirty || expenseForm.controls.categoryName.touched)"
+      <div *ngIf="categoryName.errors && (categoryName.dirty || categoryName.touched)"
            class="invalid-feedback">
-        <p *ngIf="expenseForm.controls.categoryName.errors.required">Neue Kategorie ist ein Pflichtfeld</p>
+        <p *ngIf="categoryName.errors['required']">Neue Kategorie ist ein Pflichtfeld</p>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label" for="description">Beschreibung</label>
       <textarea [ngClass]="{
-          'is-invalid': expenseForm.controls.description.invalid &&
-          (expenseForm.controls.description.dirty || expenseForm.controls.description.touched),
-          'is-valid': expenseForm.controls.description.valid
+          'is-invalid': description.invalid && (description.dirty || description.touched),
+          'is-valid': description.valid
           }" class="form-control" formControlName="description" id="description" rows="2"></textarea>
-      <div *ngIf="expenseForm.controls.description.errors &&
-                 (expenseForm.controls.description.dirty || expenseForm.controls.description.touched)"
+      <div *ngIf="description.errors && (description.dirty || description.touched)"
            class="invalid-feedback">
-        <p *ngIf="expenseForm.controls.description.errors.maxlength">Maximum 255 Zeichen erlaubt</p>
+        <p *ngIf="description.errors['maxlength']">Maximum 255 Zeichen erlaubt</p>
       </div>
     </div>
-    <div class="form-check form-switch mb-3" *ngIf="!isUpdate">
-      <input class="form-check-input" type="checkbox" id="isRecurringTask" [checked]="isRecurringTask" (change)="onRecurringTaskChange()">
+    <div *ngIf="!isUpdate" class="form-check form-switch mb-3">
+      <input (change)="onRecurringTaskChange()" [checked]="isRecurringTask" class="form-check-input" id="isRecurringTask"
+             type="checkbox">
       <label class="form-check-label" for="isRecurringTask">Dauerauftrag</label>
     </div>
-    <div class="mb-3" *ngIf="isRecurringTask && !isUpdate">
+    <div *ngIf="isRecurringTask && !isUpdate" class="mb-3">
       <label class="form-label" for="recurringTaskInterval">Intervall</label>
       <select class="form-select" formControlName="recurringTaskInterval" id="recurringTaskInterval">
         <option *ngFor="let interval of recurringIntervals" [ngValue]="interval.value">{{interval.description}}</option>
       </select>
-      <div *ngIf="expenseForm.controls.categoryId.errors &&
-                 (expenseForm.controls.categoryId.dirty || expenseForm.controls.categoryId.touched)"
+      <div *ngIf="categoryId.errors && (categoryId.dirty || categoryId.touched)"
            class="invalid-feedback">
-        <p *ngIf="expenseForm.controls.categoryId.errors.required">Kategorie ist ein Pflichtfeld</p>
+        <p *ngIf="categoryId.errors['required']">Kategorie ist ein Pflichtfeld</p>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label" for="createDate">Datum</label>
       <input
         [ngClass]="{
-          'is-invalid': expenseForm.controls.createDate.invalid &&
-          (expenseForm.controls.createDate.dirty || expenseForm.controls.createDate.touched),
-          'is-valid': expenseForm.controls.createDate.valid
+          'is-invalid': createDate.invalid && (createDate.dirty || createDate.touched),
+          'is-valid': createDate.valid
           }"
         class="form-control"
         formControlName="createDate"
         id="createDate"
         type="date">
-      <div *ngIf="expenseForm.controls.createDate.errors &&
-                 (expenseForm.controls.createDate.dirty || expenseForm.controls.createDate.touched)"
+      <div *ngIf="createDate.errors && (createDate.dirty || createDate.touched)"
            class="invalid-feedback">
-        <p *ngIf="expenseForm.controls.createDate.errors.required">Datum ist ein Pflichtfeld</p>
+        <p *ngIf="createDate.errors['required']">Datum ist ein Pflichtfeld</p>
       </div>
     </div>
   </form>

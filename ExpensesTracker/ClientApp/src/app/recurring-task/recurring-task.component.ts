@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {RecurringTask} from "../models/recurringTask.model";
 import {AuthService} from "../services/auth.service";
 import {UsersService} from "../services/users.service";
@@ -15,24 +15,24 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class RecurringTaskComponent implements OnInit {
 
-  expenseRecurringTasks: RecurringTask[] = [];
-  revenueRecurringTasks: RecurringTask[] = [];
-  isUserWithRevenue: boolean = false;
-  currentUserId!: number;
+  public expenseRecurringTasks: RecurringTask[] = [];
+  public revenueRecurringTasks: RecurringTask[] = [];
+  public isUserWithRevenue: boolean = false;
 
-  constructor(private authService: AuthService,
-              private userService: UsersService,
-              private dialog: MatDialog,
-              private toastr: ToastrService,
-              private recurringTaskService: RecurringTaskService) {
-  }
+  private currentUserId!: number;
+
+  private readonly _authService = inject(AuthService);
+  private readonly _userService = inject(UsersService);
+  private readonly _dialog = inject(MatDialog);
+  private readonly _recurringTaskService = inject(RecurringTaskService);
+  private readonly _toastr = inject(ToastrService);
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserIdFromToken();
+    this.currentUserId = this._authService.getUserIdFromToken();
     if (this.currentUserId <= 0) {
-      this.authService.logout();
+      this._authService.logout();
     }
-    this.isUserWithRevenue = this.userService.getWithRevenue();
+    this.isUserWithRevenue = this._userService.getWithRevenue();
     this.getRecurringTasks();
   }
 
@@ -40,9 +40,9 @@ export class RecurringTaskComponent implements OnInit {
     if (this.currentUserId <= 0) return;
     this.revenueRecurringTasks = [];
     this.expenseRecurringTasks = [];
-    this.recurringTaskService.getRecurringTasksByUserId(this.currentUserId).subscribe({
+    this._recurringTaskService.getRecurringTasksByUserId(this.currentUserId).subscribe({
       next: ((recurringTasks) => {
-        if(recurringTasks) {
+        if (recurringTasks) {
           recurringTasks.forEach((task) => {
             if (task.isExpense) {
               this.expenseRecurringTasks.push(task);
@@ -54,13 +54,13 @@ export class RecurringTaskComponent implements OnInit {
       }),
       error: (error) => {
         console.log(error);
-        this.toastr.error('Daueraufträge konnten nicht geladen werden!', 'Daueraufträge')
+        this._toastr.error('Daueraufträge konnten nicht geladen werden!', 'Daueraufträge')
       }
     });
   }
 
   onEditTask(recurringTask: RecurringTask) {
-    const dialogRef = this.dialog.open(EditRecurringTaskComponent, {
+    const dialogRef = this._dialog.open(EditRecurringTaskComponent, {
       width: '80%',
       height: 'auto',
       data: {recurringTask: recurringTask}
@@ -105,17 +105,17 @@ export class RecurringTaskComponent implements OnInit {
   }
 
   private deleteRecurringTask(recurringTask: RecurringTask) {
-    this.recurringTaskService.deleteRecurringTask(recurringTask.id).subscribe({
+    this._recurringTaskService.deleteRecurringTask(recurringTask.id).subscribe({
       next: ((response) => {
         if (response) {
-          this.toastr.success('Dauerauftrag gelöscht', 'Löschen');
+          this._toastr.success('Dauerauftrag gelöscht', 'Löschen');
           this.getRecurringTasks();
         } else {
-          this.toastr.error('Dauerauftrag konnte nicht gelöscht werden', 'Löschen');
+          this._toastr.error('Dauerauftrag konnte nicht gelöscht werden', 'Löschen');
         }
       }),
       error: (error) => {
-        this.toastr.error(error.error, 'Löschen')
+        this._toastr.error(error.error, 'Löschen')
       }
     });
   }

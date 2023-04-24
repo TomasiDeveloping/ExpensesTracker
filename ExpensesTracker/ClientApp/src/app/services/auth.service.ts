@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {BehaviorSubject, map, Observable} from "rxjs";
 import {AppUser} from "../models/appUser.model";
@@ -14,13 +14,12 @@ import {RegisterModel} from "../models/register.model";
 })
 export class AuthService {
 
-  serviceUrl = environment.apiUrl + 'auth/';
-  currentUserSource = new BehaviorSubject<AppUser | null>(null);
+  public currentUserSource = new BehaviorSubject<AppUser | null>(null);
+  private readonly _serviceUrl = environment.apiUrl + 'auth/';
+  private readonly _httpClient = inject(HttpClient);
+  private readonly _toastr = inject(ToastrService);
+  private readonly _userService = inject(UsersService);
 
-  constructor(private http: HttpClient,
-              private toastr: ToastrService,
-              private userService: UsersService) {
-  }
 
   get userIsAuthenticated() {
     return this.currentUserSource.asObservable().pipe(map(appUser => {
@@ -29,10 +28,6 @@ export class AuthService {
       }
       return false;
     }));
-  }
-
-  get currentUser() {
-    return this.currentUserSource.asObservable();
   }
 
   private static setUserData(appUser: AppUser) {
@@ -54,25 +49,27 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    this.http.post<AppUser>(this.serviceUrl + 'Login', {email, password}).subscribe({
+    this._httpClient.post<AppUser>(this._serviceUrl + 'Login', {email, password}).subscribe({
       next: ((response) => {
-      this.currentUserSource.next(response);
-      AuthService.setUserData(response);
-    }),
+        this.currentUserSource.next(response);
+        AuthService.setUserData(response);
+      }),
       error: (error) => {
-      this.toastr.error(error.error, 'Login');
-    }});
+        this._toastr.error(error.error, 'Login');
+      }
+    });
   }
 
   register(register: RegisterModel) {
-    this.http.post<AppUser>(this.serviceUrl + 'Register', register).subscribe({
+    this._httpClient.post<AppUser>(this._serviceUrl + 'Register', register).subscribe({
       next: ((response) => {
-      this.currentUserSource.next(response);
-      AuthService.setUserData(response);
-    }),
+        this.currentUserSource.next(response);
+        AuthService.setUserData(response);
+      }),
       error: (error) => {
-      this.toastr.error(error.error, 'Registrieren')
-    }})
+        this._toastr.error(error.error, 'Registrieren')
+      }
+    })
   }
 
   autoLogin() {
@@ -85,7 +82,7 @@ export class AuthService {
           .then(() => this.logout());
       }
       const userId = +decodeToken.nameid;
-      this.userService.getUserById(userId).subscribe(response => {
+      this._userService.getUserById(userId).subscribe(response => {
         const appUser: AppUser = new class implements AppUser {
           userId = response.id;
           token = token ? token : '';
@@ -108,6 +105,6 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<boolean> {
-    return this.http.post<boolean>(this.serviceUrl + 'forgotPassword', {email: email});
+    return this._httpClient.post<boolean>(this._serviceUrl + 'forgotPassword', {email: email});
   }
 }

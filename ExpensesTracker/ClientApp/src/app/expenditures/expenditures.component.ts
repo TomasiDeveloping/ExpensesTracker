@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ExpensesService} from "../services/expenses.service";
 import {ExpenseModel} from "../models/expense.model";
 import {EditExpensesComponent} from "../home/edit-expenses/edit-expenses.component";
@@ -15,27 +15,27 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class ExpendituresComponent implements OnInit {
 
-  date = new Date();
-  months: { name: string, value: number }[] = [];
+  public date = new Date();
+  public months: { name: string, value: number }[] = [];
+  public years: number[] = [];
+  public groupedExpenses: { categoryName: string, groupAmount: number, expense: ExpenseModel[] }[] = [];
+  public expenses: ExpenseModel[] = [];
+  public currentYear = new Date().getFullYear();
+  public currentMonth = new Date().getMonth() + 1;
 
-  years: number[] = [];
-  groupedExpenses: { categoryName: string, groupAmount: number, expense: ExpenseModel[] }[] = [];
-  expenses: ExpenseModel[] = [];
-  currentUserId: number = 0;
-  currentYear = new Date().getFullYear();
-  currentMonth = new Date().getMonth() + 1;
+  private currentUserId: number = 0;
 
-  constructor(private expenseService: ExpensesService,
-              private monthPipe: MonthNamePipe,
-              private authService: AuthService,
-              private dialog: MatDialog,
-              private toastr: ToastrService) {
-  }
+  private readonly _expenseService = inject(ExpensesService);
+  private readonly _monthPipe = inject(MonthNamePipe);
+  private readonly _dialog = inject(MatDialog);
+  private readonly _toastr = inject(ToastrService);
+  private readonly _authService = inject(AuthService);
+
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserIdFromToken();
+    this.currentUserId = this._authService.getUserIdFromToken();
     if (this.currentUserId <= 0) {
-      this.authService.logout();
+      this._authService.logout();
     }
     this.getUserExpenses(this.currentYear, this.currentMonth);
     this.createYears();
@@ -44,7 +44,7 @@ export class ExpendituresComponent implements OnInit {
 
   getUserExpenses(year: number, month: number) {
     this.groupedExpenses = [];
-    this.expenseService.getUserExpensesByQueryParams(this.currentUserId, year, month).subscribe((response) => {
+    this._expenseService.getUserExpensesByQueryParams(this.currentUserId, year, month).subscribe((response) => {
       this.expenses = response;
       if (response) {
         response.forEach((expense) => {
@@ -78,7 +78,7 @@ export class ExpendituresComponent implements OnInit {
 
   createMonths() {
     for (let i = 1; i <= 12; i++) {
-      this.months.push({name: this.monthPipe.transform(i), value: i});
+      this.months.push({name: this._monthPipe.transform(i), value: i});
     }
   }
 
@@ -93,7 +93,7 @@ export class ExpendituresComponent implements OnInit {
   }
 
   onEditExpense(expense: ExpenseModel) {
-    const dialogRef = this.dialog.open(EditExpensesComponent, {
+    const dialogRef = this._dialog.open(EditExpensesComponent, {
       width: '80%',
       height: 'auto',
       data: {expense: expense, isUpdate: true}
@@ -124,12 +124,12 @@ export class ExpendituresComponent implements OnInit {
   }
 
   private deleteExpense(expense: ExpenseModel) {
-    this.expenseService.deleteExpense(expense.id).subscribe({
+    this._expenseService.deleteExpense(expense.id).subscribe({
       next: ((response) => {
         if (response) {
           this.groupedExpenses = [];
           this.getUserExpenses(this.currentYear, this.currentMonth);
-          this.toastr.success('Ausgabe wurde gelöscht', 'Löschen');
+          this._toastr.success('Ausgabe wurde gelöscht', 'Löschen');
         }
       }),
       error: (error) => {

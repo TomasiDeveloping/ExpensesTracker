@@ -7,20 +7,19 @@
     <div class="input-group">
       <input
         [ngClass]="{
-                        'is-invalid': registerForm.controls.email.invalid && (registerForm.controls.email.dirty || registerForm.controls.email.touched),
-                        'is-valid': registerForm.controls.email.valid
+                        'is-invalid': email.invalid && (email.dirty || email.touched),
+                        'is-valid': email.valid
                       }"
         class="form-control"
         formControlName="email"
         id="registerEmail"
         type="email">
-      <div *ngIf="registerForm.controls.email.errors &&
-                 (registerForm.controls.email.dirty || registerForm.controls.email.touched)"
+      <div *ngIf="email.errors &&(email.dirty || email.touched)"
            class="invalid-feedback">
-        <p *ngIf="registerForm.controls.email.errors.required">Email ist ein Pflichtfeld</p>
-        <p *ngIf="registerForm.controls.email.errors.email">Ungültige E-Mail</p>
-        <p *ngIf="registerForm.controls.email.errors.maxlength">Max 100 Zeichen erlaubt</p>
-        <p *ngIf="registerForm.controls.email.errors.emailExists">E-Mail bereits registriert</p>
+        <p *ngIf="email.errors['required']">Email ist ein Pflichtfeld</p>
+        <p *ngIf="email.errors['email']">Ungültige E-Mail</p>
+        <p *ngIf="email.errors['maxlength']">Max 100 Zeichen erlaubt</p>
+        <p *ngIf="email.errors['emailExists']">E-Mail bereits registriert</p>
       </div>
     </div>
   </div>
@@ -29,18 +28,17 @@
     <div class="input-group">
       <input
         [ngClass]="{
-                        'is-invalid': registerForm.controls.firstName.invalid && (registerForm.controls.firstName.dirty || registerForm.controls.firstName.touched),
-                        'is-valid': registerForm.controls.firstName.valid
+                        'is-invalid': firstName.invalid && (firstName.dirty || firstName.touched),
+                        'is-valid': firstName.valid
                       }"
         class="form-control"
         formControlName="firstName"
         id="registerFirstName"
         type="text">
-      <div *ngIf="registerForm.controls.firstName.errors &&
-                 (registerForm.controls.firstName.dirty || registerForm.controls.firstName.touched)"
+      <div *ngIf="firstName.errors && (firstName.dirty || firstName.touched)"
            class="invalid-feedback">
-        <p *ngIf="registerForm.controls.firstName.errors.required">Vorname ist ein Pflichtfeld</p>
-        <p *ngIf="registerForm.controls.firstName.errors.maxlength">Max 100 Zeichen erlaubt</p>
+        <p *ngIf="firstName.errors['required']">Vorname ist ein Pflichtfeld</p>
+        <p *ngIf="firstName.errors['maxlength']">Max 100 Zeichen erlaubt</p>
       </div>
     </div>
   </div>
@@ -49,18 +47,17 @@
     <div class="input-group">
       <input
         [ngClass]="{
-                        'is-invalid': registerForm.controls.lastName.invalid && (registerForm.controls.lastName.dirty || registerForm.controls.lastName.touched),
-                        'is-valid': registerForm.controls.lastName.valid
+                        'is-invalid': lastName.invalid && (lastName.dirty || lastName.touched),
+                        'is-valid': lastName.valid
                       }"
         class="form-control"
         formControlName="lastName"
         id="registerLastName"
         type="text">
-      <div *ngIf="registerForm.controls.lastName.errors &&
-                 (registerForm.controls.lastName.dirty || registerForm.controls.lastName.touched)"
+      <div *ngIf="lastName.errors && (lastName.dirty || lastName.touched)"
            class="invalid-feedback">
-        <p *ngIf="registerForm.controls.lastName.errors.required">Nachname ist ein Pflichtfeld</p>
-        <p *ngIf="registerForm.controls.lastName.errors.maxlength">Max 100 Zeichen erlaubt</p>
+        <p *ngIf="lastName.errors['required']">Nachname ist ein Pflichtfeld</p>
+        <p *ngIf="lastName.errors['maxlength']">Max 100 Zeichen erlaubt</p>
       </div>
     </div>
   </div>
@@ -69,18 +66,17 @@
     <div class="input-group">
       <input
         [ngClass]="{
-                        'is-invalid': registerForm.controls.password.invalid && (registerForm.controls.password.dirty || registerForm.controls.password.touched),
-                        'is-valid': registerForm.controls.password.valid
+                        'is-invalid': password.invalid && (password.dirty || password.touched),
+                        'is-valid': password.valid
                       }"
         autocomplete="on"
         class="form-control"
         formControlName="password"
         id="registerPassword"
         type="password">
-      <div *ngIf="registerForm.controls.password.errors &&
-                 (registerForm.controls.password.dirty || registerForm.controls.password.touched)"
+      <div *ngIf="password.errors && (password.dirty || password.touched)"
            class="invalid-feedback">
-        <p *ngIf="registerForm.controls.password.errors.required">Passwort ist ein Pflichtfeld</p>
+        <p *ngIf="password.errors['required']">Passwort ist ein Pflichtfeld</p>
       </div>
     </div>
   </div>
@@ -89,19 +85,18 @@
     <div class="input-group">
       <input
         [ngClass]="{
-                        'is-invalid': registerForm.controls.confirmPassword.invalid && (registerForm.controls.confirmPassword.dirty || registerForm.controls.confirmPassword.touched),
-                        'is-valid': registerForm.controls.confirmPassword.valid
+                        'is-invalid': confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched),
+                        'is-valid': confirmPassword.valid
                       }"
         autocomplete="on"
         class="form-control"
         formControlName="confirmPassword"
         id="registerConfirmPassword"
         type="password">
-      <div *ngIf="registerForm.controls.confirmPassword.errors &&
-                 (registerForm.controls.confirmPassword.dirty || registerForm.controls.confirmPassword.touched)"
+      <div *ngIf="confirmPassword.errors && (confirmPassword.dirty || confirmPassword.touched)"
            class="invalid-feedback">
-        <p *ngIf="registerForm.controls.confirmPassword.errors.required">Passwort bestätigen ist ein Pflichtfeld</p>
-        <p *ngIf="registerForm.controls.confirmPassword.errors.isMatching">Passwort nicht identisch</p>
+        <p *ngIf="confirmPassword.errors['required']">Passwort bestätigen ist ein Pflichtfeld</p>
+        <p *ngIf="confirmPassword.errors['isMatching']">Passwort nicht identisch</p>
       </div>
     </div>
   </div>

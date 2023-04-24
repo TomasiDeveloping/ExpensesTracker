@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {AuthService} from "./services/auth.service";
 
@@ -7,24 +7,23 @@ import {AuthService} from "./services/auth.service";
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'app';
 
-  isLogin = false;
-  private userSub: Subscription | undefined;
+  public isLogin = false;
 
-  constructor(private authService: AuthService) {
-  }
+  private userSub$: Subscription | undefined;
+
+  private readonly _authService = inject(AuthService);
 
   ngOnInit(): void {
-    this.authService.autoLogin();
-    this.userSub = this.authService.userIsAuthenticated.subscribe(isAuth => {
+    this._authService.autoLogin();
+    this.userSub$ = this._authService.userIsAuthenticated.subscribe(isAuth => {
       this.isLogin = isAuth;
     });
   }
 
   ngOnDestroy(): void {
-    if (this.userSub) {
-      this.userSub.unsubscribe();
+    if (this.userSub$) {
+      this.userSub$.unsubscribe();
     }
   }
 }

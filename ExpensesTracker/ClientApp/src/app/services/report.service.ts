@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {ReportModel} from "../models/report.model";
@@ -9,12 +9,11 @@ import {map, Observable} from "rxjs";
 })
 export class ReportService {
 
-  serviceUrl = environment.apiUrl + 'reports/';
-
-  constructor(private readonly http: HttpClient) { }
+  private readonly _serviceUrl = environment.apiUrl + 'reports/';
+  private readonly _httpClient = inject(HttpClient);
 
   createYearlyExcelReport(report: ReportModel): Observable<any> {
-    return this.http.post(this.serviceUrl + 'CreateYearlyExcelReport', report, {
+    return this._httpClient.post(this._serviceUrl + 'CreateYearlyExcelReport', report, {
       observe: 'response',
       responseType: 'blob'
     })
@@ -28,7 +27,7 @@ export class ReportService {
   }
 
   createMonthlyExcelReport(report: ReportModel): Observable<any> {
-    return this.http.post(this.serviceUrl + 'CreateMonthlyExcelReport', report, {
+    return this._httpClient.post(this._serviceUrl + 'CreateMonthlyExcelReport', report, {
       observe: 'response',
       responseType: 'blob'
     })

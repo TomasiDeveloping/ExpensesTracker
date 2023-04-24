@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {UsersService} from "../services/users.service";
 import {UserModel} from "../models/user.model";
-import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import Swal from "sweetalert2";
 import {AuthService} from "../services/auth.service";
@@ -17,32 +17,51 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class SettingsComponent implements OnInit {
 
-  currentUserId = 0;
-  // @ts-ignore
-  currentUser: UserModel;
-  userBudget = 0;
-  // @ts-ignore
-  userForm: UntypedFormGroup;
-  passwordForm = new UntypedFormGroup({
-    password: new UntypedFormControl('', [Validators.required]),
-    confirmPassword: new UntypedFormControl('', [Validators.required, this.matchValues('password')])
+  public currentUser!: UserModel;
+  public userBudget = 0;
+  public userForm!: FormGroup;
+  public passwordForm = new FormGroup({
+    password: new FormControl<string>('', [Validators.required]),
+    confirmPassword: new FormControl<string>('', [Validators.required, this.matchValues('password')])
   });
-  passwordFieldTextType = false;
-  confirmFieldTextType = false;
-  isUserUpdate = false;
-  appVersion = environment.appVersion;
-  reload = false;
+  public passwordFieldTextType = false;
+  public confirmFieldTextType = false;
+  public isUserUpdate = false;
+  public appVersion = environment.appVersion;
 
-  constructor(private userService: UsersService,
-              private toastr: ToastrService,
-              private dialog: MatDialog,
-              private authService: AuthService) {
+  private currentUserId = 0;
+  private reload = false;
+
+  private readonly _userService = inject(UsersService);
+  private readonly _toastr = inject(ToastrService);
+  private readonly _dialog = inject(MatDialog);
+  private readonly _authService = inject(AuthService);
+
+
+  get password() {
+    return this.passwordForm.get('password')!;
+  }
+
+  get confirmPassword() {
+    return this.passwordForm.get('confirmPassword')!;
+  }
+
+  get email() {
+    return this.userForm.get('email')!;
+  }
+
+  get firstName() {
+    return this.userForm.get('firstName')!;
+  }
+
+  get lastName() {
+    return this.userForm.get('lastName')!;
   }
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserIdFromToken();
+    this.currentUserId = this._authService.getUserIdFromToken();
     if (this.currentUserId <= 0) {
-      this.authService.logout();
+      this._authService.logout();
     }
     this.getCurrentUser();
   }
@@ -56,18 +75,18 @@ export class SettingsComponent implements OnInit {
   }
 
   createUserForm() {
-    this.userForm = new UntypedFormGroup({
-      id: new UntypedFormControl(this.currentUser.id),
-      firstName: new UntypedFormControl(this.currentUser.firstName),
-      lastName: new UntypedFormControl(this.currentUser.lastName),
-      email: new UntypedFormControl(this.currentUser.email),
-      withRevenue: new UntypedFormControl(this.currentUser.withRevenue)
+    this.userForm = new FormGroup({
+      id: new FormControl<number>(this.currentUser.id),
+      firstName: new FormControl<string>(this.currentUser.firstName, [Validators.required]),
+      lastName: new FormControl<string>(this.currentUser.lastName, [Validators.required]),
+      email: new FormControl<string>(this.currentUser.email, [Validators.required, Validators.email]),
+      withRevenue: new FormControl<boolean>(this.currentUser.withRevenue)
     });
     this.userForm.disable();
   }
 
   getCurrentUser() {
-    this.userService.getUserById(this.currentUserId).subscribe((response) => {
+    this._userService.getUserById(this.currentUserId).subscribe((response) => {
       this.currentUser = response;
       this.userBudget = response.monthlyBudget;
       this.createUserForm();
@@ -111,7 +130,7 @@ export class SettingsComponent implements OnInit {
 
   updateUser(user: UserModel) {
     this.currentUser.password = '';
-    this.userService.updateUser(user.id, user).subscribe({
+    this._userService.updateUser(user.id, user).subscribe({
       next: ((response) => {
         if (response) {
           if (this.reload) {
@@ -121,7 +140,7 @@ export class SettingsComponent implements OnInit {
           this.getCurrentUser();
           this.isUserUpdate = false;
           this.userForm.disable();
-          this.toastr.success('Erfolgreich geändert', 'Update');
+          this._toastr.success('Erfolgreich geändert', 'Update');
         }
       }),
       error: (error) => {
@@ -137,7 +156,7 @@ export class SettingsComponent implements OnInit {
     } else {
       message = 'Um das Programm ohne Einnahmen zu verwenden musst Du Dich neu einloggen, Du wirst automatisch ausgeloggt';
     }
-    Swal.fire('Logout', message, 'info').then(() => this.authService.logout());
+    Swal.fire('Logout', message, 'info').then(() => this._authService.logout());
   }
 
   onDeleteAccount() {
@@ -171,12 +190,12 @@ export class SettingsComponent implements OnInit {
   }
 
   deleteUserAccount() {
-    this.userService.deleteUser(this.currentUser.id).subscribe({
+    this._userService.deleteUser(this.currentUser.id).subscribe({
       next: ((response) => {
         if (response) {
-          this.authService.logout();
+          this._authService.logout();
         } else {
-          this.toastr.error('Dein Account konnte nicht gelöscht werden');
+          this._toastr.error('Dein Account konnte nicht gelöscht werden');
         }
       }),
       error: (error) => {
@@ -194,18 +213,18 @@ export class SettingsComponent implements OnInit {
     if (this.passwordForm.invalid) {
       return;
     }
-    const password = this.passwordForm.controls.password.value;
+    const password = this.passwordForm.controls.password.value!;
     const confirmPassword = this.passwordForm.controls.confirmPassword.value;
     if (password !== confirmPassword) {
       Swal.fire('Passwort', 'Passwort nicht Identisch', 'warning').then();
       this.passwordForm.reset();
       return;
     }
-    this.userService.changeUserPassword(this.currentUser.id, password).subscribe({
+    this._userService.changeUserPassword(this.currentUser.id, password).subscribe({
       next: ((response) => {
         if (response) {
           Swal.fire('Passwort ändern', 'Passwort wurde erfolgreich geändert, Du wirst automatisch ausgeloggt', 'success')
-            .then(() => this.authService.logout())
+            .then(() => this._authService.logout())
         } else {
           Swal.fire('Passwort ändern', 'Passwort konnte nicht geändert werden!', 'error')
             .then(() => this.passwordForm.reset());
@@ -218,7 +237,7 @@ export class SettingsComponent implements OnInit {
   }
 
   onChangeLog() {
-    this.dialog.open(ChangelogComponent, {
+    this._dialog.open(ChangelogComponent, {
       width: '80%',
       height: 'auto',
       autoFocus: false
@@ -226,7 +245,7 @@ export class SettingsComponent implements OnInit {
   }
 
   onContactSupport() {
-    this.dialog.open(ContactSupportComponent, {
+    this._dialog.open(ContactSupportComponent, {
       width: '80%',
       height: 'auto',
       autoFocus: false,

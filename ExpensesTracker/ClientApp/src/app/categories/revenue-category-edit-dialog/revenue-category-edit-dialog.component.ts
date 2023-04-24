@@ -1,5 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {Component, inject, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {RevenueCategoryModel} from "../../models/revenueCategory.model";
 import {RevenueCategoryService} from "../../services/revenue-category.service";
 import {ToastrService} from "ngx-toastr";
@@ -12,29 +12,34 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./revenue-category-edit-dialog.component.css']
 })
 export class RevenueCategoryEditDialogComponent implements OnInit {
-  isUpdate: boolean;
-  currentRevenueCategory: RevenueCategoryModel;
-  // @ts-ignore
-  revenueCategoryForm: UntypedFormGroup;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private revenueCategoryService: RevenueCategoryService,
-              private toastr: ToastrService,
-              private dialogRef: MatDialogRef<RevenueCategoryEditDialogComponent>) {
+  public isUpdate: boolean;
+  public currentRevenueCategory: RevenueCategoryModel;
+  public revenueCategoryForm!: FormGroup;
+
+  private readonly _revenueCategoryService = inject(RevenueCategoryService);
+  private readonly _toastr = inject(ToastrService);
+  private readonly _dialogRef = inject(MatDialogRef<RevenueCategoryEditDialogComponent>)
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.isUpdate = data.isUpdate;
     this.currentRevenueCategory = data.revenueCategory;
   }
 
+  get name() {
+    return this.revenueCategoryForm.get('name')!;
+  }
+
   ngOnInit(): void {
-    this.revenueCategoryForm = new UntypedFormGroup({
-      id: new UntypedFormControl(this.currentRevenueCategory.id),
-      name: new UntypedFormControl(this.currentRevenueCategory.name, [Validators.required]),
-      userId: new UntypedFormControl(this.currentRevenueCategory.userId)
+    this.revenueCategoryForm = new FormGroup({
+      id: new FormControl<number>(this.currentRevenueCategory.id),
+      name: new FormControl<string>(this.currentRevenueCategory.name, [Validators.required]),
+      userId: new FormControl<number>(this.currentRevenueCategory.userId)
     });
   }
 
   onClose() {
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 
   onSubmit() {
@@ -50,10 +55,10 @@ export class RevenueCategoryEditDialogComponent implements OnInit {
   }
 
   private updateRevenueCategory(revenueCategory: RevenueCategoryModel) {
-    this.revenueCategoryService.updateRevenueCategory(revenueCategory.id, revenueCategory).subscribe({
+    this._revenueCategoryService.updateRevenueCategory(revenueCategory.id, revenueCategory).subscribe({
       next: ((response) => {
-        this.dialogRef.close('update');
-        this.toastr.success(response.name + ' erfolgreich bearbeitet', 'Bearbeiten');
+        this._dialogRef.close('update');
+        this._toastr.success(response.name + ' erfolgreich bearbeitet', 'Bearbeiten');
       }),
       error: (error) => {
         Swal.fire('Bearbeiten', 'Error ' + error.error, 'error').then();
@@ -62,10 +67,10 @@ export class RevenueCategoryEditDialogComponent implements OnInit {
   }
 
   private addRevenueCategory(revenueCategory: RevenueCategoryModel) {
-    this.revenueCategoryService.insertRevenueCategory(revenueCategory).subscribe({
+    this._revenueCategoryService.insertRevenueCategory(revenueCategory).subscribe({
       next: ((response) => {
-        this.dialogRef.close('update');
-        this.toastr.success(response.name + ' hinzugefügt', 'Hinzugefügt');
+        this._dialogRef.close('update');
+        this._toastr.success(response.name + ' hinzugefügt', 'Hinzugefügt');
       }),
       error: (error) => {
         Swal.fire('Hinzugefügt', 'Error ' + error.error, 'error').then();

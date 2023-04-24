@@ -1,8 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, inject, Inject, OnInit} from '@angular/core';
 import {CategoryModel} from "../../models/category.model";
 import {CategoriesService} from "../../services/categories.service";
 import {ToastrService} from "ngx-toastr";
-import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import Swal from "sweetalert2";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
@@ -13,29 +13,33 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class CategoryEditDialogComponent implements OnInit {
 
-  currentCategory: CategoryModel;
-  isUpdate: boolean;
-  // @ts-ignore
-  categoryForm: UntypedFormGroup;
+  public currentCategory: CategoryModel;
+  public isUpdate: boolean;
+  public categoryForm!: FormGroup;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private categoryService: CategoriesService,
-              private toastr: ToastrService,
-              private dialogRef: MatDialogRef<CategoryEditDialogComponent>) {
+  private readonly _categoryService = inject(CategoriesService);
+  private readonly _toastr = inject(ToastrService);
+  private readonly _dialogRef = inject(MatDialogRef<CategoryEditDialogComponent>);
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.currentCategory = data.category;
     this.isUpdate = data.isUpdate;
   }
 
+  get name() {
+    return this.categoryForm.get('name')!;
+  }
+
   ngOnInit(): void {
-    this.categoryForm = new UntypedFormGroup({
-      id: new UntypedFormControl(this.currentCategory.id),
-      name: new UntypedFormControl(this.currentCategory.name, [Validators.required]),
-      userId: new UntypedFormControl(this.currentCategory.userId)
+    this.categoryForm = new FormGroup({
+      id: new FormControl<number>(this.currentCategory.id),
+      name: new FormControl<string>(this.currentCategory.name, [Validators.required]),
+      userId: new FormControl<number>(this.currentCategory.userId)
     });
   }
 
   onClose() {
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 
   onSubmit() {
@@ -51,10 +55,10 @@ export class CategoryEditDialogComponent implements OnInit {
   }
 
   private updateCategory(category: CategoryModel) {
-    this.categoryService.updateCategory(category.id, category).subscribe({
+    this._categoryService.updateCategory(category.id, category).subscribe({
       next: ((response) => {
-        this.dialogRef.close('update');
-        this.toastr.success(response.name + ' erfolgreich bearbeitet', 'Bearbeiten');
+        this._dialogRef.close('update');
+        this._toastr.success(response.name + ' erfolgreich bearbeitet', 'Bearbeiten');
       }),
       error: (error) => {
         Swal.fire('Bearbeiten', 'Error ' + error.error, 'error').then();
@@ -63,10 +67,10 @@ export class CategoryEditDialogComponent implements OnInit {
   }
 
   private addCategory(category: CategoryModel) {
-    this.categoryService.insertCategory(category).subscribe({
+    this._categoryService.insertCategory(category).subscribe({
       next: ((response) => {
-        this.dialogRef.close('update');
-        this.toastr.success(response.name + ' hinzugefügt', 'Hinzugefügt');
+        this._dialogRef.close('update');
+        this._toastr.success(response.name + ' hinzugefügt', 'Hinzugefügt');
       }),
       error: (error) => {
         Swal.fire('Hinzugefügt', 'Error ' + error.error, 'error').then();
