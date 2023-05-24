@@ -13,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration.WriteTo.Console()
-        .ReadFrom.Configuration(context.Configuration);
+        .ReadFrom.Configuration(context.Configuration)
+        .Enrich.WithProperty("ApplicationName", "ExpensesTracker");
 });
 
 builder.Services.ConfigureCors();
