@@ -1,7 +1,19 @@
 # ExpensesTracker
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+<br>
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=bugs)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=coverage)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+<hr>
 Angular 15 with .NET 7 Rest API
-<br>
-<br>
 <hr>
 <h3>Home</h3>
 <img src="https://github.com/TomasiDeveloping/ExpensesTracker/blob/master/Images/Home.png" width="70%">
