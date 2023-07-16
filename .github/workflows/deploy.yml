@@ -63,7 +63,7 @@ jobs:
      uses: actions/upload-artifact@v3
      with:
       name: Angular-UI
-      path: ./ExpensesTracker/ClientApp/dist/ExpensesTracker
+      path: ./ExpensesTracker/ClientApp/dist
 
  deploy-backend:
   runs-on: windows-latest
