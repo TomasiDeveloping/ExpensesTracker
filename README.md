@@ -42,6 +42,9 @@ Angular 15 with .NET 7 Rest API
 <hr>
 
 ## Changelog
+### 3.1.3 (2023-07-16)
+- NuGet packages update
+- Fix
 ### 3.1.2 (2023-04-24)
 - Update Angular
 - Update NuGet Packages

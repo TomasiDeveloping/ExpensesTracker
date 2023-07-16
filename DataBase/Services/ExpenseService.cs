@@ -27,7 +27,7 @@ namespace DataBase.Services
             return _mapper.Map<List<ExpenseDto>>(expenses);
         }
 
-        public async Task<ExpenseDto?> GetExpenseByIdAsync(int expenseId)
+        public async Task<ExpenseDto> GetExpenseByIdAsync(int expenseId)
         {
             var expense = await _context.Expenses
                 .Include(e => e.Category)
@@ -93,7 +93,7 @@ namespace DataBase.Services
             return _mapper.Map<ExpenseDto>(newExpense);
         }
 
-        public async Task<ExpenseDto?> UpdateExpenseAsync(int expenseId, ExpenseDto expenseDto)
+        public async Task<ExpenseDto> UpdateExpenseAsync(int expenseId, ExpenseDto expenseDto)
         {
             var expenseToUpdate = await _context.Expenses.FirstOrDefaultAsync(e => e.Id == expenseId);
             if (expenseToUpdate == null) return null;

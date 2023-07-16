@@ -26,7 +26,7 @@ namespace DataBase.Services
             return _mapper.Map<List<UserDto>>(users);
         }
 
-        public async Task<UserDto?> GetUserByIdAsync(int userId)
+        public async Task<UserDto> GetUserByIdAsync(int userId)
         {
             var user = await _context.Users
                 .AsNoTracking()
@@ -34,7 +34,7 @@ namespace DataBase.Services
             return user == null ? null : _mapper.Map<UserDto>(user);
         }
 
-        public async Task<User?> GetUserByEmailForLoginAsync(string email)
+        public async Task<User> GetUserByEmailForLoginAsync(string email)
         {
             var user = await _context.Users
                 .AsNoTracking()
@@ -42,7 +42,7 @@ namespace DataBase.Services
             return user;
         }
 
-        public async Task<UserDto?> GetUserByEmailAsync(string email)
+        public async Task<UserDto> GetUserByEmailAsync(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             return user == null ? null : _mapper.Map<UserDto>(user);
@@ -68,7 +68,7 @@ namespace DataBase.Services
             return _mapper.Map<UserDto>(newUser);
         }
 
-        public async Task<UserDto?> UpdateUserAsync(int userId, UserDto userDto)
+        public async Task<UserDto> UpdateUserAsync(int userId, UserDto userDto)
         {
             var userToUpdate = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (userToUpdate == null) return null;

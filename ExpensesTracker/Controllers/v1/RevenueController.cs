@@ -39,7 +39,7 @@ public class RevenueController : ControllerBase
         [FromQuery] int? month = null)
     {
         _ = new List<RevenueDto>();
-        List<RevenueDto>? userRevenues;
+        List<RevenueDto> userRevenues;
         if (year != null && month != null)
             userRevenues = await _service.GetUserRevenuesByParamsAsync(userId, year.Value, month.Value);
         else
@@ -104,7 +104,7 @@ public class RevenueController : ControllerBase
         {
             var checkDelete = await _service.DeleteRevenueByIdAsync(revenueId);
             if (!checkDelete) return BadRequest("Revenue could not be deleted!");
-            return Ok(checkDelete);
+            return Ok(true);
         }
         catch (Exception e)
         {

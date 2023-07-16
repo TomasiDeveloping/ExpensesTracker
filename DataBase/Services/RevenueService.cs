@@ -27,7 +27,7 @@ namespace DataBase.Services
             return _mapper.Map<List<RevenueDto>>(revenues);
         }
 
-        public async Task<RevenueDto?> GetRevenueByIdAsync(int revenueId)
+        public async Task<RevenueDto> GetRevenueByIdAsync(int revenueId)
         {
             var revenue = await _context.Revenues
                 .Include(r => r.RevenueCategory)
@@ -81,7 +81,7 @@ namespace DataBase.Services
             return _mapper.Map<RevenueDto>(revenue);
         }
 
-        public async Task<RevenueDto?> UpdateRevenueAsync(int revenueId, RevenueDto revenueDto)
+        public async Task<RevenueDto> UpdateRevenueAsync(int revenueId, RevenueDto revenueDto)
         {
             var revenueToUpdate = await _context.Revenues.FirstOrDefaultAsync(r => r.Id == revenueId);
             if (revenueToUpdate == null) return null;

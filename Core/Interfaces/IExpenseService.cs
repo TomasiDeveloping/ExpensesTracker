@@ -7,7 +7,7 @@ namespace Core.Interfaces
     {
         Task<List<ExpenseDto>> GetExpensesAsync();
 
-        Task<ExpenseDto?> GetExpenseByIdAsync(int expenseId);
+        Task<ExpenseDto> GetExpenseByIdAsync(int expenseId);
 
         Task<List<ExpenseDto>> GetExpensesByUserId(int userId);
 
@@ -23,7 +23,7 @@ namespace Core.Interfaces
 
         Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto);
 
-        Task<ExpenseDto?> UpdateExpenseAsync(int expenseId, ExpenseDto expenseDto);
+        Task<ExpenseDto> UpdateExpenseAsync(int expenseId, ExpenseDto expenseDto);
 
         Task<bool> DeleteExpenseByIdAsync(int expenseId);
     }
