@@ -12,6 +12,10 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=coverage)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=TomasiDeveloping_ExpensesTracker&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=TomasiDeveloping_ExpensesTracker)
+<br>
+<br>
+[![SonarCloud](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/sonarCloud.yml/badge.svg)](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/sonarCloud.yml)
+[![CI/CD for ExpenseTracker](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/deploy.yml/badge.svg)](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/deploy.yml)
 <hr>
 Angular 15 with .NET 7 Rest API
 <hr>
