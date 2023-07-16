@@ -34,7 +34,7 @@ namespace DataBase.Services
             return _mapper.Map<List<CategoryDto>>(userCategories);
         }
 
-        public async Task<CategoryDto?> GetCategoryByIdAsync(int categoryId)
+        public async Task<CategoryDto> GetCategoryByIdAsync(int categoryId)
         {
             var category = await _context.Categories
                 .AsNoTracking()
@@ -50,7 +50,7 @@ namespace DataBase.Services
             return _mapper.Map<CategoryDto>(newCategory);
         }
 
-        public async Task<CategoryDto?> UpdateCategoryAsync(int categoryId, CategoryDto categoryDto)
+        public async Task<CategoryDto> UpdateCategoryAsync(int categoryId, CategoryDto categoryDto)
         {
             var categoryToUpdate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
             if (categoryToUpdate == null) return null;

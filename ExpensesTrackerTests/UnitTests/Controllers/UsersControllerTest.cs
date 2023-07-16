@@ -44,7 +44,7 @@ namespace ExpensesTrackerTests.UnitTests.Controllers
         public async void UserController_PostAsync_InsertUser()
         {
             var user = GetTestUser();
-            UserDto? testUser = null;
+            UserDto testUser = null;
             _mockRepo.Setup(x => x.InsertUserAsync(It.IsAny<UserDto>()))
                 .Callback<UserDto>(x => testUser = x);
 

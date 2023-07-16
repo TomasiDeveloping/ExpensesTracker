@@ -34,7 +34,7 @@ namespace DataBase.Services
             return _mapper.Map<List<RevenueCategoryDto>>(userRevenueCategories);
         }
 
-        public async Task<RevenueCategoryDto?> GetRevenueCategoryByIdAsync(int revenueCategoryId)
+        public async Task<RevenueCategoryDto> GetRevenueCategoryByIdAsync(int revenueCategoryId)
         {
             var revenueCategory = await _context.RevenuesCategories
                 .AsNoTracking()
@@ -50,7 +50,7 @@ namespace DataBase.Services
             return _mapper.Map<RevenueCategoryDto>(revenueCategory);
         }
 
-        public async Task<RevenueCategoryDto?> UpdateRevenueCategoryAsync(int revenueCategoryId, RevenueCategoryDto revenueCategoryDto)
+        public async Task<RevenueCategoryDto> UpdateRevenueCategoryAsync(int revenueCategoryId, RevenueCategoryDto revenueCategoryDto)
         {
             var revenueCategoryToUpdate =
                 await _context.RevenuesCategories.FirstOrDefaultAsync(rc => rc.Id == revenueCategoryId);

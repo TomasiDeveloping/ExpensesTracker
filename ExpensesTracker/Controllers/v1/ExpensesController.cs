@@ -33,7 +33,7 @@ public class ExpensesController : ControllerBase
         [FromQuery] int? month = null)
     {
         _ = new List<ExpenseDto>();
-        List<ExpenseDto>? userExpenses;
+        List<ExpenseDto> userExpenses;
         if (year != null && month != null)
             userExpenses = await _service.GetUserExpensesByParamsAsync(userId, year.Value, month.Value);
         else
@@ -114,7 +114,7 @@ public class ExpensesController : ControllerBase
         {
             var checkDelete = await _service.DeleteExpenseByIdAsync(expenseId);
             if (!checkDelete) return BadRequest($"Expense with id: {expenseId} could not be deleted!");
-            return Ok(checkDelete);
+            return Ok(true);
         }
         catch (Exception e)
         {
