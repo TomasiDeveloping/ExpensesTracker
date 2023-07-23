@@ -1,0 +1,9 @@
+<div class="expenses-container">
+  <div id="text">{{categoryName}}: </div>
+  <div id="progress">
+    <div class="progress" style="height: 20px;">
+      <div class="progress-bar bg-info" role="progressbar" [ngStyle]="{'width': consumptionPercent + '%'}" [attr.aria-valuenow]="consumptionPercent" aria-valuemin="0" aria-valuemax="100">{{consumptionPercent}}%</div>
+    </div>
+  </div>
+  <div class="expense">{{categoryAmount | currency: 'CHF '}}</div>
+</div>

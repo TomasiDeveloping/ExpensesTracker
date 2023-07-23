@@ -1,6 +1,6 @@
-﻿using Core.DTOs;
+﻿using Api.Controllers.v1;
+using Core.DTOs;
 using Core.Interfaces;
-using ExpensesTracker.Controllers.v1;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
