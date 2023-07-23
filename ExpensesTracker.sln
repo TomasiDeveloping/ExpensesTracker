@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Pr
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{CFD6BF8B-7633-4F9C-8E37-F7EC121A34A4}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "UI", "UI\UI.esproj", "{556E30A8-B243-4D1C-98BB-E1D00822B5DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +42,16 @@ Global
 		{15AB891A-8A46-4FEA-8A9B-063A134C8D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15AB891A-8A46-4FEA-8A9B-063A134C8D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15AB891A-8A46-4FEA-8A9B-063A134C8D0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFD6BF8B-7633-4F9C-8E37-F7EC121A34A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD6BF8B-7633-4F9C-8E37-F7EC121A34A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD6BF8B-7633-4F9C-8E37-F7EC121A34A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD6BF8B-7633-4F9C-8E37-F7EC121A34A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{556E30A8-B243-4D1C-98BB-E1D00822B5DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{556E30A8-B243-4D1C-98BB-E1D00822B5DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{556E30A8-B243-4D1C-98BB-E1D00822B5DC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{556E30A8-B243-4D1C-98BB-E1D00822B5DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{556E30A8-B243-4D1C-98BB-E1D00822B5DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{556E30A8-B243-4D1C-98BB-E1D00822B5DC}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
