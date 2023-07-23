@@ -1,11 +1,11 @@
 ﻿using Core.DTOs;
 using Core.Helper.Classes;
 using Core.Interfaces;
-using ExpensesTracker.Controllers.v1;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
+using Api.Controllers.v1;
 using Xunit;
 
 namespace ExpensesTrackerTests.UnitTests.Controllers

@@ -1,0 +1,29 @@
+h2 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.material-icons {
+  cursor: pointer;
+}
+
+.add-button {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.add-button button {
+
+}
+
+.edit:hover {
+  color: blue;
+}
+
+.delete:hover {
+  color: red;
+}
+.revenue {
+  margin-bottom: 5rem;
+}

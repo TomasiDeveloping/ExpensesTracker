@@ -13,7 +13,7 @@ namespace DataBase.Migrations
 {
     [DbContext(typeof(ExpensesTrackerContext))]
     [Migration("20211212104923_user")]
-    partial class user
+    partial class User
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

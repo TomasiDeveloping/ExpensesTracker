@@ -4,7 +4,7 @@
 
 namespace DataBase.Migrations
 {
-    public partial class user : Migration
+    public partial class User : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

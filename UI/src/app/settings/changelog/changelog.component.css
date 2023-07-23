@@ -1,0 +1,12 @@
+mat-dialog-actions {
+  justify-content: flex-end;
+}
+
+.version {
+  font-weight: bold;
+}
+
+.version-date {
+  font-weight: normal;
+  font-size: small;
+}

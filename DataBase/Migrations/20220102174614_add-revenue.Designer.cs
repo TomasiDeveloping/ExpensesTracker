@@ -13,7 +13,7 @@ namespace DataBase.Migrations
 {
     [DbContext(typeof(ExpensesTrackerContext))]
     [Migration("20220102174614_add-revenue")]
-    partial class addrevenue
+    partial class Addrevenue
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

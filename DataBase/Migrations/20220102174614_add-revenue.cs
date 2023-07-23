@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataBase.Migrations
 {
-    public partial class addrevenue : Migration
+    public partial class Addrevenue : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

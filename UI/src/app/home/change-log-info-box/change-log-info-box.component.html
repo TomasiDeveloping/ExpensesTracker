@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Neue Version!</h1>
+<div mat-dialog-content>
+  <div class="container">
+    <h4 class="mb-3">Was ist neu in Version {{version}} ?</h4>
+    <p>Es können neu für Einnahmen und Ausgaben Daueraufträge erfasst werden.</p>
+    <p>Beim Erfassen einer neuen Einnahme oder Ausgabe kann nun die Einnahme oder Ausgabe als Dauerauftrag erfasst
+      werden.</p>
+    <p>Aktuell können folgende Intervalle gewählt werden:</p>
+    <ul>
+      <li>Monatlich -> Jeden Monat</li>
+      <li>Vierteljährlich -> Alle 3 Monate</li>
+      <li>Halbjährlich -> Alle 6 Monate</li>
+      <li>Jährlich -> Alle 12 Monate</li>
+    </ul>
+    <p>Die Daueraufträge können in der neuen Rubrik «Daueraufträge» verwaltet werden.</p>
+    <p>Das System erstellt die Daueraufträge automatisch mit den Hinterlegten Daten, sofern der Auftrag Aktiv ist. Ein
+      Dauerauftrag ist automatisch beim Erstellen aktiv.</p>
+    <p style="color: red">ACHTUNG:</p>
+    <p style="color: red">Kategorien für Daueraufträge müssen in der Rubrik Daueraufträge geändert werden. Der
+      Dauerauftrag erfasst eine neue Ausgabe oder Einnahme mit der Kategorie, Betrag und Beschreibung, welche unter dem
+      Dauerauftrag erfasst sind.
+      Wird eine Kategorie gelöscht wird automatisch der Dauerauftrag mitgelöscht sollte sich dieser in dieser Kategorie
+      befinden!
+    </p>
+  </div>
+</div>
+<div class="button-container" mat-dialog-actions>
+  <button (click)="onOk()" class="btn btn-success" type="button">Ok</button>
+</div>
