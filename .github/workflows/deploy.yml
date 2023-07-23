@@ -11,7 +11,7 @@ jobs:
   runs-on: windows-latest
   defaults:
    run:
-    working-directory: ./ExpensesTracker
+    working-directory: ./Api
     
   steps:
    - name: Checkout .NET
@@ -40,7 +40,7 @@ jobs:
   runs-on: ubuntu-latest
   defaults:
    run:
-    working-directory: ./ExpensesTracker/ClientApp
+    working-directory: ./UI
     
   steps:
    - name: Ceckout Angular
@@ -51,7 +51,7 @@ jobs:
      with:
       node-version: '18.x'
       cache: 'npm'
-      cache-dependency-path: './ExpensesTracker/ClientApp/package-lock.json'
+      cache-dependency-path: './UI/package-lock.json'
       
    - name: Install dependencies
      run: npm ci
@@ -63,7 +63,7 @@ jobs:
      uses: actions/upload-artifact@v3
      with:
       name: Angular-UI
-      path: ./ExpensesTracker/ClientApp/dist
+      path: ./UI/dist/ui
 
  deploy-backend:
   runs-on: windows-latest
