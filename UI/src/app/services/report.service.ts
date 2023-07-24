@@ -9,8 +9,8 @@ import {map, Observable} from "rxjs";
 })
 export class ReportService {
 
-  private readonly _serviceUrl = environment.apiUrl + 'reports/';
-  private readonly _httpClient = inject(HttpClient);
+  private readonly _serviceUrl: string = environment.apiUrl + 'reports/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
 
   createYearlyExcelReport(report: ReportModel): Observable<any> {
     return this._httpClient.post(this._serviceUrl + 'CreateYearlyExcelReport', report, {

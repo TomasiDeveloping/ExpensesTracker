@@ -23,27 +23,27 @@ export class HomeComponent implements OnInit {
 
   public userExpenses: ExpenseModel[] = [];
   public userRevenues: RevenueModel[] = [];
-  public totalAmount = 0;
-  public totalRevenueAmount = 0;
-  public monthlyConsumptionPercent = 0;
-  public userBudget = 0;
-  public currentMonth = {value: 0, name: '', year: 0};
+  public totalAmount: number = 0;
+  public totalRevenueAmount: number = 0;
+  public monthlyConsumptionPercent: number = 0;
+  public userBudget: number = 0;
+  public currentMonth: { value: number, name: string, year: number } = {value: 0, name: '', year: 0};
   public categoryGroups: { category: number, name: string, amount: number } [] = [];
   public isUserWithRevenue: boolean = false;
 
   private currentUserId: number = 0;
   private currentUser!: UserModel;
-  private currentDate = new Date();
-  private showChangeLogBox = environment.showVersionInfo;
-  private version = environment.versionToCheck;
+  private currentDate: Date = new Date();
+  private showChangeLogBox: boolean = environment.showVersionInfo;
+  private version: string = environment.versionToCheck;
 
-  private readonly _expenseService = inject(ExpensesService);
-  private readonly _userService = inject(UsersService);
-  private readonly _monthPipe = inject(MonthNamePipe);
-  private readonly _authService = inject(AuthService);
-  private readonly _revenueService = inject(RevenueService);
-  private readonly _applicationVersionConfirmationService = inject(ApplicationVersionConfirmationService);
-  private readonly _dialog = inject(MatDialog);
+  private readonly _expenseService: ExpensesService = inject(ExpensesService);
+  private readonly _userService: UsersService = inject(UsersService);
+  private readonly _monthPipe: MonthNamePipe = inject(MonthNamePipe);
+  private readonly _authService: AuthService = inject(AuthService);
+  private readonly _revenueService: RevenueService = inject(RevenueService);
+  private readonly _applicationVersionConfirmationService: ApplicationVersionConfirmationService = inject(ApplicationVersionConfirmationService);
+  private readonly _dialog: MatDialog = inject(MatDialog);
 
 
   ngOnInit(): void {
@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit {
     this.getCurrentUser();
   }
 
-  getCurrentUser() {
+  getCurrentUser(): void {
     this.totalAmount = 0;
     this.totalRevenueAmount = 0;
     this.userExpenses = [];
@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  getUserExpenses() {
+  getUserExpenses(): void {
     this._expenseService.getUserExpensesByQueryParams(this.currentUserId, this.currentDate.getFullYear(),
       this.currentDate.getMonth() + 1)
       .subscribe({
@@ -103,7 +103,7 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  getUserRevenues() {
+  getUserRevenues(): void {
     this._revenueService.getUserRevenuesByQueryParams(this.currentUserId, this.currentDate.getFullYear(),
       this.currentDate.getMonth() + 1).subscribe({
       next: ((response) => {
@@ -117,7 +117,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onAddExpense() {
+  onAddExpense(): void {
     const expense: ExpenseModel = new class implements ExpenseModel {
       amount = 0;
       categoryId = 0;
@@ -140,7 +140,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onAddRevenue() {
+  onAddRevenue(): void {
     const revenue: RevenueModel = new class implements RevenueModel {
       amount = 0;
       categoryName = '';
@@ -163,7 +163,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  checkChangeLogBox() {
+  checkChangeLogBox(): void {
     if (this.showChangeLogBox) {
       if (this.currentUserId <= 0) return;
       this._applicationVersionConfirmationService.checkUserHasConfirmed(this.currentUserId, this.version).subscribe({
@@ -181,14 +181,14 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private CalculateExpensesInPercent(totalAmount: number) {
+  private CalculateExpensesInPercent(totalAmount: number): void {
     if (this.userBudget > 0) {
       this.monthlyConsumptionPercent = (100 / this.userBudget) * totalAmount;
       this.monthlyConsumptionPercent = Math.round(this.monthlyConsumptionPercent * 100) / 100;
     }
   }
 
-  private getCurrentMonth() {
+  private getCurrentMonth(): void {
     const currentMonth = new Date().getMonth() + 1;
     this.currentMonth.year = new Date().getFullYear();
     this.currentMonth.value = currentMonth;

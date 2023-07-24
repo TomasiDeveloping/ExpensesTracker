@@ -18,24 +18,24 @@ import {MatDialog} from "@angular/material/dialog";
 export class SettingsComponent implements OnInit {
 
   public currentUser!: UserModel;
-  public userBudget = 0;
+  public userBudget: number = 0;
   public userForm!: FormGroup;
-  public passwordForm = new FormGroup({
+  public passwordForm: FormGroup = new FormGroup({
     password: new FormControl<string>('', [Validators.required]),
     confirmPassword: new FormControl<string>('', [Validators.required, this.matchValues('password')])
   });
-  public passwordFieldTextType = false;
-  public confirmFieldTextType = false;
-  public isUserUpdate = false;
-  public appVersion = environment.appVersion;
+  public passwordFieldTextType: boolean = false;
+  public confirmFieldTextType: boolean = false;
+  public isUserUpdate: boolean = false;
+  public appVersion: string = environment.appVersion;
 
-  private currentUserId = 0;
-  private reload = false;
+  private currentUserId: number = 0;
+  private reload: boolean = false;
 
-  private readonly _userService = inject(UsersService);
-  private readonly _toastr = inject(ToastrService);
-  private readonly _dialog = inject(MatDialog);
-  private readonly _authService = inject(AuthService);
+  private readonly _userService: UsersService = inject(UsersService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
+  private readonly _dialog: MatDialog = inject(MatDialog);
+  private readonly _authService: AuthService = inject(AuthService);
 
 
   get password() {
@@ -74,7 +74,7 @@ export class SettingsComponent implements OnInit {
     };
   }
 
-  createUserForm() {
+  createUserForm(): void {
     this.userForm = new FormGroup({
       id: new FormControl<number>(this.currentUser.id),
       firstName: new FormControl<string>(this.currentUser.firstName, [Validators.required]),
@@ -85,7 +85,7 @@ export class SettingsComponent implements OnInit {
     this.userForm.disable();
   }
 
-  getCurrentUser() {
+  getCurrentUser(): void {
     this._userService.getUserById(this.currentUserId).subscribe((response) => {
       this.currentUser = response;
       this.userBudget = response.monthlyBudget;
@@ -93,7 +93,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  onBudgetChange() {
+  onBudgetChange(): void {
     if (this.userBudget < 0) {
       return;
     }
@@ -101,20 +101,20 @@ export class SettingsComponent implements OnInit {
     this.updateUser(this.currentUser);
   }
 
-  toggleConfirmFieldTextType() {
+  toggleConfirmFieldTextType(): void {
     this.confirmFieldTextType = !this.confirmFieldTextType;
   }
 
-  togglePasswordFieldTextType() {
+  togglePasswordFieldTextType(): void {
     this.passwordFieldTextType = !this.passwordFieldTextType;
   }
 
-  onEditUser() {
+  onEditUser(): void {
     this.isUserUpdate = true;
     this.userForm.enable();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.userForm.invalid) {
       return;
     }
@@ -128,7 +128,7 @@ export class SettingsComponent implements OnInit {
     this.updateUser(this.currentUser);
   }
 
-  updateUser(user: UserModel) {
+  updateUser(user: UserModel): void {
     this.currentUser.password = '';
     this._userService.updateUser(user.id, user).subscribe({
       next: ((response) => {
@@ -149,7 +149,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  showReloadMessage() {
+  showReloadMessage(): void {
     let message: string;
     if (this.currentUser.withRevenue) {
       message = 'Um das Programm mit Einnahmen zu verwenden musst Du Dich neu einloggen, Du wirst automatisch ausgeloggt';
@@ -159,7 +159,7 @@ export class SettingsComponent implements OnInit {
     Swal.fire('Logout', message, 'info').then(() => this._authService.logout());
   }
 
-  onDeleteAccount() {
+  onDeleteAccount(): void {
     Swal.fire({
       title: 'Bist Du sicher ?',
       html: '<p>Möchtest Du dein Account wirklich löschen ?</p>',
@@ -189,7 +189,7 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  deleteUserAccount() {
+  deleteUserAccount(): void {
     this._userService.deleteUser(this.currentUser.id).subscribe({
       next: ((response) => {
         if (response) {
@@ -204,12 +204,12 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  onCancelEditUser() {
+  onCancelEditUser(): void {
     this.isUserUpdate = false;
     this.userForm.disable();
   }
 
-  onPasswordChange() {
+  onPasswordChange(): void {
     if (this.passwordForm.invalid) {
       return;
     }
@@ -236,7 +236,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  onChangeLog() {
+  onChangeLog(): void {
     this._dialog.open(ChangelogComponent, {
       width: '80%',
       height: 'auto',
@@ -244,7 +244,7 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  onContactSupport() {
+  onContactSupport(): void {
     this._dialog.open(ContactSupportComponent, {
       width: '80%',
       height: 'auto',

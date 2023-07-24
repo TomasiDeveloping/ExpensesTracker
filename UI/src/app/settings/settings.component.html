@@ -47,7 +47,9 @@
       <button (click)="onCancelEditUser()" *ngIf="isUserUpdate" class="btn btn-danger" id="cancel-user-change">
         Abbrechen
       </button>
-      <button [disabled]="userForm.invalid" (click)="onSubmit()" *ngIf="isUserUpdate" class="btn btn-success">Speichern</button>
+      <button (click)="onSubmit()" *ngIf="isUserUpdate" [disabled]="userForm.invalid" class="btn btn-success">
+        Speichern
+      </button>
     </div>
   </form>
   <hr>

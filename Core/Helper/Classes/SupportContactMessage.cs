@@ -1,9 +1,8 @@
-﻿namespace Core.Helper.Classes
+﻿namespace Core.Helper.Classes;
+
+public class SupportContactMessage
 {
-    public class SupportContactMessage
-    {
-        public string Email { get; set; }
-        public string Subject { get; set; }
-        public string Message { get; set; }
-    }
+    public string Email { get; set; }
+    public string Subject { get; set; }
+    public string Message { get; set; }
 }

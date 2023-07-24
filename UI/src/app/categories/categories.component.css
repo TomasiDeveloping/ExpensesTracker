@@ -13,10 +13,6 @@ h2 {
   margin: 20px 0;
 }
 
-.add-button button {
-
-}
-
 .edit:hover {
   color: blue;
 }
@@ -24,6 +20,7 @@ h2 {
 .delete:hover {
   color: red;
 }
+
 .revenue {
   margin-bottom: 5rem;
 }

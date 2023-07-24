@@ -17,29 +17,29 @@ export class ReportsComponent implements OnInit {
 
   public view: any = [innerWidth / 1.1, 300];
   public animations: boolean = false;
-  public currentYear = new Date().getFullYear();
-  public currentMonth = new Date().getMonth() + 1;
+  public currentYear: number = new Date().getFullYear();
+  public currentMonth: number = new Date().getMonth() + 1;
   public yearlyExpenses: { name: string, value: number }[] = [];
   public months: { name: string; value: number }[] = [];
   public years: number[] = [];
   public yearlyRevenues: { name: string, value: number }[] = [];
   public isWithRevenue: boolean = false;
-  public yearlyExpensesAmount = 0;
-  public yearlyRevenuesAmount = 0;
+  public yearlyExpensesAmount: number = 0;
+  public yearlyRevenuesAmount: number = 0;
 
   private report: ReportModel = new class implements ReportModel {
     month = 0;
     userId = 0;
     year = 0;
   };
-  private currentUserId = 0;
+  private currentUserId: number = 0;
 
-  private readonly _expenseService = inject(ExpensesService);
-  private readonly _authService = inject(AuthService);
-  private readonly _userService = inject(UsersService);
-  private readonly _revenueService = inject(RevenueService);
-  private readonly _reportService = inject(ReportService);
-  private readonly _monthPipe = inject(MonthNamePipe);
+  private readonly _expenseService: ExpensesService = inject(ExpensesService);
+  private readonly _authService: AuthService = inject(AuthService);
+  private readonly _userService: UsersService = inject(UsersService);
+  private readonly _revenueService: RevenueService = inject(RevenueService);
+  private readonly _reportService: ReportService = inject(ReportService);
+  private readonly _monthPipe: MonthNamePipe = inject(MonthNamePipe);
 
 
   ngOnInit(): void {
@@ -56,7 +56,7 @@ export class ReportsComponent implements OnInit {
     }
   }
 
-  getUserYearExpenses() {
+  getUserYearExpenses(): void {
     this.disableAnimations(); //Workaround for ngx charts when animation is set to true the values can not be adjusted with custom methods
     this.yearlyExpenses = [];
     this.yearlyExpensesAmount = 0;
@@ -79,7 +79,7 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  getUserYearRevenues() {
+  getUserYearRevenues(): void {
     this.yearlyRevenues = [];
     this.yearlyRevenuesAmount = 0;
     this._revenueService.getUserYearlyExpenses(this.currentUserId, this.currentYear).subscribe({
@@ -101,19 +101,19 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  createYears() {
+  createYears(): void {
     for (let i = 0; i < 5; i++) {
       this.years.push(this.currentYear - i);
     }
   }
 
-  createMonths() {
+  createMonths(): void {
     for (let i = 1; i <= 12; i++) {
       this.months.push({name: this._monthPipe.transform(i), value: i});
     }
   }
 
-  onCreateYearlyExcelReport() {
+  onCreateYearlyExcelReport(): void {
     this.report.year = this.currentYear;
     this.report.month = this.currentMonth;
     this.report.userId = this.currentUserId;
@@ -127,7 +127,7 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  onCreateMonthlyExcelReport() {
+  onCreateMonthlyExcelReport(): void {
     this.report.year = this.currentYear;
     this.report.month = this.currentMonth;
     this.report.userId = this.currentUserId;
@@ -166,14 +166,14 @@ export class ReportsComponent implements OnInit {
   }
 
   //Workaround for ngx charts when animation is set to true the values can not be adjusted with custom methods
-  disableAnimations() {
+  disableAnimations(): void {
     this.animations = true;
     setTimeout(() => {
       this.animations = false;
     }, 1000);
   }
 
-  onResize(event: any) {
+  onResize(event: any): void {
     this.view = [event.target.innerWidth / 1.1, 300];
   }
 }

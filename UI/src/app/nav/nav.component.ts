@@ -10,13 +10,13 @@ import {UserModel} from "../models/user.model";
 })
 export class NavComponent implements OnInit {
 
-  public isShown = false;
+  public isShown: boolean = false;
   public currentUser: UserModel | undefined;
 
-  private currentUserId = 0;
+  private currentUserId: number = 0;
 
-  private readonly _authService = inject(AuthService);
-  private readonly _userService = inject(UsersService);
+  private readonly _authService: AuthService = inject(AuthService);
+  private readonly _userService: UsersService = inject(UsersService);
 
   ngOnInit(): void {
     this.currentUserId = this._authService.getUserIdFromToken();
@@ -26,11 +26,11 @@ export class NavComponent implements OnInit {
     this.getCurrentUser();
   }
 
-  onLogout() {
+  onLogout(): void {
     this._authService.logout();
   }
 
-  private getCurrentUser() {
+  private getCurrentUser(): void {
     this._userService.getUserById(this.currentUserId).subscribe({
       next: ((response) => {
         this.currentUser = response;

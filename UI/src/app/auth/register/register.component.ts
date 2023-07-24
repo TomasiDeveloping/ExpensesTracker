@@ -13,8 +13,8 @@ export class RegisterComponent implements OnInit {
 
   public registerForm!: FormGroup;
 
-  private _dialogRef = inject(MatDialogRef<RegisterComponent>);
-  private readonly _authService = inject(AuthService);
+  private _dialogRef: MatDialogRef<RegisterComponent> = inject(MatDialogRef<RegisterComponent>);
+  private readonly _authService: AuthService = inject(AuthService);
 
 
   get email() {
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
     this.createRegisterForm();
   }
 
-  createRegisterForm() {
+  createRegisterForm(): void {
     this.registerForm = new FormGroup({
       email: new FormControl<string>('', [Validators.required, Validators.email, Validators.maxLength(100)]),
       password: new FormControl<string>('', [Validators.required]),
@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onRegister() {
+  onRegister(): void {
     if (this.registerForm.invalid) {
       return;
     }
@@ -69,7 +69,7 @@ export class RegisterComponent implements OnInit {
   }
 
 
-  onClose() {
+  onClose(): void {
     this._dialogRef.close();
   }
 }

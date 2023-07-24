@@ -23,13 +23,15 @@ export class CategoriesComponent implements OnInit {
   public userCategories: CategoryModel[] = [];
   public userRevenueCategories: RevenueCategoryModel[] = [];
   public isUserWithRevenue: boolean = false;
-  private currentUserId = 0;
-  private readonly _categoryService = inject(CategoriesService);
-  private readonly _revenueCategoryService = inject(RevenueCategoryService);
-  private readonly _authService = inject(AuthService);
-  private readonly _userService = inject(UsersService);
-  private readonly _toastr = inject(ToastrService);
-  private readonly _dialog = inject(MatDialog);
+
+  private currentUserId: number = 0;
+
+  private readonly _categoryService: CategoriesService = inject(CategoriesService);
+  private readonly _revenueCategoryService: RevenueCategoryService = inject(RevenueCategoryService);
+  private readonly _authService: AuthService = inject(AuthService);
+  private readonly _userService: UsersService = inject(UsersService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
+  private readonly _dialog: MatDialog = inject(MatDialog);
 
 
   ngOnInit(): void {
@@ -44,13 +46,13 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  getUserCategories() {
+  getUserCategories(): void {
     this._categoryService.getUserCategories(this.currentUserId).subscribe((response) => {
       this.userCategories = response;
     });
   }
 
-  getUserRevenueCategories() {
+  getUserRevenueCategories(): void {
     this._revenueCategoryService.getUserRevenueCategories(this.currentUserId).subscribe({
       next: ((response) => {
         this.userRevenueCategories = response;
@@ -58,7 +60,7 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  onAddCategory() {
+  onAddCategory(): void {
     const category: CategoryModel = new class implements CategoryModel {
       id = 0;
       name = '';
@@ -68,11 +70,11 @@ export class CategoriesComponent implements OnInit {
     this.openDialog(category, false);
   }
 
-  onEdit(category: CategoryModel) {
+  onEdit(category: CategoryModel): void {
     this.openDialog(category, true);
   }
 
-  openDialog(category: CategoryModel, isUpdate: boolean) {
+  openDialog(category: CategoryModel, isUpdate: boolean): void {
     const dialogRef = this._dialog.open(CategoryEditDialogComponent, {
       width: '80%',
       height: 'auto',
@@ -85,7 +87,7 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  openRevenueDialog(revenueCategory: RevenueCategoryModel, isUpdate: boolean) {
+  openRevenueDialog(revenueCategory: RevenueCategoryModel, isUpdate: boolean): void {
     const dialogRef = this._dialog.open(RevenueCategoryEditDialogComponent, {
       width: '80%',
       height: 'auto',
@@ -98,7 +100,7 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  onDelete(category: CategoryModel) {
+  onDelete(category: CategoryModel): void {
     Swal.fire({
       title: 'Bist Du sicher ?',
       html: '<p>Kategorie <b>' + category.name + '</b> wirklich löschen ?</p><p>Alle Ausgaben und Daueraufträge für die Kategorie werden ebenfalls gelöscht!</p>',
@@ -115,11 +117,11 @@ export class CategoriesComponent implements OnInit {
     })
   }
 
-  onEditRevenue(category: RevenueCategoryModel) {
+  onEditRevenue(category: RevenueCategoryModel): void {
     this.openRevenueDialog(category, true);
   }
 
-  onDeleteDeleteRevenue(category: RevenueCategoryModel) {
+  onDeleteDeleteRevenue(category: RevenueCategoryModel): void {
     Swal.fire({
       title: 'Bist Du sicher ?',
       html: '<p>Kategorie <b>' + category.name + '</b> wirklich löschen ?</p><p>Alle Einnahmen und Daueraufträge für die Kategorie werden ebenfalls gelöscht!</p>',
@@ -136,7 +138,7 @@ export class CategoriesComponent implements OnInit {
     })
   }
 
-  onAddRevenueCategory() {
+  onAddRevenueCategory(): void {
     const revenueCategory: RevenueCategoryModel = new class implements RevenueCategoryModel {
       id = 0;
       name = '';
@@ -146,13 +148,12 @@ export class CategoriesComponent implements OnInit {
     this.openRevenueDialog(revenueCategory, false);
   }
 
-  private deleteCategory(category: CategoryModel) {
+  private deleteCategory(category: CategoryModel): void {
     this._categoryService.deleteCategory(category.id).subscribe({
       next: ((response) => {
         if (response) {
           this.getUserCategories();
           this._toastr.success(category.name + ' gelöscht', 'Löschen');
-        } else {
         }
       }),
       error: (error) => {
@@ -161,7 +162,7 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  private deleteRevenueCategory(category: RevenueCategoryModel) {
+  private deleteRevenueCategory(category: RevenueCategoryModel): void {
     this._revenueCategoryService.deleteRevenueCategory(category.id).subscribe({
       next: ((response) => {
         if (response) {

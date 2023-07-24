@@ -25,15 +25,15 @@ import {ChangelogComponent} from './settings/changelog/changelog.component';
 import {ReportsComponent} from './reports/reports.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {MonthNamePipe} from './util/month-name.pipe';
-import { RevenuesComponent } from './revenues/revenues.component';
-import { EditRevenueComponent } from './revenues/edit-revenue/edit-revenue.component';
+import {RevenuesComponent} from './revenues/revenues.component';
+import {EditRevenueComponent} from './revenues/edit-revenue/edit-revenue.component';
 import {
   RevenueCategoryEditDialogComponent
 } from "./categories/revenue-category-edit-dialog/revenue-category-edit-dialog.component";
-import { ContactSupportComponent } from './settings/contact-support/contact-support.component';
-import { ChangeLogInfoBoxComponent } from './home/change-log-info-box/change-log-info-box.component';
-import { RecurringTaskComponent } from './recurring-task/recurring-task.component';
-import { EditRecurringTaskComponent } from './recurring-task/edit-recurring-task/edit-recurring-task.component';
+import {ContactSupportComponent} from './settings/contact-support/contact-support.component';
+import {ChangeLogInfoBoxComponent} from './home/change-log-info-box/change-log-info-box.component';
+import {RecurringTaskComponent} from './recurring-task/recurring-task.component';
+import {EditRecurringTaskComponent} from './recurring-task/edit-recurring-task/edit-recurring-task.component';
 import {MatDialogModule} from "@angular/material/dialog";
 
 

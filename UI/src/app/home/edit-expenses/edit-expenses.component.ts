@@ -17,12 +17,12 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./edit-expenses.component.css']
 })
 export class EditExpensesComponent implements OnInit {
-  public isUpdate: Boolean;
+  public isUpdate: boolean;
   public currentExpense: ExpenseModel;
   public expenseForm!: FormGroup;
   public categories: CategoryModel[] = [];
-  public isNewCategory = false;
-  public isRecurringTask = false;
+  public isNewCategory: boolean = false;
+  public isRecurringTask: boolean = false;
   public recurringIntervals: { value: number, description: string }[] = [
     {value: 1, description: 'Monatlich'},
     {value: 3, description: 'Vierteljährlich'},
@@ -30,11 +30,11 @@ export class EditExpensesComponent implements OnInit {
     {value: 12, description: 'Jährlich'}
   ];
 
-  private readonly _dialogRef = inject(MatDialogRef<EditExpensesComponent>);
-  private readonly _categoryService = inject(CategoriesService);
-  private readonly _expenseService = inject(ExpensesService);
-  private readonly _recurringTaskService = inject(RecurringTaskService);
-  private readonly _toastr = inject(ToastrService);
+  private readonly _dialogRef: MatDialogRef<EditExpensesComponent> = inject(MatDialogRef<EditExpensesComponent>);
+  private readonly _categoryService: CategoriesService = inject(CategoriesService);
+  private readonly _expenseService: ExpensesService = inject(ExpensesService);
+  private readonly _recurringTaskService: RecurringTaskService = inject(RecurringTaskService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.isUpdate = data.isUpdate;
@@ -66,7 +66,7 @@ export class EditExpensesComponent implements OnInit {
     this.getUserCategories()
   }
 
-  createExpenseForm() {
+  createExpenseForm(): void {
     const date = new Date(this.currentExpense.createDate);
     this.expenseForm = new FormGroup({
       id: new FormControl<number>(this.currentExpense.id),
@@ -85,17 +85,17 @@ export class EditExpensesComponent implements OnInit {
     });
   }
 
-  getUserCategories() {
+  getUserCategories(): void {
     this._categoryService.getUserCategories(this.currentExpense.userId).subscribe((response) => {
       this.categories = response;
     });
   }
 
-  onClose() {
+  onClose(): void {
     this._dialogRef.close();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.expenseForm.invalid) {
       return;
     }
@@ -107,7 +107,7 @@ export class EditExpensesComponent implements OnInit {
     }
   }
 
-  onCategoryChange(event: any) {
+  onCategoryChange(event: any): void {
     if (event.target.value === 'newCategory') {
       this.isNewCategory = true;
       this.expenseForm.controls.categoryName.setValidators([Validators.required]);
@@ -119,7 +119,7 @@ export class EditExpensesComponent implements OnInit {
     }
   }
 
-  insertRecurringTask(expense: ExpenseModel) {
+  insertRecurringTask(expense: ExpenseModel): void {
     const recurringTask: RecurringTask = {
       isRevenue: false,
       isExpense: true,
@@ -144,11 +144,11 @@ export class EditExpensesComponent implements OnInit {
     });
   }
 
-  onRecurringTaskChange() {
+  onRecurringTaskChange(): void {
     this.isRecurringTask = !this.isRecurringTask;
   }
 
-  private updateExpense(expense: ExpenseModel) {
+  private updateExpense(expense: ExpenseModel): void {
     if (this.isNewCategory) {
       const category: CategoryModel = new class implements CategoryModel {
         id = 0;
@@ -184,7 +184,7 @@ export class EditExpensesComponent implements OnInit {
     }
   }
 
-  private insertExpense(expense: ExpenseModel) {
+  private insertExpense(expense: ExpenseModel): void {
     if (this.isNewCategory) {
       const category: CategoryModel = new class implements CategoryModel {
         id = 0;

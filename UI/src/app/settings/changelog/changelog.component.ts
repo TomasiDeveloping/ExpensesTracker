@@ -1,16 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-changelog',
   templateUrl: './changelog.component.html',
   styleUrls: ['./changelog.component.css']
 })
-export class ChangelogComponent implements OnInit {
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
+export class ChangelogComponent {
 
 }
