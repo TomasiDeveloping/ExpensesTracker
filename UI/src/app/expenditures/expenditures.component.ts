@@ -15,21 +15,21 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class ExpendituresComponent implements OnInit {
 
-  public date = new Date();
+  public date: Date = new Date();
   public months: { name: string, value: number }[] = [];
   public years: number[] = [];
   public groupedExpenses: { categoryName: string, groupAmount: number, expense: ExpenseModel[] }[] = [];
   public expenses: ExpenseModel[] = [];
-  public currentYear = new Date().getFullYear();
-  public currentMonth = new Date().getMonth() + 1;
+  public currentYear: number = new Date().getFullYear();
+  public currentMonth: number = new Date().getMonth() + 1;
 
   private currentUserId: number = 0;
 
-  private readonly _expenseService = inject(ExpensesService);
-  private readonly _monthPipe = inject(MonthNamePipe);
-  private readonly _dialog = inject(MatDialog);
-  private readonly _toastr = inject(ToastrService);
-  private readonly _authService = inject(AuthService);
+  private readonly _expenseService: ExpensesService = inject(ExpensesService);
+  private readonly _monthPipe: MonthNamePipe = inject(MonthNamePipe);
+  private readonly _dialog: MatDialog = inject(MatDialog);
+  private readonly _toastr: ToastrService = inject(ToastrService);
+  private readonly _authService: AuthService = inject(AuthService);
 
 
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class ExpendituresComponent implements OnInit {
     this.createMonths();
   }
 
-  getUserExpenses(year: number, month: number) {
+  getUserExpenses(year: number, month: number): void {
     this.groupedExpenses = [];
     this._expenseService.getUserExpensesByQueryParams(this.currentUserId, year, month).subscribe((response) => {
       this.expenses = response;
@@ -69,30 +69,30 @@ export class ExpendituresComponent implements OnInit {
     });
   }
 
-  createYears() {
+  createYears(): void {
     let year = this.date.getFullYear() + 1;
     for (let i = 0; i < 6; i++) {
       this.years.push(year - i);
     }
   }
 
-  createMonths() {
+  createMonths(): void {
     for (let i = 1; i <= 12; i++) {
       this.months.push({name: this._monthPipe.transform(i), value: i});
     }
   }
 
-  onYearChange(event: any) {
+  onYearChange(event: any): void {
     this.currentYear = event.target.value;
     this.getUserExpenses(this.currentYear, this.currentMonth);
   }
 
-  onMonthChange(event: any) {
+  onMonthChange(event: any): void {
     this.currentMonth = +event.target.value;
     this.getUserExpenses(this.currentYear, this.currentMonth);
   }
 
-  onEditExpense(expense: ExpenseModel) {
+  onEditExpense(expense: ExpenseModel): void {
     const dialogRef = this._dialog.open(EditExpensesComponent, {
       width: '80%',
       height: 'auto',
@@ -106,7 +106,7 @@ export class ExpendituresComponent implements OnInit {
     });
   }
 
-  onDeleteExpense(expense: ExpenseModel) {
+  onDeleteExpense(expense: ExpenseModel): void {
     Swal.fire({
       title: 'Bist Du sicher ?',
       html: '<p>Ausgabe wirklich löschen ?</p>',
@@ -123,7 +123,7 @@ export class ExpendituresComponent implements OnInit {
     })
   }
 
-  private deleteExpense(expense: ExpenseModel) {
+  private deleteExpense(expense: ExpenseModel): void {
     this._expenseService.deleteExpense(expense.id).subscribe({
       next: ((response) => {
         if (response) {

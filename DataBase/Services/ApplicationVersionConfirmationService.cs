@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Core.DTOs;
-using Core.Helper.Classes;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +17,13 @@ public class ApplicationVersionConfirmationService : IApplicationVersionConfirma
         _mapper = mapper;
     }
 
-    public async Task<bool> CheckApplicationVersionConfirmedByUserIdAsync(ApplicationVersionConfirmationDto applicationVersionConfirmationDto)
+    public async Task<bool> CheckApplicationVersionConfirmedByUserIdAsync(
+        ApplicationVersionConfirmationDto applicationVersionConfirmationDto)
     {
         var userConfirmed =
-            await _context.ApplicationVersionConfirmations.FirstOrDefaultAsync(avc => avc.UserId.Equals(applicationVersionConfirmationDto.UserId) && avc.Version.Equals(applicationVersionConfirmationDto.Version));
+            await _context.ApplicationVersionConfirmations.FirstOrDefaultAsync(avc =>
+                avc.UserId.Equals(applicationVersionConfirmationDto.UserId) &&
+                avc.Version.Equals(applicationVersionConfirmationDto.Version));
         return userConfirmed != null;
     }
 

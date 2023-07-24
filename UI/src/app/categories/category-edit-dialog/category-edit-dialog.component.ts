@@ -17,9 +17,9 @@ export class CategoryEditDialogComponent implements OnInit {
   public isUpdate: boolean;
   public categoryForm!: FormGroup;
 
-  private readonly _categoryService = inject(CategoriesService);
-  private readonly _toastr = inject(ToastrService);
-  private readonly _dialogRef = inject(MatDialogRef<CategoryEditDialogComponent>);
+  private readonly _categoryService: CategoriesService = inject(CategoriesService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
+  private readonly _dialogRef: MatDialogRef<CategoryEditDialogComponent> = inject(MatDialogRef<CategoryEditDialogComponent>);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.currentCategory = data.category;
@@ -38,11 +38,11 @@ export class CategoryEditDialogComponent implements OnInit {
     });
   }
 
-  onClose() {
+  onClose(): void {
     this._dialogRef.close();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.categoryForm.invalid) {
       return;
     }
@@ -54,7 +54,7 @@ export class CategoryEditDialogComponent implements OnInit {
     }
   }
 
-  private updateCategory(category: CategoryModel) {
+  private updateCategory(category: CategoryModel): void {
     this._categoryService.updateCategory(category.id, category).subscribe({
       next: ((response) => {
         this._dialogRef.close('update');
@@ -66,7 +66,7 @@ export class CategoryEditDialogComponent implements OnInit {
     });
   }
 
-  private addCategory(category: CategoryModel) {
+  private addCategory(category: CategoryModel): void {
     this._categoryService.insertCategory(category).subscribe({
       next: ((response) => {
         this._dialogRef.close('update');

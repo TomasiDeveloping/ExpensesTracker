@@ -1,9 +1,8 @@
-﻿namespace Core.DTOs
+﻿namespace Core.DTOs;
+
+public class RevenueCategoryDto
 {
-    public class RevenueCategoryDto
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Name { get; set; }
-    }
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public string Name { get; set; }
 }

@@ -10,9 +10,9 @@ import {SupportContactModel} from "../models/supportContact.model";
 })
 export class UsersService {
 
-  private readonly _serviceUrl = environment.apiUrl + 'users/';
-  private readonly _httpClient = inject(HttpClient);
-  private userWithRevenue = false;
+  private readonly _serviceUrl: string = environment.apiUrl + 'users/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
+  private userWithRevenue: boolean = false;
 
   getWithRevenue(): boolean {
     return this.userWithRevenue;

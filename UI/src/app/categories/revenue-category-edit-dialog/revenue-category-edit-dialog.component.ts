@@ -17,9 +17,9 @@ export class RevenueCategoryEditDialogComponent implements OnInit {
   public currentRevenueCategory: RevenueCategoryModel;
   public revenueCategoryForm!: FormGroup;
 
-  private readonly _revenueCategoryService = inject(RevenueCategoryService);
-  private readonly _toastr = inject(ToastrService);
-  private readonly _dialogRef = inject(MatDialogRef<RevenueCategoryEditDialogComponent>)
+  private readonly _revenueCategoryService: RevenueCategoryService = inject(RevenueCategoryService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
+  private readonly _dialogRef: MatDialogRef<RevenueCategoryEditDialogComponent> = inject(MatDialogRef<RevenueCategoryEditDialogComponent>)
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.isUpdate = data.isUpdate;
@@ -38,11 +38,11 @@ export class RevenueCategoryEditDialogComponent implements OnInit {
     });
   }
 
-  onClose() {
+  onClose(): void {
     this._dialogRef.close();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.revenueCategoryForm.invalid) {
       return;
     }
@@ -54,7 +54,7 @@ export class RevenueCategoryEditDialogComponent implements OnInit {
     }
   }
 
-  private updateRevenueCategory(revenueCategory: RevenueCategoryModel) {
+  private updateRevenueCategory(revenueCategory: RevenueCategoryModel): void {
     this._revenueCategoryService.updateRevenueCategory(revenueCategory.id, revenueCategory).subscribe({
       next: ((response) => {
         this._dialogRef.close('update');
@@ -66,7 +66,7 @@ export class RevenueCategoryEditDialogComponent implements OnInit {
     });
   }
 
-  private addRevenueCategory(revenueCategory: RevenueCategoryModel) {
+  private addRevenueCategory(revenueCategory: RevenueCategoryModel): void {
     this._revenueCategoryService.insertRevenueCategory(revenueCategory).subscribe({
       next: ((response) => {
         this._dialogRef.close('update');

@@ -1,46 +1,45 @@
-﻿using Core.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Core.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Core.Helper.Services
+namespace Core.Helper.Services;
+
+public class TokenService : ITokenService
 {
-    public class TokenService : ITokenService
+    private readonly IConfiguration _config;
+    private readonly SymmetricSecurityKey _key;
+
+    public TokenService(IConfiguration config)
     {
-        private readonly IConfiguration _config;
-        private readonly SymmetricSecurityKey _key;
+        _config = config;
+        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]!));
+    }
 
-        public TokenService(IConfiguration config)
+    public string CreateToken(string userId, string userEmail)
+    {
+        var claims = new List<Claim>
         {
-            _config = config;
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
-        }
+            new(JwtRegisteredClaimNames.NameId, userId),
+            new(JwtRegisteredClaimNames.Email, userEmail)
+        };
 
-        public string CreateToken(string userId, string userEmail)
+        var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            var claims = new List<Claim>
-            {
-                new(JwtRegisteredClaimNames.NameId, userId),
-                new(JwtRegisteredClaimNames.Email, userEmail)
-            };
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddDays(1),
+            SigningCredentials = creds,
+            Issuer = _config["Token:Issuer"]
+        };
 
-            var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+        var tokenHandler = new JwtSecurityTokenHandler();
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds,
-                Issuer = _config["Token:Issuer"]
-            };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
+        return tokenHandler.WriteToken(token);
     }
 }

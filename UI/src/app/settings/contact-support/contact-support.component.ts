@@ -14,13 +14,13 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 export class ContactSupportComponent implements OnInit {
 
   public supportForm!: FormGroup;
-  public isError = false;
+  public isError: boolean = false;
   public subjects: string[] = ['Fehlermeldung', 'Wunsch', 'Allgemeine Anfrage'];
 
   private readonly _userEmail: string;
-  private readonly _userService = inject(UsersService);
-  private readonly _dialogRef = inject(MatDialogRef<ContactSupportComponent>);
-  private readonly _toastr = inject(ToastrService);
+  private readonly _userService: UsersService = inject(UsersService);
+  private readonly _dialogRef: MatDialogRef<ContactSupportComponent> = inject(MatDialogRef<ContactSupportComponent>);
+  private readonly _toastr: ToastrService = inject(ToastrService);
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
@@ -55,7 +55,7 @@ export class ContactSupportComponent implements OnInit {
     this.createForm();
   }
 
-  createForm() {
+  createForm(): void {
     this.supportForm = new FormGroup({
       email: new FormControl<string>(this._userEmail, [Validators.required, Validators.email]),
       subject: new FormControl<string>('', [Validators.required]),
@@ -66,7 +66,7 @@ export class ContactSupportComponent implements OnInit {
     });
   }
 
-  submit() {
+  submit(): void {
     let supportMessage: SupportContactModel = this.supportForm.value as SupportContactModel;
     if (this.isError) {
       let message = 'Fehlerbeschreibung:\n' + this.supportForm.controls.describeBug.value + '\n\n';
@@ -92,7 +92,7 @@ export class ContactSupportComponent implements OnInit {
     });
   }
 
-  onSelectChange(event: any) {
+  onSelectChange(event: any): void {
     if (event.target.value.includes('Fehlermeldung')) {
       this.isError = true;
       this.supportForm.controls.message.clearValidators();

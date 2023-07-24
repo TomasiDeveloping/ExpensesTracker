@@ -9,8 +9,8 @@ import {RevenueModel} from "../models/revenue.model";
 })
 export class RevenueService {
 
-  private readonly _serviceUrl = environment.apiUrl + 'revenue/';
-  private readonly _httpClient = inject(HttpClient);
+  private readonly _serviceUrl: string = environment.apiUrl + 'revenue/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
 
 
   getUserRevenuesByQueryParams(userId: number, year: number, month: number): Observable<RevenueModel[]> {

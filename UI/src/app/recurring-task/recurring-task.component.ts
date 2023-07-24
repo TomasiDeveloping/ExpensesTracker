@@ -21,11 +21,11 @@ export class RecurringTaskComponent implements OnInit {
 
   private currentUserId!: number;
 
-  private readonly _authService = inject(AuthService);
-  private readonly _userService = inject(UsersService);
-  private readonly _dialog = inject(MatDialog);
-  private readonly _recurringTaskService = inject(RecurringTaskService);
-  private readonly _toastr = inject(ToastrService);
+  private readonly _authService: AuthService = inject(AuthService);
+  private readonly _userService: UsersService = inject(UsersService);
+  private readonly _dialog: MatDialog = inject(MatDialog);
+  private readonly _recurringTaskService: RecurringTaskService = inject(RecurringTaskService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
 
   ngOnInit(): void {
     this.currentUserId = this._authService.getUserIdFromToken();
@@ -36,7 +36,7 @@ export class RecurringTaskComponent implements OnInit {
     this.getRecurringTasks();
   }
 
-  getRecurringTasks() {
+  getRecurringTasks(): void {
     if (this.currentUserId <= 0) return;
     this.revenueRecurringTasks = [];
     this.expenseRecurringTasks = [];
@@ -59,7 +59,7 @@ export class RecurringTaskComponent implements OnInit {
     });
   }
 
-  onEditTask(recurringTask: RecurringTask) {
+  onEditTask(recurringTask: RecurringTask): void {
     const dialogRef = this._dialog.open(EditRecurringTaskComponent, {
       width: '80%',
       height: 'auto',
@@ -72,7 +72,7 @@ export class RecurringTaskComponent implements OnInit {
     });
   }
 
-  onDeleteTask(recurringTask: RecurringTask) {
+  onDeleteTask(recurringTask: RecurringTask): void {
     Swal.fire({
       title: 'Bist Du sicher ?',
       html: '<p>Dauerauftrag wirklich löschen ?</p>',
@@ -104,7 +104,7 @@ export class RecurringTaskComponent implements OnInit {
     }
   }
 
-  private deleteRecurringTask(recurringTask: RecurringTask) {
+  private deleteRecurringTask(recurringTask: RecurringTask): void {
     this._recurringTaskService.deleteRecurringTask(recurringTask.id).subscribe({
       next: ((response) => {
         if (response) {

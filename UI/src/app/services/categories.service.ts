@@ -9,8 +9,8 @@ import {CategoryModel} from "../models/category.model";
 })
 export class CategoriesService {
 
-  private readonly _serviceUrl = environment.apiUrl + 'categories/';
-  private readonly _httpClient = inject(HttpClient);
+  private readonly _serviceUrl: string = environment.apiUrl + 'categories/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
 
 
   getUserCategories(userId: number): Observable<CategoryModel[]> {

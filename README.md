@@ -42,6 +42,9 @@ Angular 15 with .NET 7 Rest API
 <hr>
 
 ## Changelog
+### 3.1.6 (2023-07-24)
+- CleanUp
+- SonaCloud Report Fix
 ### 3.1.5 (2023-07-23)
 - Api outsourced
 - UI outsourced

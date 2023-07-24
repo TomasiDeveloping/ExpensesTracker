@@ -1,8 +1,9 @@
-.container h2{
+.container h2 {
   text-align: center;
   margin: 20px 0;
   text-transform: uppercase;
 }
+
 .beams {
   display: flex;
   align-items: center;
@@ -13,14 +14,17 @@
   border-radius: 6px;
   margin-bottom: 20px;
 }
+
 .beams span {
   font-weight: bold;
 }
+
 .month-budget {
   display: flex;
   justify-content: space-between;
   margin: 5px 0;
 }
+
 .expenses-content {
   background-color: rgb(255, 255, 255);
   box-shadow: 3px 3px 10px rgb(201, 200, 200);
@@ -30,6 +34,7 @@
   width: 60%;
   margin: 0 auto 20px auto;
 }
+
 .progress-bar {
   color: white;
 }
