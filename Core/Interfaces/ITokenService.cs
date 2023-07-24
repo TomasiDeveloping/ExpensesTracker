@@ -1,7 +1,6 @@
-﻿namespace Core.Interfaces
+﻿namespace Core.Interfaces;
+
+public interface ITokenService
 {
-    public interface ITokenService
-    {
-        string CreateToken(string userId, string userEmail);
-    }
+    string CreateToken(string userId, string userEmail);
 }

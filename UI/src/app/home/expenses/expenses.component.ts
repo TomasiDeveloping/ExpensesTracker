@@ -10,15 +10,13 @@ export class ExpensesComponent implements OnInit {
   @Input() categoryName!: string;
   @Input() totalAmount!: number;
   @Input() categoryAmount!: number;
-  public consumptionPercent = 0;
-
-  constructor() { }
+  public consumptionPercent: number = 0;
 
   ngOnInit(): void {
     this.calculateConsumption();
   }
 
-  private calculateConsumption() {
+  private calculateConsumption(): void {
     this.consumptionPercent = (100 / this.totalAmount) * this.categoryAmount;
     this.consumptionPercent = Math.round(this.consumptionPercent * 100) / 100;
   }

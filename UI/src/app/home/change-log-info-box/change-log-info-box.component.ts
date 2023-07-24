@@ -1,4 +1,4 @@
-import {Component, inject, Inject, OnInit} from '@angular/core';
+import {Component, inject, Inject} from '@angular/core';
 import {ApplicationVersionConfirmationService} from "../../services/application-version-confirmation.service";
 import {ApplicationVersionConfirmation} from "../../models/applicationVersionConfirmation.model";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -8,22 +8,20 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   templateUrl: './change-log-info-box.component.html',
   styleUrls: ['./change-log-info-box.component.css']
 })
-export class ChangeLogInfoBoxComponent implements OnInit {
+export class ChangeLogInfoBoxComponent {
 
   public version: string;
   private readonly _currentUserId: number;
-  private readonly _matDialogRef = inject(MatDialogRef<ChangeLogInfoBoxComponent>);
-  private readonly _applicationVersionConfirmationService = inject(ApplicationVersionConfirmationService);
+  private readonly _matDialogRef: MatDialogRef<HashChangeEvent> = inject(MatDialogRef<ChangeLogInfoBoxComponent>);
+  private readonly _applicationVersionConfirmationService: ApplicationVersionConfirmationService = inject(ApplicationVersionConfirmationService);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this._currentUserId = data.userId;
     this.version = data.version;
   }
 
-  ngOnInit(): void {
-  }
 
-  onOk() {
+  onOk(): void {
     const applicationVersionConfirmation: ApplicationVersionConfirmation = {
       userId: this._currentUserId,
       version: this.version

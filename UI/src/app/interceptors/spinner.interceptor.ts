@@ -6,7 +6,7 @@ import {SpinnerService} from "../services/spinner.service";
 @Injectable()
 export class SpinnerInterceptor implements HttpInterceptor {
 
-  private readonly _spinnerService = inject(SpinnerService);
+  private readonly _spinnerService: SpinnerService = inject(SpinnerService);
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     this._spinnerService.busy();

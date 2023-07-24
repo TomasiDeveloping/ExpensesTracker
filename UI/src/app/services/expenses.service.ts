@@ -9,12 +9,12 @@ import {ExpenseModel} from "../models/expense.model";
 })
 export class ExpensesService {
 
-  private readonly _serviceUrl = environment.apiUrl + 'expenses/';
-  private readonly _httpClient = inject(HttpClient);
+  private readonly _serviceUrl: string = environment.apiUrl + 'expenses/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
 
 
   getUserExpensesByQueryParams(userId: number, year: number, month: number): Observable<ExpenseModel[]> {
-    let params = new HttpParams();
+    let params: HttpParams = new HttpParams();
     params = params.set('year', year);
     params = params.set('month', month);
     return this._httpClient.get<ExpenseModel[]>(this._serviceUrl + 'user/' + userId, {params});

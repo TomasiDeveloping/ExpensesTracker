@@ -9,8 +9,8 @@ import {RevenueCategoryModel} from "../models/revenueCategory.model";
 })
 export class RevenueCategoryService {
 
-  private readonly _serviceUrl = environment.apiUrl + 'revenueCategory/';
-  private readonly _httpClient = inject(HttpClient);
+  private readonly _serviceUrl: string = environment.apiUrl + 'revenueCategory/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
 
   getUserRevenueCategories(userId: number): Observable<RevenueCategoryModel[]> {
     return this._httpClient.get<RevenueCategoryModel[]>(this._serviceUrl + 'user/' + userId);

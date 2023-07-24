@@ -340,15 +340,12 @@ namespace Core.Helper.Services
             worksheet.Row(row).Style.Fill.SetBackgroundColor(XLColor.LightGray);
             worksheet.Cell(row, 2).SetValue("Ausgaben");
             worksheet.Cell(row, 2).Style.Font.SetFontSize(18).Font.SetBold();
-            //worksheet.Cell(row, 2).Style.Fill.BackgroundColor = XLColor.LightGray;
             if (isWithRevenue)
             {
                 worksheet.Cell(row, 3).SetValue("Einnahmen");
                 worksheet.Cell(row, 3).Style.Font.SetFontSize(18).Font.SetBold();
-                //worksheet.Cell(row, 3).Style.Fill.BackgroundColor = XLColor.LightGray;
                 worksheet.Cell(row, 4).SetValue("Differenz");
                 worksheet.Cell(row, 4).Style.Font.SetFontSize(18).Font.SetBold();
-                //worksheet.Cell(row, 4).Style.Fill.BackgroundColor = XLColor.LightGray;
             }
 
             row++;

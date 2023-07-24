@@ -14,12 +14,12 @@ import {MatDialog} from "@angular/material/dialog";
 export class AuthComponent implements OnInit {
 
   public loginForm!: FormGroup;
-  public fieldTextType: Boolean = false;
-  public currentYear = new Date().getFullYear();
+  public fieldTextType: boolean = false;
+  public currentYear: number = new Date().getFullYear();
 
-  private readonly _authService = inject(AuthService);
-  private readonly _toastr = inject(ToastrService);
-  private readonly _dialog = inject(MatDialog);
+  private readonly _authService: AuthService = inject(AuthService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
+  private readonly _dialog: MatDialog = inject(MatDialog);
 
 
   get email() {
@@ -34,14 +34,14 @@ export class AuthComponent implements OnInit {
     this.createLoginForm();
   }
 
-  createLoginForm() {
+  createLoginForm(): void {
     this.loginForm = new FormGroup({
       email: new FormControl<string>('', [Validators.required, Validators.email]),
       password: new FormControl<string>('', [Validators.required]),
     });
   }
 
-  onLogin() {
+  onLogin(): void {
     if (this.loginForm.invalid) {
       this._toastr.error('Fehler im Eingabefeld', 'Login');
       return;
@@ -49,7 +49,7 @@ export class AuthComponent implements OnInit {
     this._authService.login(this.email.value, this.password.value);
   }
 
-  onForgotPassword() {
+  onForgotPassword(): void {
     this._dialog.open(ForgotPasswordComponent, {
       width: '100%',
       height: 'auto',
@@ -57,11 +57,11 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  toggleFieldTextType() {
+  toggleFieldTextType(): void {
     this.fieldTextType = !this.fieldTextType;
   }
 
-  onRegister() {
+  onRegister(): void {
     this._dialog.open(RegisterComponent, {
       width: '100%',
       height: 'auto',
@@ -69,7 +69,7 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  onFooter() {
+  onFooter(): void {
     window.open('https://tomasi-developing.ch');
   }
 }

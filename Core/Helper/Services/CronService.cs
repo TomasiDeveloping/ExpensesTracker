@@ -24,7 +24,6 @@ public class CronService : ICronService
         if (!activeRecurringTasks.Any()) return true;
 
         foreach (var recurringTask in activeRecurringTasks.Where(CheckIfJobMustRun))
-        {
             if (recurringTask.IsExpense)
             {
                 var checkInsert = await InsertExpense(recurringTask);
@@ -41,14 +40,14 @@ public class CronService : ICronService
                 recurringTask.NextExecution = _today.AddMonths(recurringTask.ExecuteInMonths);
                 await _recurringTaskService.UpdateRecurringTaskAsync(recurringTask);
             }
-        }
 
         return true;
     }
 
     private bool CheckIfJobMustRun(RecurringTaskDto recurringTaskDto)
     {
-        return recurringTaskDto.NextExecution.Day.Equals(_today.Day) && recurringTaskDto.NextExecution.Month.Equals(_today.Month) &&
+        return recurringTaskDto.NextExecution.Day.Equals(_today.Day) &&
+               recurringTaskDto.NextExecution.Month.Equals(_today.Month) &&
                recurringTaskDto.NextExecution.Year.Equals(_today.Year);
     }
 
@@ -60,7 +59,7 @@ public class CronService : ICronService
             var newExpense = new ExpenseDto
             {
                 Amount = recurringTaskDto.Amount,
-                CategoryId = recurringTaskDto.CategoryId.Value,
+                CategoryId = recurringTaskDto.CategoryId!.Value,
                 CreateDate = _today,
                 Description = recurringTaskDto.Description,
                 UserId = recurringTaskDto.UserId
@@ -82,7 +81,7 @@ public class CronService : ICronService
             var newRevenue = new RevenueDto
             {
                 Amount = recurringTaskDto.Amount,
-                RevenueCategoryId = recurringTaskDto.RevenueCategoryId.Value,
+                RevenueCategoryId = recurringTaskDto.RevenueCategoryId!.Value,
                 CreateDate = _today,
                 Description = recurringTaskDto.Description,
                 UserId = recurringTaskDto.UserId

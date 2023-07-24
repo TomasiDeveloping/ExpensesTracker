@@ -15,20 +15,20 @@ import {MatDialog} from "@angular/material/dialog";
   styleUrls: ['./revenues.component.css']
 })
 export class RevenuesComponent implements OnInit {
-  public date = new Date();
+  public date: Date = new Date();
   public months: { name: string, value: number }[] = [];
   public years: number[] = [];
   public groupedRevenues: { categoryName: string, groupAmount: number, revenue: RevenueModel[] }[] = [];
-  public currentYear = new Date().getFullYear();
-  public currentMonth = new Date().getMonth() + 1;
+  public currentYear: number = new Date().getFullYear();
+  public currentMonth: number = new Date().getMonth() + 1;
 
   private currentUserId: number = 0;
 
-  private readonly _monthPipe = inject(MonthNamePipe);
-  private readonly _authService = inject(AuthService);
-  private readonly _revenueService = inject(RevenueService);
-  private readonly _dialog = inject(MatDialog);
-  private readonly _toastr = inject(ToastrService);
+  private readonly _monthPipe: MonthNamePipe = inject(MonthNamePipe);
+  private readonly _authService: AuthService = inject(AuthService);
+  private readonly _revenueService: RevenueService = inject(RevenueService);
+  private readonly _dialog: MatDialog = inject(MatDialog);
+  private readonly _toastr: ToastrService = inject(ToastrService);
 
   ngOnInit(): void {
     this.currentUserId = this._authService.getUserIdFromToken();
@@ -40,7 +40,7 @@ export class RevenuesComponent implements OnInit {
     this.createYears();
   }
 
-  getUserRevenues(year: number, month: number) {
+  getUserRevenues(year: number, month: number): void {
     this.groupedRevenues = [];
     this._revenueService.getUserRevenuesByQueryParams(this.currentUserId, year, month).subscribe({
       next: ((response) => {
@@ -71,30 +71,30 @@ export class RevenuesComponent implements OnInit {
     });
   }
 
-  createYears() {
+  createYears(): void {
     let year = this.date.getFullYear() + 1;
     for (let i = 0; i < 6; i++) {
       this.years.push(year - i);
     }
   }
 
-  createMonths() {
+  createMonths(): void {
     for (let i = 1; i <= 12; i++) {
       this.months.push({name: this._monthPipe.transform(i), value: i});
     }
   }
 
-  onMonthChange(event: any) {
+  onMonthChange(event: any): void {
     this.currentMonth = +event.target.value;
     this.getUserRevenues(this.currentYear, this.currentMonth);
   }
 
-  onYearChange(event: any) {
+  onYearChange(event: any): void {
     this.currentYear = event.target.value;
     this.getUserRevenues(this.currentYear, this.currentMonth);
   }
 
-  onEditRevenue(revenue: RevenueModel) {
+  onEditRevenue(revenue: RevenueModel): void {
     const dialogRef = this._dialog.open(EditRevenueComponent, {
       width: '80%',
       height: 'auto',
@@ -108,7 +108,7 @@ export class RevenuesComponent implements OnInit {
     });
   }
 
-  onDeleteRevenue(revenue: RevenueModel) {
+  onDeleteRevenue(revenue: RevenueModel): void {
     Swal.fire({
       title: 'Bist Du sicher ?',
       html: '<p>Einnahme wirklich löschen ?</p>',
@@ -125,7 +125,7 @@ export class RevenuesComponent implements OnInit {
     })
   }
 
-  private deleteRevenue(revenue: RevenueModel) {
+  private deleteRevenue(revenue: RevenueModel): void {
     this._revenueService.deleteRevenue(revenue.id).subscribe({
       next: ((response) => {
         if (response) {

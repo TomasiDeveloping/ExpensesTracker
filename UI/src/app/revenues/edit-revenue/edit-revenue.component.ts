@@ -21,8 +21,8 @@ export class EditRevenueComponent implements OnInit {
   public isUpdate: boolean;
   public revenueForm!: FormGroup;
   public categories: RevenueCategoryModel[] = [];
-  public isNewCategory = false;
-  public isRecurringTask = false;
+  public isNewCategory: boolean = false;
+  public isRecurringTask: boolean = false;
   public recurringIntervals: { value: number, description: string }[] = [
     {value: 1, description: 'Monatlich'},
     {value: 3, description: 'Vierteljährlich'},
@@ -32,11 +32,11 @@ export class EditRevenueComponent implements OnInit {
 
   private currentRevenue: RevenueModel;
 
-  private readonly _dialogRef = inject(MatDialogRef<EditRevenueComponent>);
-  private readonly _revenueCategoryService = inject(RevenueCategoryService);
-  private readonly _revenueService = inject(RevenueService);
-  private readonly _recurringTaskService = inject(RecurringTaskService);
-  private readonly _toastr = inject(ToastrService);
+  private readonly _dialogRef: MatDialogRef<EditRevenueComponent> = inject(MatDialogRef<EditRevenueComponent>);
+  private readonly _revenueCategoryService: RevenueCategoryService = inject(RevenueCategoryService);
+  private readonly _revenueService: RevenueService = inject(RevenueService);
+  private readonly _recurringTaskService: RecurringTaskService = inject(RecurringTaskService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
@@ -69,7 +69,7 @@ export class EditRevenueComponent implements OnInit {
     this.getUserRevenueCategories();
   }
 
-  createRevenueForm() {
+  createRevenueForm(): void {
     const date = new Date(this.currentRevenue.createDate);
     this.revenueForm = new FormGroup({
       id: new FormControl<number>(this.currentRevenue.id),
@@ -88,7 +88,7 @@ export class EditRevenueComponent implements OnInit {
     });
   }
 
-  getUserRevenueCategories() {
+  getUserRevenueCategories(): void {
     this._revenueCategoryService.getUserRevenueCategories(this.currentRevenue.userId).subscribe({
       next: ((response) => {
         this.categories = response;
@@ -96,7 +96,7 @@ export class EditRevenueComponent implements OnInit {
     });
   }
 
-  onCategoryChange(event: any) {
+  onCategoryChange(event: any): void {
     if (event.target.value === 'newCategory') {
       this.isNewCategory = true;
       this.revenueForm.controls.categoryName.setValidators([Validators.required]);
@@ -108,11 +108,11 @@ export class EditRevenueComponent implements OnInit {
     }
   }
 
-  onClose() {
+  onClose(): void {
     this._dialogRef.close();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.revenueForm.invalid) {
       return;
     }
@@ -125,7 +125,7 @@ export class EditRevenueComponent implements OnInit {
     }
   }
 
-  insertRecurringTask(revenue: RevenueModel) {
+  insertRecurringTask(revenue: RevenueModel): void {
     const recurringTask: RecurringTask = {
       isRevenue: true,
       isExpense: false,
@@ -150,11 +150,11 @@ export class EditRevenueComponent implements OnInit {
     });
   }
 
-  onRecurringTaskChange() {
+  onRecurringTaskChange(): void {
     this.isRecurringTask = !this.isRecurringTask;
   }
 
-  private updateRevenue(revenue: RevenueModel) {
+  private updateRevenue(revenue: RevenueModel): void {
     if (this.isNewCategory) {
       const category: RevenueCategoryModel = new class implements RevenueCategoryModel {
         id = 0;
@@ -190,7 +190,7 @@ export class EditRevenueComponent implements OnInit {
     }
   }
 
-  private insertRevenue(revenue: RevenueModel) {
+  private insertRevenue(revenue: RevenueModel): void {
     if (this.isNewCategory) {
       const category: RevenueCategoryModel = new class implements RevenueCategoryModel {
         id = 0;

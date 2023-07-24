@@ -1,30 +1,29 @@
 ﻿using Core.DTOs;
 using Core.Helper.Classes;
 
-namespace Core.Interfaces
+namespace Core.Interfaces;
+
+public interface IExpenseService
 {
-    public interface IExpenseService
-    {
-        Task<List<ExpenseDto>> GetExpensesAsync();
+    Task<List<ExpenseDto>> GetExpensesAsync();
 
-        Task<ExpenseDto> GetExpenseByIdAsync(int expenseId);
+    Task<ExpenseDto> GetExpenseByIdAsync(int expenseId);
 
-        Task<List<ExpenseDto>> GetExpensesByUserId(int userId);
+    Task<List<ExpenseDto>> GetExpensesByUserId(int userId);
 
-        Task<List<ExpenseDto>> GetUserYearlyExpensesAsync(int userId, int year);
+    Task<List<ExpenseDto>> GetUserYearlyExpensesAsync(int userId, int year);
 
-        Task<List<ExpenseDto>> GetUserExpensesByParamsAsync(int userId, int year, int month);
+    Task<List<ExpenseDto>> GetUserExpensesByParamsAsync(int userId, int year, int month);
 
-        Task<List<ExpenseDto>> GetExpensesByUserIdAndCategoryId(int userId, int categoryId);
+    Task<List<ExpenseDto>> GetExpensesByUserIdAndCategoryId(int userId, int categoryId);
 
-        Task<List<ExpenseDto>> GetExpensesForYearlyReportAsync(Report report);
+    Task<List<ExpenseDto>> GetExpensesForYearlyReportAsync(Report report);
 
-        Task<List<ExpenseDto>> GetExpensesForMonthlyReportAsync(Report report);
+    Task<List<ExpenseDto>> GetExpensesForMonthlyReportAsync(Report report);
 
-        Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto);
+    Task<ExpenseDto> InsertExpenseAsync(ExpenseDto expenseDto);
 
-        Task<ExpenseDto> UpdateExpenseAsync(int expenseId, ExpenseDto expenseDto);
+    Task<ExpenseDto> UpdateExpenseAsync(int expenseId, ExpenseDto expenseDto);
 
-        Task<bool> DeleteExpenseByIdAsync(int expenseId);
-    }
+    Task<bool> DeleteExpenseByIdAsync(int expenseId);
 }

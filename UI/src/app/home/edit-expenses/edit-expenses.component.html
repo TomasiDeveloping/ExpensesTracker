@@ -59,7 +59,8 @@
       </div>
     </div>
     <div *ngIf="!isUpdate" class="form-check form-switch mb-3">
-      <input (change)="onRecurringTaskChange()" [checked]="isRecurringTask" class="form-check-input" id="isRecurringTask"
+      <input (change)="onRecurringTaskChange()" [checked]="isRecurringTask" class="form-check-input"
+             id="isRecurringTask"
              type="checkbox">
       <label class="form-check-label" for="isRecurringTask">Dauerauftrag</label>
     </div>

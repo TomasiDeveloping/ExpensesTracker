@@ -14,11 +14,11 @@ import {RegisterModel} from "../models/register.model";
 })
 export class AuthService {
 
-  public currentUserSource = new BehaviorSubject<AppUser | null>(null);
-  private readonly _serviceUrl = environment.apiUrl + 'auth/';
-  private readonly _httpClient = inject(HttpClient);
-  private readonly _toastr = inject(ToastrService);
-  private readonly _userService = inject(UsersService);
+  public currentUserSource: BehaviorSubject<AppUser | null> = new BehaviorSubject<AppUser | null>(null);
+  private readonly _serviceUrl: string = environment.apiUrl + 'auth/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
+  private readonly _toastr: ToastrService = inject(ToastrService);
+  private readonly _userService: UsersService = inject(UsersService);
 
 
   get userIsAuthenticated() {
@@ -30,11 +30,11 @@ export class AuthService {
     }));
   }
 
-  private static setUserData(appUser: AppUser) {
+  private static setUserData(appUser: AppUser): void {
     localStorage.setItem('expenseToken', appUser.token);
   }
 
-  private static removeUserData() {
+  private static removeUserData(): void {
     localStorage.removeItem('expenseToken');
   }
 
@@ -48,7 +48,7 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string) {
+  login(email: string, password: string): void {
     this._httpClient.post<AppUser>(this._serviceUrl + 'Login', {email, password}).subscribe({
       next: ((response) => {
         this.currentUserSource.next(response);
@@ -60,7 +60,7 @@ export class AuthService {
     });
   }
 
-  register(register: RegisterModel) {
+  register(register: RegisterModel): void {
     this._httpClient.post<AppUser>(this._serviceUrl + 'Register', register).subscribe({
       next: ((response) => {
         this.currentUserSource.next(response);
@@ -72,7 +72,7 @@ export class AuthService {
     })
   }
 
-  autoLogin() {
+  autoLogin(): void {
     const token = localStorage.getItem('expenseToken');
     if (token) {
       const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
@@ -99,7 +99,7 @@ export class AuthService {
   //   return this.http.get<boolean>(this.apiUrl + 'CheckEmailExists', {params: params});
   // }
 
-  logout() {
+  logout(): void {
     AuthService.removeUserData();
     this.currentUserSource.next(null);
   }

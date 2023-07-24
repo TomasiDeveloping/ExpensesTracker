@@ -9,8 +9,8 @@ import {RecurringTask} from "../models/recurringTask.model";
 })
 export class RecurringTaskService {
 
-  private readonly _serviceUrl = environment.apiUrl + 'recurringTask/';
-  private readonly _httpClient = inject(HttpClient);
+  private readonly _serviceUrl: string = environment.apiUrl + 'recurringTask/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
 
 
   getRecurringTasksByUserId(userId: number): Observable<RecurringTask[]> {

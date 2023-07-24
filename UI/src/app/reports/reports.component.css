@@ -2,6 +2,7 @@ h2 {
   text-align: center;
   margin: 20px 0;
 }
+
 h3 {
   margin-left: 20px;
 }
@@ -16,11 +17,13 @@ h3 {
   display: flex;
   justify-content: center;
 }
+
 .yearly-amount {
   display: flex;
   justify-content: space-around;
   font-weight: bold;
 }
+
 .noContent {
   font-size: 1.25rem;
   text-align: center;

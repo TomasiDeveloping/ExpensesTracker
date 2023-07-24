@@ -24,11 +24,11 @@ export class EditRecurringTaskComponent implements OnInit {
     {value: 12, description: 'Jährlich'}
   ];
 
-  private readonly _dialogRef = inject(MatDialogRef<EditRecurringTaskComponent>);
-  private readonly _recurringTaskService = inject(RecurringTaskService);
-  private readonly _revenueCategoryService = inject(RevenueCategoryService);
-  private readonly _toastr = inject(ToastrService);
-  private readonly _expenseCategoryService = inject(CategoriesService);
+  private readonly _dialogRef: MatDialogRef<EditRecurringTaskComponent> = inject(MatDialogRef<EditRecurringTaskComponent>);
+  private readonly _recurringTaskService: RecurringTaskService = inject(RecurringTaskService);
+  private readonly _revenueCategoryService: RevenueCategoryService = inject(RevenueCategoryService);
+  private readonly _toastr: ToastrService = inject(ToastrService);
+  private readonly _expenseCategoryService: CategoriesService = inject(CategoriesService);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.currentRecurringTask = data.recurringTask;
@@ -68,7 +68,7 @@ export class EditRecurringTaskComponent implements OnInit {
     }
   }
 
-  createForm() {
+  createForm(): void {
     const date = new Date(this.currentRecurringTask.nextExecution);
     this.recurringTaskForm = new FormGroup<any>({
       id: new FormControl<number>(this.currentRecurringTask.id, [Validators.required]),
@@ -93,7 +93,7 @@ export class EditRecurringTaskComponent implements OnInit {
     });
   }
 
-  getExpenseGroups(userId: number) {
+  getExpenseGroups(userId: number): void {
     if (userId <= 0) return;
     this._expenseCategoryService.getUserCategories(userId).subscribe({
       next: ((categories) => {
@@ -112,7 +112,7 @@ export class EditRecurringTaskComponent implements OnInit {
     });
   }
 
-  getRevenueGroups(userId: number) {
+  getRevenueGroups(userId: number): void {
     if (userId <= 0) return;
     this._revenueCategoryService.getUserRevenueCategories(userId).subscribe({
       next: ((categories) => {
@@ -131,11 +131,11 @@ export class EditRecurringTaskComponent implements OnInit {
     });
   }
 
-  onClose() {
+  onClose(): void {
     this._dialogRef.close();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     const recurringTask: RecurringTask = this.recurringTaskForm.value as RecurringTask;
     this._recurringTaskService.updateRecurringTask(recurringTask).subscribe({
       next: ((response) => {

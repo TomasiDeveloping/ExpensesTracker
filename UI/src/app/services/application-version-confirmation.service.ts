@@ -9,8 +9,8 @@ import {ApplicationVersionConfirmation} from "../models/applicationVersionConfir
 })
 export class ApplicationVersionConfirmationService {
 
-  private readonly _serviceUrl = environment.apiUrl + 'applicationVersionConfirmation/';
-  private readonly _httpClient = inject(HttpClient);
+  private readonly _serviceUrl: string = environment.apiUrl + 'applicationVersionConfirmation/';
+  private readonly _httpClient: HttpClient = inject(HttpClient);
 
   checkUserHasConfirmed(userId: number, version: string): Observable<boolean> {
     const applicationVersionConfirmation: ApplicationVersionConfirmation = {

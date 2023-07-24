@@ -8,11 +8,11 @@ import {AuthService} from "./services/auth.service";
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  public isLogin = false;
+  public isLogin: boolean = false;
 
   private userSub$: Subscription | undefined;
 
-  private readonly _authService = inject(AuthService);
+  private readonly _authService: AuthService = inject(AuthService);
 
   ngOnInit(): void {
     this._authService.autoLogin();

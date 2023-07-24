@@ -13,7 +13,8 @@ public class ApplicationVersionConfirmationController : ControllerBase
     private readonly ILogger<ApplicationVersionConfirmationController> _logger;
 
     public ApplicationVersionConfirmationController(
-        IApplicationVersionConfirmationService applicationVersionConfirmationService, ILogger<ApplicationVersionConfirmationController> logger)
+        IApplicationVersionConfirmationService applicationVersionConfirmationService,
+        ILogger<ApplicationVersionConfirmationController> logger)
     {
         _applicationVersionConfirmationService = applicationVersionConfirmationService;
         _logger = logger;
