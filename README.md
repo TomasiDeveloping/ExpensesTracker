@@ -42,6 +42,10 @@ Angular 15 with .NET 7 Rest API
 <hr>
 
 ## Changelog
+### 3.2.0 (2023-09-10)
+- Update NuGet Packages
+- Update NPM Packages
+- Update Angular from 15 to 16
 ### 3.1.6 (2023-07-24)
 - CleanUp
 - SonaCloud Report Fix
