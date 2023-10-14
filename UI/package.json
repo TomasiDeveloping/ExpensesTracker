@@ -23,7 +23,7 @@
     "@angular/router": "^16.2.9",
     "@popperjs/core": "^2.11.8",
     "@swimlane/ngx-charts": "^20.4.1",
-    "@types/d3": "^7.4.0",
+    "@types/d3": "^7.4.1",
     "angular-font-awesome": "^3.1.2",
     "bootstrap": "^5.3.1",
     "bootswatch": "^5.3.1",
