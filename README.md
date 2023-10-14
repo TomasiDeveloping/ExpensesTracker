@@ -42,6 +42,13 @@ Angular 15 with .NET 7 Rest API
 <hr>
 
 ## Changelog
+### 3.2.1 (2023-10-14)
+- Update NuGet Packages
+- Update Angular
+- Update NPM Packages
+- Add new expense without starting 0
+- Add new revenue without starting 0
+- Remove autofus on add dialogs
 ### 3.2.0 (2023-09-10)
 - Update NuGet Packages
 - Update NPM Packages

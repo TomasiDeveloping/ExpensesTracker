@@ -131,6 +131,7 @@ export class HomeComponent implements OnInit {
     const dialogRef = this._dialog.open(EditExpensesComponent, {
       width: '80%',
       height: 'auto',
+      autoFocus: false,
       data: {isUpdate: false, expense: expense}
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -154,6 +155,7 @@ export class HomeComponent implements OnInit {
     const dialogRef = this._dialog.open(EditRevenueComponent, {
       width: '80%',
       height: 'auto',
+      autoFocus: false,
       data: {isUpdate: false, revenue: revenue}
     });
     dialogRef.afterClosed().subscribe(result => {
