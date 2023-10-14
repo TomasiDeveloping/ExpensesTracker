@@ -77,7 +77,7 @@ export class EditRevenueComponent implements OnInit {
       categoryId: new FormControl<number | null>(this.isUpdate ? this.currentRevenue.revenueCategoryId : null, [Validators.required]),
       categoryName: new FormControl<string>(''),
       description: new FormControl<string>(this.currentRevenue.description, [Validators.maxLength(255)]),
-      amount: new FormControl<number>(this.currentRevenue.amount, [Validators.required]),
+      amount: new FormControl<number | null>(this.isUpdate ? this.currentRevenue.amount : null, [Validators.required]),
       recurringTaskInterval: new FormControl<number>(1),
       createDate: new FormControl<string>(new Date(
         Date.UTC(date.getFullYear(),
