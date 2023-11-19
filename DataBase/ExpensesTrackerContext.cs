@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataBase;
 
-public class ExpensesTrackerContext : DbContext
+public class ExpensesTrackerContext(DbContextOptions<ExpensesTrackerContext> options) : DbContext(options)
 {
-    public ExpensesTrackerContext(DbContextOptions<ExpensesTrackerContext> options) : base(options)
-    {
-    }
-
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Expense> Expenses { get; set; }
