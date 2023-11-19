@@ -8,31 +8,22 @@ namespace Api.Controllers.v1;
 [ApiVersion("1.0")]
 [Route("api/v{v:apiVersion}/[controller]")]
 [ApiController]
-public class ApplicationVersionConfirmationController : ControllerBase
+public class ApplicationVersionConfirmationController(
+    IApplicationVersionConfirmationService applicationVersionConfirmationService,
+    ILogger<ApplicationVersionConfirmationController> logger) : ControllerBase
 {
-    private readonly IApplicationVersionConfirmationService _applicationVersionConfirmationService;
-    private readonly ILogger<ApplicationVersionConfirmationController> _logger;
-
-    public ApplicationVersionConfirmationController(
-        IApplicationVersionConfirmationService applicationVersionConfirmationService,
-        ILogger<ApplicationVersionConfirmationController> logger)
-    {
-        _applicationVersionConfirmationService = applicationVersionConfirmationService;
-        _logger = logger;
-    }
-
     [HttpPost("[action]")]
     public async Task<IActionResult> UserHasVersionConfirmed(
         [FromBody] ApplicationVersionConfirmationDto applicationVersionConfirmationDto)
     {
         try
         {
-            return Ok(await _applicationVersionConfirmationService.CheckApplicationVersionConfirmedByUserIdAsync(
+            return Ok(await applicationVersionConfirmationService.CheckApplicationVersionConfirmedByUserIdAsync(
                 applicationVersionConfirmationDto));
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Something Went Wrong in {nameof(UserHasVersionConfirmed)}");
+            logger.LogError(e, $"Something Went Wrong in {nameof(UserHasVersionConfirmed)}");
             return BadRequest(e.Message);
         }
     }
@@ -44,13 +35,13 @@ public class ApplicationVersionConfirmationController : ControllerBase
         try
         {
             var newApplicationVersionConfirmationDto =
-                await _applicationVersionConfirmationService.InsertApplicationVersionConfirmationAsync(
+                await applicationVersionConfirmationService.InsertApplicationVersionConfirmationAsync(
                     applicationVersionConfirmationDto);
             return Ok(newApplicationVersionConfirmationDto);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Something Went Wrong in {nameof(InsertApplicationVersionConfirmation)}");
+            logger.LogError(e, $"Something Went Wrong in {nameof(InsertApplicationVersionConfirmation)}");
             return BadRequest(e.Message);
         }
     }
