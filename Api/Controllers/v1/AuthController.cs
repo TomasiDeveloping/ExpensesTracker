@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Nodes;
+using Asp.Versioning;
 using Core.DTOs;
 using Core.Helper.Classes;
 using Core.Helper.Services;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Options;
 namespace Api.Controllers.v1;
 
 [ApiVersion("1.0")]
-[Route("api/v{v:apiVersion}/[controller]")]
+[Route("api/v{v:apiVersion}/[controller]/[action]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
@@ -29,7 +30,7 @@ public class AuthController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpGet("[action]")]
+    [HttpGet]
     public async Task<IActionResult> CheckEmailExists([FromQuery] string email)
     {
         var user = await _userService.GetUserByEmailAsync(email);
@@ -37,7 +38,7 @@ public class AuthController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> Login(Login login)
     {
         var user = await _userService.GetUserByEmailForLoginAsync(login.Email);
@@ -57,7 +58,7 @@ public class AuthController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> Register(Register register)
     {
         var newUser = await _userService.InsertUserAsync(new UserDto
@@ -80,7 +81,7 @@ public class AuthController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> ForgotPassword([FromBody] JsonObject requestJsonObject)
     {
         try

@@ -1,4 +1,5 @@
-﻿using Core.Helper.Classes;
+﻿using Asp.Versioning;
+using Core.Helper.Classes;
 using Core.Helper.Services;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@ namespace Api.Controllers.v1;
 
 [Authorize]
 [ApiVersion("1.0")]
-[Route("api/v{v:apiVersion}/[controller]")]
+[Route("api/v{v:apiVersion}/[controller]/[action]")]
 [ApiController]
 public class ReportsController : ControllerBase
 {
@@ -21,7 +22,7 @@ public class ReportsController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> CreateYearlyExcelReport(Report report)
     {
         try
@@ -31,8 +32,8 @@ public class ReportsController : ControllerBase
             workBook.SaveAs(stream);
             var content = stream.ToArray();
             var filename = $"Statistik_{report.Year}.xlsx";
-            Response.Headers.Add("x-file-name", filename);
-            Response.Headers.Add("Access-Control-Expose-Headers", "x-file-name");
+            Response.Headers.Append("x-file-name", filename);
+            Response.Headers.Append("Access-Control-Expose-Headers", "x-file-name");
             return File(
                 content,
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -45,7 +46,7 @@ public class ReportsController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> CreateMonthlyExcelReport(Report report)
     {
         try
@@ -56,8 +57,8 @@ public class ReportsController : ControllerBase
             var content = stream.ToArray();
             var filename = $"Statistik_{ExcelService.GetMonthName(report.Month)}_{report.Year}.xlsx";
             if (report.Month == 3) filename = $"Statistik_Maerz_{report.Year}.xlsx";
-            Response.Headers.Add("x-file-name", filename);
-            Response.Headers.Add("Access-Control-Expose-Headers", "x-file-name");
+            Response.Headers.Append("x-file-name", filename);
+            Response.Headers.Append("Access-Control-Expose-Headers", "x-file-name");
             return File(
                 content,
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
