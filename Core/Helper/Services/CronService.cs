@@ -3,24 +3,14 @@ using Core.Interfaces;
 
 namespace Core.Helper.Services;
 
-public class CronService : ICronService
+public class CronService(IRecurringTaskService recurringTaskService, IRevenueService revenueService,
+    IExpenseService expenseService) : ICronService
 {
-    private readonly IExpenseService _expenseService;
-    private readonly IRecurringTaskService _recurringTaskService;
-    private readonly IRevenueService _revenueService;
     private readonly DateTime _today = DateTime.Now;
-
-    public CronService(IRecurringTaskService recurringTaskService, IRevenueService revenueService,
-        IExpenseService expenseService)
-    {
-        _recurringTaskService = recurringTaskService;
-        _revenueService = revenueService;
-        _expenseService = expenseService;
-    }
 
     public async Task<bool> CreateRecurringTasks()
     {
-        var activeRecurringTasks = await _recurringTaskService.GetAllActiveRecurringTasks();
+        var activeRecurringTasks = await recurringTaskService.GetAllActiveRecurringTasks();
         if (!activeRecurringTasks.Any()) return true;
 
         foreach (var recurringTask in activeRecurringTasks.Where(CheckIfJobMustRun))
@@ -30,7 +20,7 @@ public class CronService : ICronService
                 if (!checkInsert) return false;
                 recurringTask.LastExecution = _today;
                 recurringTask.NextExecution = _today.AddMonths(recurringTask.ExecuteInMonths);
-                await _recurringTaskService.UpdateRecurringTaskAsync(recurringTask);
+                await recurringTaskService.UpdateRecurringTaskAsync(recurringTask);
             }
             else
             {
@@ -38,7 +28,7 @@ public class CronService : ICronService
                 if (!checkInsert) return false;
                 recurringTask.LastExecution = _today;
                 recurringTask.NextExecution = _today.AddMonths(recurringTask.ExecuteInMonths);
-                await _recurringTaskService.UpdateRecurringTaskAsync(recurringTask);
+                await recurringTaskService.UpdateRecurringTaskAsync(recurringTask);
             }
 
         return true;
@@ -64,7 +54,7 @@ public class CronService : ICronService
                 Description = recurringTaskDto.Description,
                 UserId = recurringTaskDto.UserId
             };
-            await _expenseService.InsertExpenseAsync(newExpense);
+            await expenseService.InsertExpenseAsync(newExpense);
             return true;
         }
         catch (Exception e)
@@ -86,7 +76,7 @@ public class CronService : ICronService
                 Description = recurringTaskDto.Description,
                 UserId = recurringTaskDto.UserId
             };
-            await _revenueService.InsertRevenueAsync(newRevenue);
+            await revenueService.InsertRevenueAsync(newRevenue);
             return true;
         }
         catch (Exception e)

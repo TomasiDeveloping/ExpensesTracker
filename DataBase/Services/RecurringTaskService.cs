@@ -6,67 +6,58 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Services;
 
-public class RecurringTaskService : IRecurringTaskService
+public class RecurringTaskService(ExpensesTrackerContext context, IMapper mapper) : IRecurringTaskService
 {
-    private readonly ExpensesTrackerContext _context;
-    private readonly IMapper _mapper;
-
-    public RecurringTaskService(ExpensesTrackerContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     public async Task<List<RecurringTaskDto>> GetAllActiveRecurringTasks()
     {
-        var activeRecurringTasks = await _context.RecurringTasks
+        var activeRecurringTasks = await context.RecurringTasks
             .AsNoTracking()
             .Where(rt => rt.IsActive)
             .ToListAsync();
-        return _mapper.Map<List<RecurringTaskDto>>(activeRecurringTasks);
+        return mapper.Map<List<RecurringTaskDto>>(activeRecurringTasks);
     }
 
     public async Task<List<RecurringTaskDto>> GetRecurringTasksByUserIdAsync(int userId)
     {
-        var recurringTasks = await _context.RecurringTasks
+        var recurringTasks = await context.RecurringTasks
             .Include(rt => rt.Category)
             .Include(rt => rt.RevenueCategory)
             .AsNoTracking()
             .Where(rt => rt.UserId.Equals(userId))
             .ToListAsync();
-        return _mapper.Map<List<RecurringTaskDto>>(recurringTasks);
+        return mapper.Map<List<RecurringTaskDto>>(recurringTasks);
     }
 
     public async Task<RecurringTaskDto> InsertRecurringTaskAsync(RecurringTaskDto recurringTaskDto)
     {
-        var newRecurringTask = _mapper.Map<RecurringTask>(recurringTaskDto);
+        var newRecurringTask = mapper.Map<RecurringTask>(recurringTaskDto);
         newRecurringTask.NextExecution = newRecurringTask.LastExecution.AddMonths(newRecurringTask.ExecuteInMonths);
-        await _context.RecurringTasks.AddAsync(newRecurringTask);
-        await _context.SaveChangesAsync();
-        return _mapper.Map<RecurringTaskDto>(newRecurringTask);
+        await context.RecurringTasks.AddAsync(newRecurringTask);
+        await context.SaveChangesAsync();
+        return mapper.Map<RecurringTaskDto>(newRecurringTask);
     }
 
     public async Task<RecurringTaskDto> UpdateRecurringTaskAsync(RecurringTaskDto recurringTaskDto)
     {
         var recurringTaskToUpdate =
-            await _context.RecurringTasks.FirstOrDefaultAsync(rt => rt.Id.Equals(recurringTaskDto.Id));
+            await context.RecurringTasks.FirstOrDefaultAsync(rt => rt.Id.Equals(recurringTaskDto.Id));
         if (recurringTaskToUpdate == null)
             throw new ArgumentException($"No RecurringTask found with id: {recurringTaskDto.Id}");
         if (recurringTaskToUpdate.ExecuteInMonths != recurringTaskDto.ExecuteInMonths)
             recurringTaskDto.NextExecution =
                 recurringTaskToUpdate.LastExecution.AddMonths(recurringTaskDto.ExecuteInMonths);
-        _mapper.Map(recurringTaskDto, recurringTaskToUpdate);
-        await _context.SaveChangesAsync();
-        return _mapper.Map<RecurringTaskDto>(recurringTaskToUpdate);
+        mapper.Map(recurringTaskDto, recurringTaskToUpdate);
+        await context.SaveChangesAsync();
+        return mapper.Map<RecurringTaskDto>(recurringTaskToUpdate);
     }
 
     public async Task<bool> DeleteRecurringAsync(int recurringTaskId)
     {
         var recurringTaskToDelete =
-            await _context.RecurringTasks.FirstOrDefaultAsync(rt => rt.Id.Equals(recurringTaskId));
+            await context.RecurringTasks.FirstOrDefaultAsync(rt => rt.Id.Equals(recurringTaskId));
         if (recurringTaskToDelete == null) return false;
-        _context.RecurringTasks.Remove(recurringTaskToDelete);
-        await _context.SaveChangesAsync();
+        context.RecurringTasks.Remove(recurringTaskToDelete);
+        await context.SaveChangesAsync();
         return true;
     }
 }

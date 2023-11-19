@@ -5,22 +5,13 @@ using System.Net.Mail;
 
 namespace Core.Helper.Services
 {
-    public class EmailService
+    public class EmailService(IOptions<EmailSettings> conf)
     {
-        private readonly string _host;
-        private readonly int _port;
-        private readonly string _userName;
-        private readonly string _password;
-        private readonly string _senderAddress;
-
-        public EmailService(IOptions<EmailSettings> conf)
-        {
-            _host = conf.Value.Host;
-            _port = conf.Value.Port;
-            _userName = conf.Value.UserName;
-            _password = conf.Value.Password;
-            _senderAddress = conf.Value.SenderAddress;
-        }
+        private readonly string _host = conf.Value.Host;
+        private readonly int _port = conf.Value.Port;
+        private readonly string _userName = conf.Value.UserName;
+        private readonly string _password = conf.Value.Password;
+        private readonly string _senderAddress = conf.Value.SenderAddress;
 
         public async Task<bool> SendEmailAsync(string receiverAddress, string message, string subject)
         {

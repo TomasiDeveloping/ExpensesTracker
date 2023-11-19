@@ -1,4 +1,5 @@
-﻿using Core.DTOs;
+﻿using Asp.Versioning;
+using Core.DTOs;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,29 +8,20 @@ namespace Api.Controllers.v1;
 [ApiVersion("1.0")]
 [Route("api/v{v:apiVersion}/[controller]")]
 [ApiController]
-public class RecurringTaskController : ControllerBase
+public class RecurringTaskController(IRecurringTaskService recurringTaskService, ILogger<RecurringTaskController> logger) : ControllerBase
 {
-    private readonly ILogger<RecurringTaskController> _logger;
-    private readonly IRecurringTaskService _recurringTaskService;
-
-    public RecurringTaskController(IRecurringTaskService recurringTaskService, ILogger<RecurringTaskController> logger)
-    {
-        _recurringTaskService = recurringTaskService;
-        _logger = logger;
-    }
-
-    [HttpGet("{userId:int}")]
+    [HttpGet("{userId}")]
     public async Task<IActionResult> GetRecurringTasks(int userId)
     {
         try
         {
-            var recurringTasks = await _recurringTaskService.GetRecurringTasksByUserIdAsync(userId);
+            var recurringTasks = await recurringTaskService.GetRecurringTasksByUserIdAsync(userId);
             if (!recurringTasks.Any()) return NoContent();
             return Ok(recurringTasks);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Something Went Wrong in {nameof(GetRecurringTasks)}");
+            logger.LogError(e, $"Something Went Wrong in {nameof(GetRecurringTasks)}");
             return BadRequest(e.Message);
         }
     }
@@ -39,43 +31,43 @@ public class RecurringTaskController : ControllerBase
     {
         try
         {
-            var newRecurringTask = await _recurringTaskService.InsertRecurringTaskAsync(recurringTaskDto);
+            var newRecurringTask = await recurringTaskService.InsertRecurringTaskAsync(recurringTaskDto);
             return Ok(newRecurringTask);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Something Went Wrong in {nameof(InsertRecurringTask)}");
+            logger.LogError(e, $"Something Went Wrong in {nameof(InsertRecurringTask)}");
             return BadRequest(e.Message);
         }
     }
 
-    [HttpPut("{recurringTaskId:int}")]
+    [HttpPut("{recurringTaskId}")]
     public async Task<IActionResult> UpdateRecurringTask(int recurringTaskId, RecurringTaskDto recurringTaskDto)
     {
         try
         {
             if (recurringTaskId != recurringTaskDto.Id) return BadRequest("Error in id's!");
-            var updatedRecurringTask = await _recurringTaskService.UpdateRecurringTaskAsync(recurringTaskDto);
+            var updatedRecurringTask = await recurringTaskService.UpdateRecurringTaskAsync(recurringTaskDto);
             return Ok(updatedRecurringTask);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Something Went Wrong in {nameof(UpdateRecurringTask)}");
+            logger.LogError(e, $"Something Went Wrong in {nameof(UpdateRecurringTask)}");
             return BadRequest(e.Message);
         }
     }
 
-    [HttpDelete("{recurringTaskId:int}")]
+    [HttpDelete("{recurringTaskId}")]
     public async Task<IActionResult> DeleteRecurringTask(int recurringTaskId)
     {
         try
         {
-            var checkDelete = await _recurringTaskService.DeleteRecurringAsync(recurringTaskId);
+            var checkDelete = await recurringTaskService.DeleteRecurringAsync(recurringTaskId);
             return checkDelete ? Ok(true) : BadRequest("Could not delete Recurring Task!");
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Something Went Wrong in {nameof(DeleteRecurringTask)}");
+            logger.LogError(e, $"Something Went Wrong in {nameof(DeleteRecurringTask)}");
             return BadRequest(e.Message);
         }
     }
