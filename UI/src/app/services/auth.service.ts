@@ -6,7 +6,7 @@ import {HttpClient} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
 import {UsersService} from "./users.service";
 import Swal from "sweetalert2";
-import * as jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import {RegisterModel} from "../models/register.model";
 
 @Injectable({
@@ -41,7 +41,7 @@ export class AuthService {
   getUserIdFromToken(): number {
     const token = localStorage.getItem('expenseToken');
     if (token) {
-      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
+      const decodeToken: { email: string, nameid: string, exp: number } = jwtDecode(token);
       return +decodeToken.nameid;
     } else {
       return 0;
@@ -75,7 +75,7 @@ export class AuthService {
   autoLogin(): void {
     const token = localStorage.getItem('expenseToken');
     if (token) {
-      const decodeToken: { email: string, nameid: string, exp: number } = jwt_decode.default(token);
+      const decodeToken: { email: string, nameid: string, exp: number } =jwtDecode(token);
       const expiryDate = new Date(decodeToken.exp * 1000);
       if (expiryDate < new Date()) {
         Swal.fire('Session', 'Die Sitzung ist abgelaufen, bitte melden Sie sich erneut an', 'info')
