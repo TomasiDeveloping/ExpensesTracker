@@ -17,7 +17,7 @@
 [![SonarCloud](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/sonarCloud.yml/badge.svg)](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/sonarCloud.yml)
 [![CI/CD for ExpenseTracker](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/deploy.yml/badge.svg)](https://github.com/TomasiDeveloping/ExpensesTracker/actions/workflows/deploy.yml)
 <hr>
-Angular 15 with .NET 7 Rest API
+Angular 17 with .NET 8 Rest API
 <hr>
 <h3>Home</h3>
 <img src="https://github.com/TomasiDeveloping/ExpensesTracker/blob/master/Images/Home.png" width="70%">
@@ -42,6 +42,10 @@ Angular 15 with .NET 7 Rest API
 <hr>
 
 ## Changelog
+### 3.4.1 (2024-01-28)
+- Update NuGet Packages
+- Update NPM
+- Security fix
 ### 3.4.0 (2023-11-25)
 - Update to Angular version 17
 - NPM packages update
