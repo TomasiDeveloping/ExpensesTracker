@@ -42,6 +42,9 @@ Angular 17 with .NET 8 Rest API
 <hr>
 
 ## Changelog
+### 3.4.3 (2024-04-13) 
+- All NuGet packages have been updated.
+- Angular and NPM have been updated.
 ### 3.4.2 (2024-03-24)
 - Updated NuGet packages in the backend for enhanced security.
 - Updated Angular and NPM packages for improved security.
