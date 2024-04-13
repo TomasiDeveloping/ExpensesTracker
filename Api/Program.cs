@@ -8,17 +8,24 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
+
+
+// Configure Serilog logger
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-    Log.Logger.Information("Starting web host");
 
-    builder.Host.UseSerilog((context, configuration) =>
+    // Add Serilog to services
+    builder.Services.AddSerilog(configureLogger =>
     {
-        configuration.WriteTo.Console()
-            .ReadFrom.Configuration(context.Configuration)
-            .Enrich.WithProperty("ApplicationName", "ExpensesTracker");
+        configureLogger.ReadFrom.Configuration(builder.Configuration);
     });
+
+    Log.Logger.Information("Starting web host");
 
     builder.Services.ConfigureCors();
     var jwtSettings = builder.Configuration.GetSection("Token");
